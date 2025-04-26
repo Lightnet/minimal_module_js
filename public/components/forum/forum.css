@@ -1,3 +1,5 @@
+/* Forum Layout Styles */
+
 .forum-container {
   max-width: 800px;
   margin: 0 auto;
@@ -9,7 +11,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 0;
-  background-color: #d9d9d9;
+  background-color: #b3b3b3; /* Darker gray (was #d9d9d9) */
   border-radius: 8px;
   margin-bottom: 20px;
 }
@@ -17,11 +19,12 @@
 .nav-button {
   padding: 8px 16px;
   border-radius: 4px;
-  background-color: #d9d9d9;
-  border: 1px solid #ddd;
+  background-color: #b3b3b3; /* Match nav-container */
+  border: 1px solid #999; /* Darker border for contrast */
   cursor: pointer;
   transition: all 0.2s;
   margin: 0 5px;
+  color: #000000; /* Black text */
 }
 
 .nav-button:hover {
@@ -37,10 +40,11 @@
 .theme-toggle {
   padding: 8px;
   border-radius: 4px;
-  background-color: #d9d9d9;
-  border: 1px solid #ddd;
+  background-color: #b3b3b3; /* Match nav-container */
+  border: 1px solid #999;
   cursor: pointer;
   transition: all 0.2s;
+  color: #000000; /* Black text */
 }
 
 .theme-toggle:hover {
@@ -57,13 +61,13 @@
 }
 
 .forum-item {
-  background: #d9d9d9;
+  background: #b3b3b3; /* Darker gray (was #d9d9d9) */
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 15px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.2s;
-  border: 1px solid #eee;
+  border: 1px solid #999;
 }
 
 .forum-item:hover {
@@ -77,24 +81,24 @@
   align-items: center;
   margin-bottom: 15px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid #999;
 }
 
 .forum-title {
   font-size: 1.4em;
   font-weight: bold;
-  color: #333;
+  color: #000000; /* Black text (was #333) */
 }
 
 .forum-content {
   line-height: 1.6;
-  color: #666;
+  color: #000000; /* Black text (was #666) */
   cursor: pointer;
   margin-bottom: 15px;
 }
 
 .forum-content strong {
-  color: #333;
+  color: #000000; /* Black text (was #333) */
 }
 
 .action-buttons {
@@ -107,28 +111,30 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-  border: 1px solid #ddd;
+  border: 1px solid #999;
   font-size: 0.9em;
+  color: #000000; /* Black text */
 }
 
 .action-buttons .edit-btn {
-  background-color: #28a745; /* Green for Edit */
-  color: white;
+  background-color: #4ade80; /* Lighter green for better contrast (was #28a745) */
+  color: #000000; /* Black text */
   border: none;
 }
 
 .action-buttons .edit-btn:hover {
-  background-color: #218838; /* Darker green on hover */
+  background-color: #22c55e; /* Lighter green on hover (was #218838) */
 }
 
+
 .action-buttons .delete-btn {
-  background-color: #dc3545; /* Red for Delete */
-  color: white;
+  background-color: #f87171; /* Lighter red for better contrast (was #dc3545) */
+  color: #000000; /* Black text */
   border: none;
 }
 
 .action-buttons .delete-btn:hover {
-  background-color: #c82333; /* Darker red on hover */
+  background-color: #ef4444; /* Lighter red on hover (was #c82333) */
 }
 
 [data-admin-only="true"] {
@@ -160,14 +166,13 @@
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
-  background: #ffffff;
+  background: #e6e6e6; /* Darker background (was #ffffff) */
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.98);
   z-index: 1000;
 }
 
@@ -179,21 +184,23 @@
 
 .modal-form-group label {
   font-weight: bold;
-  color: #333;
+  color: #000000; /* Black text (was #333) */
 }
 
 .modal-form-group input {
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #999;
   border-radius: 4px;
+  color: #000000; /* Black text */
 }
 
 .modal-form-group textarea {
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #999;
   border-radius: 4px;
   resize: vertical;
   min-height: 100px;
+  color: #000000; /* Black text */
 }
 
 .modal-actions {
@@ -210,13 +217,13 @@
 }
 
 .modal-actions .cancel-btn {
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  color: #333;
+  background-color: #cccccc; /* Darker gray (was #f8f9fa) */
+  border: 1px solid #999;
+  color: #000000; /* Black text */
 }
 
 .modal-actions .cancel-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #b3b3b3; /* Slightly darker on hover */
 }
 
 .modal-actions .submit-btn {
@@ -231,12 +238,12 @@
 
 /* Board Layout */
 .board-container {
-  background: #d9d9d9;
+  background: #b3b3b3; /* Darker gray (was #d9d9d9) */
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  border: 1px solid #eee;
+  border: 1px solid #999;
 }
 
 .board-header {
@@ -245,18 +252,18 @@
   align-items: center;
   margin-bottom: 15px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid #999;
 }
 
 .board-title {
   font-size: 1.6em;
   font-weight: bold;
-  color: #333;
+  color: #000000; /* Black text (was #333) */
 }
 
 .board-description {
   font-size: 1em;
-  color: #666;
+  color: #000000; /* Black text (was #666) */
   line-height: 1.6;
   margin-bottom: 15px;
 }
@@ -271,9 +278,9 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  color: #333;
+  background-color: #cccccc; /* Darker gray (was #f8f9fa) */
+  border: 1px solid #999;
+  color: #000000; /* Black text */
 }
 
 .board-actions button:hover {
@@ -288,16 +295,16 @@
 }
 
 .topic-item {
-  background: #f9f9f9;
+  background: #d9d9d9; /* Darker gray (was #f9f9f9) */
   border-radius: 6px;
   padding: 15px;
   margin-bottom: 10px;
-  border: 1px solid #eee;
+  border: 1px solid #999;
   transition: background-color 0.2s;
 }
 
 .topic-item:hover {
-  background-color: #f1f1f1;
+  background-color: #cccccc; /* Slightly darker on hover (was #f1f1f1) */
 }
 
 .topic-header {
@@ -310,7 +317,7 @@
 .topic-title {
   font-size: 1.2em;
   font-weight: bold;
-  color: #333;
+  color: #000000; /* Black text (was #333) */
   cursor: pointer;
 }
 
@@ -320,17 +327,17 @@
 
 .topic-meta {
   font-size: 0.9em;
-  color: #666;
+  color: #000000; /* Black text (was #666) */
   margin-bottom: 10px;
 }
 
 .topic-meta strong {
-  color: #333;
+  color: #000000; /* Black text (was #333) */
 }
 
 .topic-content {
   font-size: 1em;
-  color: #666;
+  color: #000000; /* Black text (was #666) */
   line-height: 1.6;
 }
 
@@ -345,14 +352,15 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
+  background-color: #cccccc;
+  border: 1px solid #999;
   font-size: 0.85em;
+  color: #000000; /* Black text */
 }
 
 .topic-actions .edit-btn {
-  background-color: #28a745;
-  color: white;
+  background-color: #4ade80; /* Lighter green */
+  color: #000000; /* Black text */
   border: none;
 }
 
@@ -361,29 +369,28 @@
 }
 
 .topic-actions .delete-btn {
-  background-color: #dc3545;
-  color: white;
+  background-color: #f87171; /* Lighter red */
+  color: #000000; /* Black text */
   border: none;
 }
 
 .topic-actions .delete-btn:hover {
-  background-color: #c82333;
+  background-color: #ef4444; /* Lighter red on hover */
 }
 
 /* Comment Layout */
 .comment-list {
-  color: #333;
   list-style: none;
   padding: 0;
   margin-top: 15px;
 }
 
 .comment-item {
-  background: #ffffffd8;
+  background: #e6e6e6; /* Darker background (was #ffffffd8) */
   border-radius: 6px;
   padding: 12px;
   margin-bottom: 10px;
-  border: 1px solid #eee;
+  border: 1px solid #999;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
@@ -392,6 +399,22 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #000000; /* Black text (was #333) */
+}
+
+.comment-meta {
+  font-size: 0.85em;
+  color: #000000; /* Black text (was #666) */
+}
+
+.comment-content {
+  font-size: 0.95em;
+  color: #000000; /* Black text (was #666) */
+  line-height: 1.6;
 }
 
 .comment-actions {
@@ -405,27 +428,72 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-  background-color: #d9d9d9;
-  border: 1px solid #ddd;
+  background-color: #b3b3b3;
+  border: 1px solid #999;
   font-size: 0.85em;
+  color: #000000; /* Black text */
 }
 
 .comment-actions .edit-btn {
-  background-color: #28a745;
-  color: white;
+  background-color: #4ade80; /* Lighter green */
+  color: #000000; /* Black text */
   border: none;
 }
 
 .comment-actions .edit-btn:hover {
-  background-color: #218838;
+  background-color: #22c55e; /* Lighter green on hover */
 }
 
 .comment-actions .delete-btn {
-  background-color: #dc3545;
-  color: white;
+  background-color: #f87171; /* Lighter red */
+  color: #000000; /* Black text */
   border: none;
 }
 
 .comment-actions .delete-btn:hover {
-  background-color: #c82333;
+  background-color: #ef4444; /* Lighter red on hover */
+}
+
+.comment-actions .like-btn {
+  background-color: #2ccce4; /* Lighter cyan for better contrast (was #17a2b8) */
+  color: #000000; /* Black text */
+  border: none;
+}
+
+.comment-actions .like-btn:hover {
+  background-color: #0ea5e9; /* Lighter cyan on hover (was #138496) */
+}
+
+.comment-actions .reply-btn {
+  background-color: #fcd34d; /* Lighter yellow for better contrast (was #ffc107) */
+  color: #000000; /* Black text */
+  border: none;
+}
+
+.comment-actions .reply-btn:hover {
+  background-color: #fbbf24; /* Lighter yellow on hover (was #e0a800) */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .forum-container {
+      padding: 10px;
+  }
+  
+  .nav-container {
+      flex-direction: column;
+      gap: 10px;
+  }
+  
+  .nav-button {
+      width: 100%;
+  }
+  
+  .forum-item {
+      margin-bottom: 10px;
+  }
+  
+  .forum-list {
+      grid-template-columns: 1fr;
+  }
 }

@@ -44,9 +44,7 @@ const baseLayout = ({ children }) => {
   })
 
   return div({class:"forum-container"},
-    div({class:"nav-container"},
-      forumNavMenu()
-    ),
+    forumNavMenu(),
     bbPostTypeEL,
     div({class:"forum-main"},
       children

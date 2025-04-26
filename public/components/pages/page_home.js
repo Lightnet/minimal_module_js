@@ -21,12 +21,11 @@ function Page_Home() {
     return aliasState.val
   });
 
-  return div(
+  return div({id:"home"},
     HomeNavMenu(),
     div(
       label("[Home]"), 
       label("User: ", username),
-      //button_test(),
     ),
   );
 }

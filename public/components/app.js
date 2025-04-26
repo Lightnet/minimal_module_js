@@ -9,11 +9,7 @@
 import van from "vanjs-core";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import useFetch from "/libs/useFetch.js";
-
-import {
-  aliasState,
-  loginState
-} from "/components/context.js";
+import { aliasState, loginState } from "/components/context.js";
 
 import { Page_Home } from "./pages/page_home.js";
 import { ForgotPage, SignInPage, SignOutPage, SignUpPage } from "./pages/page_auth.js";
@@ -51,7 +47,7 @@ const App = () => {
 
   login_check();
 
-  return Router({
+  return Router({id:"route",
     //basename: "/", // Optional base name (All links are now prefixed with '/vanjs-routing')
     routes: [
       { path: "/", component: Page_Home },
@@ -68,8 +64,8 @@ const App = () => {
       { path: "/board/:id", component: pageBoard },
       { path: "/topic/:id", component: pageTopic },
       // { path: "/report", component: Page_Report },
-      //{ path: "/help", component: HelpPage },
-      //{ path: "/help/:section", component: HelpPage },
+      // { path: "/help", component: HelpPage },
+      // { path: "/help/:section", component: HelpPage },
       // { path: "/novel", component: Page_Novel },
     ]
   });
