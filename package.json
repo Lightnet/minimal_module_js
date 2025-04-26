@@ -1,0 +1,22 @@
+{
+  "name": "minimal_module_js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hono/node-server": "^1.14.1",
+    "better-sqlite3": "^11.9.1",
+    "hono": "^4.7.7",
+    "mini-van-plate": "^0.6.3",
+    "nanoid": "^5.1.5",
+    "socket.io": "^4.8.1",
+    "uuid": "^11.1.0"
+  }
+}

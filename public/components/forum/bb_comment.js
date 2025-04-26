@@ -1,0 +1,137 @@
+/*
+  Project Name: threepolygonenginejs
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/threepolygonenginejs
+  
+*/
+
+import van from "vanjs-core";
+import { Modal } from "vanjs-ui";
+import {useFetch} from "/libs/useFetch.js";
+import { baseLayout } from "./base_layout.js";
+import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
+
+const {button, input, h2, label, div, table, tbody, tr,td} = van.tags;
+
+import { aliasState, loginState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
+
+function displayButtonCreateComment(){
+
+  const isCreated = van.state(false);
+
+  function btnCreateTopic(){
+    isCreated.val = false;
+    van.add(document.body, Modal({closed:isCreated},
+      createCommentForm({closed:isCreated})
+    ));
+  }
+
+  return button({class:"nav-button",onclick:()=>btnCreateTopic()},"Create Comment");
+}
+
+function createCommentForm({closed}){
+
+  const forumTitle = van.state('test');
+  const forumContent = van.state('test');
+
+  async function btnCreateTopic(){
+    console.log("create Topic")
+    try{
+      const data = await useFetch('/api/comment',{
+        method:'POST',
+        body:JSON.stringify({
+          parentid:topicIDState.val,
+          title:forumTitle.val,
+          content:forumContent.val,
+        })
+      });
+      console.log(data);
+      if(closed){
+        closed.val = true;
+      }
+    }catch(e){
+      console.log("ERROR",e)
+    }
+  }
+
+  return div({id:'createComment'},
+    table(
+      tbody(
+        tr(
+          td(label('Title:')),
+          td(input({value:forumTitle, oninput:e=>forumTitle.val=e.target.value})),
+        ),
+        tr(
+          td(label('Content:')),
+          td(input({value:forumContent, oninput:e=>forumContent.val=e.target.value})),
+        ),
+        tr(
+          button({onclick:btnCreateTopic},'Create'),
+          button({onclick:()=>closed.val=true},'Cancel'),
+        )
+      )
+    )
+  )
+}
+
+// PAGE COMMENT
+function pageComment() {
+  van.derive(() => {
+    console.log("[BOARD] FORUM ID:>> ",getRouterQuery()); // { section: "profile" }
+    console.log("getRouterParams >> ",getRouterParams()); 
+  });
+
+  return baseLayout({children:
+    div({class:"comment-content"},
+      div({class:"comment-header"},
+        displayButtonCreateComment()
+      ),
+      div({class:"comment-list"}, topicEl)
+    )
+  });
+}
+
+export async function getTopicIDComments(topicEl, _id){
+
+  console.log("get comments");
+
+  function getCommentID(_id){
+    commentIDState.val = _id;
+    //navigate('/comment/'+_id);
+  }
+
+  try{
+    const data = await useFetch('/api/topic/'+_id);
+    console.log(data);
+    if(data){
+      for(let item of data){
+        console.log("item: ", item);
+        van.add(topicEl, div({class:"comment-item"},
+          div({class:"comment-header"},
+            div({class:"comment-title"},
+              h2(`here[Comment] [ Title ] ${item.title}`), 
+            ),
+            div({class:"comment-actions"},
+              button({class:"like-btn"},"Like"),
+              button({class:"reply-btn"},"Reply"),
+              button({class:"edit-btn"},"Edit"),
+              button({class:"delete-btn"},"Delete"),
+            ),
+          ),
+          div({class:"comment-meta"}, label("Posted on XXX XX, XXXX")),
+          div({class:"comment-content",onclick:()=>getCommentID(item.id)},label(" [ Content ] "+ item.content))
+        ));
+      }
+    }
+  }catch(e){
+    console.log(e);
+  }
+}
+
+
+export {
+  createCommentForm,
+  displayButtonCreateComment,
+  pageComment
+}
