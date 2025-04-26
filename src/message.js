@@ -17,7 +17,6 @@ route.get('/api/message',(c)=>{
   return c.json(results);
 })
 
-
 // CREATE
 route.post('/api/message', async(c)=>{
   const data = await c.req.json();
@@ -42,7 +41,5 @@ route.delete('/api/message/:id',(c)=>{
 
   return c.json(result);
 })
-
-
 
 export default route;

@@ -36,7 +36,7 @@ function createCommentForm({closed}){
   const forumContent = van.state('test');
 
   async function btnCreateTopic(){
-    console.log("create Topic")
+    // console.log("create Topic");
     try{
       const data = await useFetch('/api/comment',{
         method:'POST',
@@ -46,12 +46,12 @@ function createCommentForm({closed}){
           content:forumContent.val,
         })
       });
-      console.log(data);
+      // console.log(data);
       if(closed){
         closed.val = true;
       }
     }catch(e){
-      console.log("ERROR",e)
+      console.log("ERROR",e);
     }
   }
 
@@ -77,10 +77,10 @@ function createCommentForm({closed}){
 
 // PAGE COMMENT
 function pageComment() {
-  van.derive(() => {
-    console.log("[BOARD] FORUM ID:>> ",getRouterQuery()); // { section: "profile" }
-    console.log("getRouterParams >> ",getRouterParams()); 
-  });
+  // van.derive(() => {
+  //   console.log("[BOARD] FORUM ID:>> ",getRouterQuery()); // { section: "profile" }
+  //   console.log("getRouterParams >> ",getRouterParams()); 
+  // });
 
   return baseLayout({children:
     div({class:"comment-content"},
@@ -94,7 +94,7 @@ function pageComment() {
 
 export async function getTopicIDComments(topicEl, _id){
 
-  console.log("get comments");
+  // console.log("get comments");
 
   function getCommentID(_id){
     commentIDState.val = _id;
@@ -106,7 +106,7 @@ export async function getTopicIDComments(topicEl, _id){
     console.log(data);
     if(data){
       for(let item of data){
-        console.log("item: ", item);
+        // console.log("item: ", item);
         van.add(topicEl, div({class:"comment-item"},
           div({class:"comment-header"},
             div({class:"comment-title"},

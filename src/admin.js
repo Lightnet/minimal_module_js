@@ -39,5 +39,4 @@ route.post('/api/report',async (c)=>{
   }
 });
 
-
 export default route;

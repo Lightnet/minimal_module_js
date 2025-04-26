@@ -36,7 +36,7 @@ function createBoardForm({closed}){
   const forumContent = van.state('test');
 
   async function btnCreateBoard(){
-    console.log("create board")
+    // console.log("create board");
     try{
       const data = await useFetch('/api/board',{
         method:'POST',
@@ -46,12 +46,12 @@ function createBoardForm({closed}){
           content:forumContent.val,
         })
       });
-      console.log(data);
+      // console.log(data);
       if(closed){
         closed.val = true;
       }
     }catch(e){
-      console.log("ERROR",e)
+      console.log("ERROR",e);
     }
   }
 
@@ -112,7 +112,7 @@ export async function getForumIDBoards(boardEl, _id){
 
   try{
     const data = await useFetch('/api/forum/'+_id);
-    console.log("get FORUM Boards:", data);
+    // console.log("get FORUM Boards:", data);
     if(data){
       for(let item of data){
         // console.log("item: ", item);

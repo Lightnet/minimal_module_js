@@ -43,7 +43,7 @@ function createMessageForm({closed}){
   const content = van.state('test content');
 
   async function btnCreateForum(){
-    console.log("create report form")
+    // console.log("create report form");
     try{
       const data = await useFetch('/api/message',{
         method:'POST',

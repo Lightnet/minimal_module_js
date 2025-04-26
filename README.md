@@ -9,6 +9,11 @@
 - vanjs
 - uuid
 - better-sqlite3
+- nanoid
+- hono
+- @hono/node-server
+- socket.io
+- 
 
 # Main Page:
 - Home

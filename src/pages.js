@@ -7,7 +7,7 @@
 */
 
 // pages for url
-import fs from 'fs';
+// import fs from 'fs';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -18,24 +18,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const {head, body, style, script} = van.tags
 const route = new Hono();
-
-// function scriptHtml(_script){
-//   const pageHtml = van.html(
-//     head(
-//       style(`
-//       body{
-//         background:gray;
-//         margin: 0px 0px 0px 0px;
-//         overflow: hidden;
-//       }
-//       `)
-//     ),
-//     body(
-//       script({type:"module",src:_script})
-//     ),
-//   );
-//   return pageHtml;
-// }
 
 function scriptHtml02(_script){
   //background:gray;
@@ -101,11 +83,11 @@ function scriptHtml03(_script){
   return pageHtml;
 }
 
-route.get('/threeammo', (c) => {
-  //const db = c.get('db');
-  const pageHtml = scriptHtml03("/van_threeammo.js");
-  return c.html(pageHtml);
-});
+// route.get('/threeammo', (c) => {
+//   //const db = c.get('db');
+//   const pageHtml = scriptHtml03("/van_threeammo.js");
+//   return c.html(pageHtml);
+// });
 
 // https://threejs.org/docs/index.html#manual/en/introduction/Installation
 
@@ -139,7 +121,6 @@ route.get("/:name", (c, next) => {
   //return c.html('None');
   return next();
 });
-
 
 export default route;
 export {

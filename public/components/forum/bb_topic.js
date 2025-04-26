@@ -36,7 +36,7 @@ function createTopicForm({closed}){
   const forumContent = van.state('test');
 
   async function btnCreateTopic(){
-    console.log("create Topic")
+    // console.log("create Topic");
     try{
       const data = await useFetch('/api/topic',{
         method:'POST',
@@ -90,7 +90,7 @@ function pageTopic() {
   const topicEl = div({class:"comment-list"});
 
   van.derive(() => {
-    console.log("Page_Topic getRouterParams >> ",getRouterParams()); 
+    // console.log("Page_Topic getRouterParams >> ",getRouterParams()); 
     const { id } = getRouterParams();
 
     if(id){

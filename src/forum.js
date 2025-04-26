@@ -36,8 +36,8 @@ route.post('/api/forum', async(c)=>{
   const db = c.get('db');
   //console.log(data);
   const results = db.forum_create(data.title,data.content);
-  console.log("results");
-  console.log(results);
+  // console.log("results");
+  // console.log(results);
   return c.json(results);
 })
 // FORUM UPDATE
@@ -45,8 +45,8 @@ route.put('/api/forum/:id',async (c)=>{
   const id = await c.req.param('id')
   const data = await c.req.json();
   if(data){
-    console.log("data update... id: ", id);
-    console.log(data);
+    // console.log("data update... id: ", id);
+    // console.log(data);
     const db = c.get('db');
     const result = db.forum_update(id, data.title,data.content);
     return c.json(result);
@@ -56,10 +56,10 @@ route.put('/api/forum/:id',async (c)=>{
 // FORUM DELETE
 route.delete('/api/forum/:id',(c)=>{
   const id = c.req.param('id');
-  console.log('ID: ', id);
+  // console.log('ID: ', id);
   const db = c.get('db');
   const result = db.forum_delete(id);
-  console.log("result: ",result)
+  // console.log("result: ",result)
   //console.log(db);
   return c.json(result);
 })

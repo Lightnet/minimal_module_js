@@ -21,15 +21,15 @@ const getForumsEL = () => {
   const forumList = div({class:"forum-container"});
 
   function editForum(id){
-    console.log(id)
+    console.log("editForum:",id);
   }
 
   function deleteForum(id){
-
+    console.log("deleteForum:",id);
   }
 
   function enterForum(id){
-    console.log("Forum ID HERE?: ",id);
+    // console.log("Forum ID HERE?: ",id);
     forumIDState.val = id;
     navigate('/forum/'+id);
   }
@@ -46,8 +46,8 @@ const getForumsEL = () => {
                   h2({onclick:()=>enterForum(data[i].id)},`?[ Forum ] ${data[i].title}`),
                 ),
                 div({class:"action-buttons"},
-                  button({class:"edit-btn",onclick:editForum(data[i].id)},'Edit'),
-                  button({class:"delete-btn",onclick:editForum(data[i].id)},'Delete'),
+                  button({class:"edit-btn",onclick:()=>editForum(data[i].id)},'Edit'),
+                  button({class:"delete-btn",onclick:()=>deleteForum(data[i].id)},'Delete'),
                 ),
               ),
               div({class:'forum-content',onclick:()=>enterForum(data[i].id)},
@@ -90,7 +90,7 @@ function createForumForm({closed}){
   const forumContent = van.state('test');
 
   async function btnCreateForum(){
-    console.log("create forum")
+    // console.log("create forum");
     try{
       const data = await useFetch('/api/forum',{
         method:'POST',
@@ -99,7 +99,7 @@ function createForumForm({closed}){
           content:forumContent.val,
         })
       });
-      console.log(data);
+      // console.log(data);
       if(closed){
         closed.val = true;
       }
@@ -130,7 +130,7 @@ function createForumForm({closed}){
 
 // GET CURRENT FORUM ID for boards
 function pageForumID() {
-  console.log("FORUM ID???");
+  // console.log("FORUM ID???");
   //If url > forum/:id
   if(!document.getElementById("forum_style")){
     van.add(document.head, link({
@@ -146,10 +146,10 @@ function pageForumID() {
   //get forums
   van.derive(() => {
     const { id } = getRouterParams();    
-    console.log("FORUM ID:", id);
+    // console.log("FORUM ID:", id);
     if(id){
       if(id.length > 0){
-        console.log("BOARD HERE???");
+        // console.log("BOARD HERE???");
         forumIDState.val = id;
         getForumIDBoards(boardEl, id);
       }

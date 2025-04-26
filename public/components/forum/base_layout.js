@@ -11,33 +11,33 @@ const { div, button, label, style, link } = van.tags;
 
 // BASE FORUM PAGE
 const baseLayout = ({ children }) => {
-  console.log("getRouterParams() ",getRouterParams());
-  console.log("getRouterPathname() ",getRouterPathname());
+  // console.log("getRouterParams() ",getRouterParams());
+  // console.log("getRouterPathname() ",getRouterPathname());
 
   const bbPostTypeEL = van.derive(()=>{
     let path = getRouterPathname();
     if(path.startsWith("/topic/")){
-      console.log("FOUND TOPIC...");
+      // console.log("FOUND TOPIC...");
       return displayButtonCreateComment();
     }
 
     if(path.startsWith("/board/")){
-      console.log("FOUND board...");
+      // console.log("FOUND board...");
       return displayButtonCreateTopic();
     }
 
     if(path.startsWith("/forum/message")){
-      console.log("FOUND forum...");
+      // console.log("FOUND forum...");
       return;
     }
 
     if(path.startsWith("/forum/")){
-      console.log("FOUND forum...");
+      // console.log("FOUND forum...");
       return displayButtonCreateBoard();
     }
 
     if(path.startsWith("/forum")){
-      console.log("FOUND forum...");
+      // console.log("FOUND forum...");
       return displayButtonCreateForum();
     }
 

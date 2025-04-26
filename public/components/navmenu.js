@@ -68,8 +68,6 @@ const AccessNavMenu=()=>{
     ' ',
     button({onclick:()=>navigate("/forum")},'Forum'),
     ' ',
-    //button({onclick:()=>navigate("/gameobject")},'GameObject'),
-    ' ',
     //button({onclick:()=>navigate("/help")},'Help'),
     button({onclick:()=>navigate("/report")},'Report'),
     ' ',

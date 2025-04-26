@@ -6,7 +6,8 @@
   
 */
 
-import van from "van";
+// import van from "van";
+import van from "vanjs-core";
 
 // // https://github.com/vanjs-org/van/discussions/78
 // van._mount = function (target, component) {
