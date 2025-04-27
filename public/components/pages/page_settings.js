@@ -13,25 +13,11 @@ const {button, input, h1, label, div, table, tbody, tr, td} = van.tags;
 
 const Page_Setting = () => {
 
-  // return div(
-  //   HomeNavMenu(),
-  //   label('Settings'),
-  //   div(
-  //     label('Theme Color?'),
-  //   ),
-  //   div(
-  //     label('Cookie?'),
-  //   ),
-  //   div(
-  //     label('Admin/Mod?'),
-  //   ),
-  // )
-
   return div({id:"settings" },
     HomeNavMenu(),
     div({class:"main-content"},
       div({class:"cheader"},
-         h1("Header"),
+         h1("Settings"),
       ),
       div({class:"ccontent"},
         label('Settings'),

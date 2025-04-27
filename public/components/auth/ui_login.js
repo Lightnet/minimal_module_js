@@ -44,7 +44,7 @@ const LoginEL = () => {
     window.location.href = "/";
   }
 
-  return div({id:'login'},
+  return div({id:'login',class:"ccontent"},
   center(
     table(
       tbody(
@@ -61,22 +61,22 @@ const LoginEL = () => {
         ),
         tr(
           td({colspan:"2"},
-            button({onclick:c_login,style:"width:100%"},'Login')
+            button({class:"normal",onclick:c_login,style:"width:100%"},'Login')
           )
         ),
         tr(
           td({colspan:"2"},
-            button({onclick:c_register,style:"width:100%"},'Register')
+            button({class:"normal",onclick:c_register,style:"width:100%"},'Register')
           )
         ),
         tr(
           td({colspan:"2"},
-            button({onclick:c_recovery,style:"width:100%"},'Recovery')
+            button({class:"normal",onclick:c_recovery,style:"width:100%"},'Recovery')
           )
         ),
         tr(
           td({colspan:"2"},
-            button({onclick:c_cancel,style:"width:100%"},'Cancel')
+            button({class:"normal",onclick:c_cancel,style:"width:100%"},'Cancel')
           )
         )
       )

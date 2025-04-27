@@ -25,7 +25,7 @@ function Page_Home() {
     HomeNavMenu(),
     div({class:"main-content"},
       div({class:"cheader"},
-         h1("Header"),
+         h1("Home"),
       ),
       div({class:"ccontent"},
         label("[Home]"), 

@@ -48,7 +48,7 @@ const SignInEL = () => {
     navigate("/");
   }
 
-  return div({id:'login'},
+  return div({id:'login',class:"ccontent"},
   center(
     table(
       tbody(
@@ -61,25 +61,25 @@ const SignInEL = () => {
         ),
         tr(
           td(label('User:')),
-          td(input({value:user, oninput:e=>user.val=e.target.value}))
+          td(input({type:"text",value:user, oninput:e=>user.val=e.target.value}))
         ),
         tr(
           td(label('Passphrase:')),
-          td(input({value:pass, oninput:e=>pass.val=e.target.value}))
+          td(input({type:"text",value:pass, oninput:e=>pass.val=e.target.value}))
         ),
         tr(
           td({colspan:"2"},
-            button({onclick:c_login,style:"width:100%"},'Login')
+            button({class:"normal",onclick:c_login,style:"width:100%"},'Login')
           )
         ),
         tr(
           td({colspan:"2"},
-            button({onclick:()=>navigate("/forgot"),style:"width:100%"},'Forgot')
+            button({class:"warn",onclick:()=>navigate("/forgot"),style:"width:100%"},'Forgot')
           )
         ),
         tr(
           td({colspan:"2"},
-            button({onclick:c_cancel,style:"width:100%"},'Cancel')
+            button({class:"warn",onclick:c_cancel,style:"width:100%"},'Cancel')
           )
         )
       )

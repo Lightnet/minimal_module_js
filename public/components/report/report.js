@@ -24,7 +24,7 @@ function El_CreateReportForm(){
     ));
   }
 
-  return button({onclick:()=>btnCreateForum()},"Create Report");
+  return button({class:"normal",onclick:()=>btnCreateForum()},"Create Report");
 }
 
 // CREATE REPORT FORUM

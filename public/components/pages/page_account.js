@@ -18,16 +18,11 @@ function AccountPage() {
   //   console.log(getRouterQuery()); // { section: "profile" }
   // });
 
-  // return div(
-  //   HomeNavMenu(),
-  //   AccountEL(),
-  // );
-
   return div({id:"account" },
     HomeNavMenu(),
     div({class:"main-content"},
       div({class:"cheader"},
-         h1("Header"),
+         h1("Account"),
       ),
       div({class:"ccontent"},
         AccountEL(),

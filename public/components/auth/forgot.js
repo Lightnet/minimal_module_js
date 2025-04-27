@@ -34,7 +34,7 @@ const ForgotEL = () => {
     navigate("/");
   }
 
-  return div({id:'forgot'},
+  return div({id:'forgot',class:"ccontent"},
   center(
     table(
       tbody(
@@ -45,20 +45,20 @@ const ForgotEL = () => {
         ),
         tr(
           td(label('User:')),
-          td(input({value:user, oninput:e=>user.val=e.target.value}))
+          td(input({type:"text",value:user, oninput:e=>user.val=e.target.value}))
         ),
         tr(
           td(label('E-Mail:')),
-          td(input({value:email, oninput:e=>email.val=e.target.value}))
+          td(input({type:"text",value:email, oninput:e=>email.val=e.target.value}))
         ),
         tr({colspan:"2"},
           td({colspan:"2"},
-            button({onclick:btnForgot,style:"width:100%"},'Recovery')
+            button({class:"normal",onclick:btnForgot,style:"width:100%"},'Recovery')
           )
         ),
         tr({colspan:"2"},
           td({colspan:"2"},
-            button({onclick:c_cancel,style:"width:100%"},'Cancel')
+            button({class:"warn",onclick:c_cancel,style:"width:100%"},'Cancel')
           )
         )
       )

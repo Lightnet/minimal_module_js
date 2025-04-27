@@ -17,17 +17,11 @@ function Page_About() {
     console.log(getRouterQuery()); // { section: "profile" }
   });
 
-  // return div(
-  //   HomeNavMenu(),
-  //   p("About"), 
-  //   p("Work in progress builds."), 
-  // );
-
-  return div({id:"home" },
+  return div({id:"about" },
     HomeNavMenu(),
     div({class:"main-content"},
       div({class:"cheader"},
-         h1("Header"),
+         h1("About"),
       ),
       div({class:"ccontent"},
         p("About"), 

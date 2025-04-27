@@ -36,5 +36,4 @@ van.add(document.head, link({
   href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 }))
 
-
 van.add(document.body, App());

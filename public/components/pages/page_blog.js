@@ -18,10 +18,23 @@ function BlogPage() {
   //   console.log(getRouterQuery()); // { section: "profile" }
   // });
 
-  return div(
+  // return div(
+  //   HomeNavMenu(),
+  //   BlogEL(),
+  // );
+
+  return div({id:"blog" },
     HomeNavMenu(),
-    BlogEL(),
+    div({class:"main-content"},
+      div({class:"cheader"},
+         h1("Blog"),
+      ),
+      div({class:"ccontent"},
+        BlogEL(),
+      ),
+    ),
   );
+
 }
 
 export{

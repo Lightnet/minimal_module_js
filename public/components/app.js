@@ -15,13 +15,14 @@ import { Page_Home } from "./pages/page_home.js";
 import { ForgotPage, SignInPage, SignOutPage, SignUpPage } from "./pages/page_auth.js";
 import { Page_About } from "./pages/page_about.js";
 //import { BlogPage } from "./pages/page_blog.js";
-// import { Page_Report } from "./pages/page_report.js";
+import { Page_Report } from "./pages/page_report.js";
 // import { Page_Novel } from "./novel/novel.js";
 import { AccountPage } from "./pages/page_account.js";
 import { Page_Message } from "./messages/page_message.js";
 import { Page_Setting } from "./pages/page_settings.js";
 import { pageForumID, pageForum, pageBoard, pageTopic, pageComment } from "./forum/bb_page.js";
 import { checkTheme } from "./theme/theme.js";
+import { HelpPage } from "./pages/page_help.js";
 const {button, div, pre, p} = van.tags
 //const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -63,8 +64,8 @@ const App = () => {
       { path: "/forum/:id", component: pageForumID },
       { path: "/board/:id", component: pageBoard },
       { path: "/topic/:id", component: pageTopic },
-      // { path: "/report", component: Page_Report },
-      // { path: "/help", component: HelpPage },
+      { path: "/report", component: Page_Report },
+      { path: "/help", component: HelpPage },
       // { path: "/help/:section", component: HelpPage },
       // { path: "/novel", component: Page_Novel },
     ]

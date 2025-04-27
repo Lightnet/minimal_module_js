@@ -11,23 +11,18 @@ import { Router, Link, getRouterParams, navigate, getRouterQuery } from "vanjs-r
 import { El_CreateReportForm } from "../report/report.js";
 import { HomeNavMenu } from "../navmenu.js";
 
-const {button, div, pre, p, br} = van.tags
+const {button, div, h1, pre, p, br} = van.tags
 
 function Page_Report() {
   // van.derive(() => {
   //   console.log(getRouterQuery()); // { section: "profile" }
   // });
 
-  // return div(
-  //   HomeNavMenu(),
-  //   El_CreateReportForm(),
-  // );
-
   return div({id:"report" },
     HomeNavMenu(),
     div({class:"main-content"},
       div({class:"cheader"},
-         h1("Header"),
+         h1("Report"),
       ),
       div({class:"ccontent"},
         El_CreateReportForm(),

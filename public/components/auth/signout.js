@@ -31,7 +31,7 @@ const SignOutEL = () => {
     }
   }
 
-  return div(
+  return div({class:"ccontent"},
     center(
       table(
         tbody(
@@ -47,12 +47,12 @@ const SignOutEL = () => {
           ),
           tr(
             td({},
-              button({style:"width:100%;",onclick:b_signout},"Yes"),
+              button({class:"warn",style:"width:100%",onclick:b_signout},"Yes"),
             )
           ),
           tr(
             td({},
-              button({style:"width:100%;",onclick:()=>navigate("/")},"No"),
+              button({class:"normal",style:"width:100%",onclick:()=>navigate("/")},"No"),
             )
           ),
         )

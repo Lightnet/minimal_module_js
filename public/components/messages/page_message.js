@@ -19,11 +19,11 @@ function Page_Message(){
   //   El_CreateMessageForm()
   // )
 
-  return div({id:"home" },
+  return div({id:"message" },
     HomeNavMenu(),
     div({class:"main-content"},
       div({class:"cheader"},
-         h1("Header"),
+         h1("Message"),
       ),
       div({class:"ccontent"},
         label('Message'),

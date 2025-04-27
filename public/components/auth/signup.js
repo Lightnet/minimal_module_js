@@ -42,7 +42,7 @@ const SignUpEL = () => {
     navigate("/");
   }
 
-  return div({id:'Signup'},
+  return div({id:'Signup',class:"ccontent"},
   center(
     table(
       tbody(
@@ -55,36 +55,36 @@ const SignUpEL = () => {
         ),
         tr(
           td(label('Display User:')),
-          td(input({value:displayuser, oninput:e=>displayuser.val=e.target.value}))
+          td(input({type:"text",value:displayuser, oninput:e=>displayuser.val=e.target.value}))
         ),
         tr(
           td(label('Login User:')),
-          td(input({value:username, oninput:e=>username.val=e.target.value}))
+          td(input({type:"text",value:username, oninput:e=>username.val=e.target.value}))
         ),
         tr(
           td(label('Passphrase #1:')),
-          td(input({value:pass2, oninput:e=>pass2.val=e.target.value}))
+          td(input({type:"text",value:pass2, oninput:e=>pass2.val=e.target.value}))
         ),
         tr(
           td(label('Passphrase #2:')),
-          td(input({value:pass, oninput:e=>pass.val=e.target.value}))
+          td(input({type:"text",value:pass, oninput:e=>pass.val=e.target.value}))
         ),
         tr(
           td(label('Email #1:')),
-          td(input({value:email, oninput:e=>email.val=e.target.value}))
+          td(input({type:"text",value:email, oninput:e=>email.val=e.target.value}))
         ),
         tr(
           td(label('Email #2:')),
-          td(input({value:email2, oninput:e=>email2.val=e.target.value}))
+          td(input({type:"text",value:email2, oninput:e=>email2.val=e.target.value}))
         ),
         tr(
           td({colspan:"2"},
-            button({onclick:c_signup,style:"width:100%"},'Register')
+            button({class:"normal",onclick:c_signup,style:"width:100%"},'Register')
           )
         ),
         tr(
           td({colspan:"2"},
-            button({onclick:c_cancel,style:"width:100%"},'Cancel')
+            button({class:"warn",onclick:c_cancel,style:"width:100%"},'Cancel')
           )
         )
       )
