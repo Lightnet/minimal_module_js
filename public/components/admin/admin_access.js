@@ -7,152 +7,189 @@
 */
 
 import { THREE, ECS, van } from "/dps.js";
-import { ToggleTheme } from "../theme/theme.js";
+import { toggleTheme } from "../theme/theme.js";
 //import van from "vanjs-core";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-import useFetch from '/libs/useFetch.js';
+// import useFetch from '/libs/useFetch.js';
 import { El_CreateReportForm } from "../report/report.js";
 const {button, div, span, label} = van.tags;
 
 
-function AdminNavMenus(){
+// Mock dependencies (replace with actual imports)
+// const El_CreateReportForm = () => van.tags.div("Report Form Placeholder");
+const useFetch = async (url) => {
+  // Mock API response
+  return [
+    { id: 1, title: "Report 1", content: "Content 1", isdone: false, isclose: false },
+    { id: 2, title: "Report 2", content: "Content 2", isdone: true, isclose: false },
+  ];
+};
 
-  return div({id:"admin"},
+
+function AdminNavMenus() {
+  return div(
+    { class: "sidebar active" },
     div(
-      button({onclick:()=>navigate('/admin')},'Home'),
-      button({onclick:()=>navigate('/admin/logs')},'Logs'),
+      toggleTheme(),
+      button({ onclick: () => navigate("/admin") }, "Home"),
+      button({ onclick: () => navigate("/admin/logs") }, "Logs"),
+      button({ onclick: () => navigate("/admin/reports") }, "Reports"),
       button({onclick:()=>navigate('/admin/accounts')},'Accounts'),
       button({onclick:()=>navigate('/admin/tickets')},'Tickets'),
-      button({onclick:()=>navigate('/admin/reports')},'Reports'),
       button({onclick:()=>navigate('/admin/database')},'Database'),
       button({onclick:()=>navigate('/admin/settings')},'Settings'),
-      ToggleTheme(),
+      
     )
-  )
+  );
 }
 
-function Page_Admin(){
-  return div(
-    AdminNavMenus(),
-    div(
-      ButtonMaintenanceMode()
-    ),
-  )
-}
+function Header() {
+  const isSidebarActive = van.state(true);
 
-
-function Page_Logs(){
-  return div(
-    AdminNavMenus(),
-    div(
-      label('Logs')
-    ),
-  )
-}
-
-function Page_Accounts(){
-  return div(
-    AdminNavMenus(),
-    div(
-      label('Accounts')
-    ),
-  )
-}
-
-function Page_Reports(){
-
-  const elReports = div();
-
-  function c_IsDone(){
-
-  }
-
-  function c_IsClose(){
-    
-  }
-
-  function isBool(_is){
-    return _is ? 'True' : 'False';
-  }
-
-  async function get_reports() {
-    let data = await useFetch('/api/report');
-    console.log(data);
-    if(data){
-      for(const item of data){
-        console.log(item);
-        van.add(elReports,
-          div(
-            div({style:"background:darkgray;"},
-              label(item.title),
-              span({style:'float:right;'},
-                button({onclick:()=>c_IsDone(item.id)},`Done: ${isBool(item.isdone)}`),
-                button({onclick:()=>c_IsClose(item.id )},`Close: ${isBool(item.isclose)}`),
-              ),
-            ),
-            //br(),
-            div({style:"background:lightgray;"},item.content),
-          )
-        );
+  function toggleSidebar() {
+    console.log("Toggle...")
+    isSidebarActive.val = !isSidebarActive.val;
+    const sidebar = document.querySelector(".sidebar");
+    if (sidebar) {
+      if (isSidebarActive.val) {
+        sidebar.classList.add("active");
+      } else {
+        sidebar.classList.remove("active");
       }
     }
   }
 
-  get_reports();
-
-
   return div(
+    { class: "header" },
+    button({ class: "toggle-btn", onclick: toggleSidebar }, "☰"),
+    div({ class: "logo" }, "Admin Panel"),
+    div({ class: "user-profile" }, "User")
+  );
+}
+
+function Page_Admin() {
+  return div(
+    { class: "container" },
+    Header(),
     AdminNavMenus(),
     div(
-      label('Report'),
+      { class: "main-content" },
+      label("Welcome to the Admin Panel"),
+      ButtonMaintenanceMode()
+    )
+  );
+}
+
+function Page_Logs() {
+  return div(
+    { class: "container" },
+    Header(),
+    AdminNavMenus(),
+    div({ class: "main-content" }, label("Logs Page"))
+  );
+}
+
+function Page_Accounts() {
+  return div(
+    { class: "container" },
+    Header(),
+    AdminNavMenus(),
+    div({ class: "main-content" }, label("Accounts Page"))
+  );
+}
+
+
+function Page_Reports() {
+  const reports = van.state([]);
+  const reportElement = div();
+
+  async function getReports() {
+    try {
+      const data = await useFetch("/api/report");
+      reports.val = data; // Update state to trigger re-render
+
+      for(let item of data){
+        van.add(reportElement,div(
+          { class: "report-item" },
+          div(
+            { class: "report-header" },
+            label(item.title),
+            span(
+              button(
+                { onclick: () => console.log(`Mark Done: ${item.id}`) },
+                `Done: ${item.isdone ? "True" : "False"}`
+              ),
+              button(
+                { onclick: () => console.log(`Close: ${item.id}`) },
+                `Close: ${item.isclose ? "True" : "False"}`
+              )
+            )
+          ),
+          div({ class: "report-content" }, item.content)
+        ));
+      }
+    } catch (error) {
+      console.error("Failed to fetch reports:", error);
+    }
+  }
+
+  // Call getReports when component mounts
+  getReports();
+
+  return div(
+    { class: "container" },
+    Header(),
+    AdminNavMenus(),
+    div(
+      { class: "main-content" },
+      label("Reports Page"),
       El_CreateReportForm(),
-      elReports,
-    ),
-  )
+      reportElement,
+    )
+  );
 }
 
-function Page_Tickets(){
+function Page_Tickets() {
   return div(
+    { class: "container" },
+    Header(),
     AdminNavMenus(),
-    div(
-      label('Tickets')
-    ),
-  )
+    div({ class: "main-content" }, label("Tickets Page"))
+  );
 }
 
-function Page_Database(){
+function Page_Database() {
   return div(
+    { class: "container" },
+    Header(),
     AdminNavMenus(),
-    div(
-      label('Database')
-    ),
-  )
+    div({ class: "main-content" }, label("Database Page"))
+  );
 }
 
-function Page_Settings(){
+function Page_Settings() {
   return div(
+    { class: "container" },
+    Header(),
     AdminNavMenus(),
-    div(
-      label('Settings')
-    ),
-  )
+    div({ class: "main-content" }, label("Settings Page"))
+  );
 }
 
-function ButtonMaintenanceMode(){
-
-  function btn_Maintenance_on(){
-    console.log("click...")
+function ButtonMaintenanceMode() {
+  function btn_Maintenance_on() {
+    console.log("Maintenance Mode On");
   }
 
-  function btn_Maintenance_off(){
-    console.log("click...")
+  function btn_Maintenance_off() {
+    console.log("Maintenance Mode Off");
   }
 
-  return label('Maintenance Mode', 
-    button({onclick:btn_Maintenance_on},'On'),
-    button({onclick:btn_Maintenance_off},'Off')
-  )
-  
+  return div(
+    label("Maintenance Mode"),
+    button({ onclick: btn_Maintenance_on }, " On "),
+    button({ onclick: btn_Maintenance_off }, " Off ")
+  );
 }
 
 export {
