@@ -14,8 +14,9 @@ import { Page_Admin, Page_Logs, Page_Accounts, Page_Tickets, Page_Reports, Page_
 import { UIStyle } from "/components/theme/theme.js";
 const {button, div, pre, p, link} = van.tags;
 
-
 const PageAdmin = () => {
+  
+  console.log("ADMIN");
 
   if(!document.getElementById("admin_style")){
     van.add(document.head, link({

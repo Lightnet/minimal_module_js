@@ -3,40 +3,6 @@ import van from "vanjs-core";
 
 const {button,style} = van.tags;
 
-export const lightTheme = {
-  colors: {
-    background: '#ffffff',
-    text: '#333333',
-    primary: '#007bff',
-    secondary: '#6c757d',
-    cardBackground: '#f8f9fa'
-  },
-  spacing: {
-    small: '0.5rem',
-    medium: '1rem',
-    large: '2rem'
-  },
-  borderRadius: '8px',
-  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-};
-
-export const darkTheme = {
-  colors: {
-    background: '#1a1a1a',
-    text: '#ffffff',
-    primary: '#0d6efd',
-    secondary: '#4a90e2',
-    cardBackground: '#2d2d2d'
-  },
-  spacing: {
-    small: '0.5rem',
-    medium: '1rem',
-    large: '2rem'
-  },
-  borderRadius: '8px',
-  boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
-};
-
 export function toggleTheme(){
 
   const themeState = van.state('light');
@@ -83,19 +49,17 @@ export function toggleTheme(){
 }
 
 export function checkTheme(){
-  //document.body.setAttribute("data-theme", themeState.val);
-  console.log("data-theme", document.body.getAttribute("data-theme"));
+  // document.body.setAttribute("data-theme", themeState.val);
+  // console.log("data-theme", document.body.getAttribute("data-theme"));
   const data_theme = localStorage.getItem("data-theme");
   if(data_theme){
     document.body.setAttribute("data-theme", data_theme);
-    console.log("data-theme", document.body.getAttribute("data-theme"));
+    // console.log("data-theme", document.body.getAttribute("data-theme"));
   }
 }
 
 const UIStyle = style(`
-/*.button1 {
-background-color: #821212;
-}*/
+/*.button1 { background-color: #821212; }*/
 
   :root {
     --cheader-color:#cccccc;
@@ -130,8 +94,7 @@ background-color: #821212;
     background-color: var(--cbody-color);
     color:var(--cfont-color);
   }
-  
-  `);
+`);
 
 export {
   UIStyle

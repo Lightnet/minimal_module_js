@@ -92,16 +92,21 @@ function scriptHtml03(_script){
 // https://threejs.org/docs/index.html#manual/en/introduction/Installation
 
 var urlandjs = [
-  {url:'/chat',                                       file:'/van_chat.js'},
-  {url:'/login',                                      file:'/login.js'},
+  {url:'/admin/logs',         file:'/admin.js'},
+  {url:'/admin/accounts',     file:'/admin.js'},
+  {url:'/admin/tickets',      file:'/admin.js'},
+  {url:'/admin/report',       file:'/admin.js'},
+  {url:'/admin/settings',     file:'/admin.js'},
   {url:'/admin',                                      file:'/admin.js'},
-  {url:'/texteditortest',                             file:'/texteditortest.js'},
+  {url:'/chat',                                       file:'/van_chat.js'},
+  {url:'/login',                                      file:'/login.js'}
 ];
 
 //console.log("URLS...");
 route.get("/:name", (c, next) => {
   let isFound = false;
   const name = c.req.param('name');
+  // console.log(name);
   let file = '';
   for (var idx in urlandjs){
     if(urlandjs[idx].url.match(name)){
