@@ -10,19 +10,19 @@ import { THREE, ECS, van } from "/dps.js";
 import { toggleTheme } from "../theme/theme.js";
 //import van from "vanjs-core";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-// import useFetch from '/libs/useFetch.js';
+import useFetch from '/libs/useFetch.js';
 import { El_CreateReportForm } from "../report/report.js";
 const {button, div, span, label} = van.tags;
 
 // Mock dependencies (replace with actual imports)
 // const El_CreateReportForm = () => van.tags.div("Report Form Placeholder");
-const useFetch = async (url) => {
-  // Mock API response
-  return [
-    { id: 1, title: "Report 1", content: "Content 1", isdone: false, isclose: false },
-    { id: 2, title: "Report 2", content: "Content 2", isdone: true, isclose: false },
-  ];
-};
+// const useFetch = async (url) => {
+//   // Mock API response
+//   return [
+//     { id: 1, title: "Report 1", content: "Content 1", isdone: false, isclose: false },
+//     { id: 2, title: "Report 2", content: "Content 2", isdone: true, isclose: false },
+//   ];
+// };
 
 function AdminNavMenus() {
   return div(

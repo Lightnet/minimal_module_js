@@ -21,9 +21,9 @@ route.get('/api/message',(c)=>{
 route.post('/api/message', async(c)=>{
   const data = await c.req.json();
   const db = c.get('db');
-  //console.log(data);
+  console.log(data);
 
-  const results = db.create_message("","",data.subject,data.content);
+  const results = db.create_message("0",data.alias,data.subject,data.content);
   console.log("results", results);
   //console.log(results);
 

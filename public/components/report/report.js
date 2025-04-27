@@ -39,21 +39,22 @@ function createReportForm({closed}){
     console.log(forumTitle.val);
     console.log(forumType.val);
     console.log(forumContent.val);
-    // try{
-    //   const data = await useFetch('/api/report',{
-    //     method:'POST',
-    //     body:JSON.stringify({
-    //       title:forumTitle.val,
-    //       content:forumContent.val,
-    //     })
-    //   });
-    //   console.log(data);
-    //   if(closed){
-    //     closed.val = true;
-    //   }
-    // }catch(e){
-    //   console.log("ERROR",e)
-    // }
+    try{
+      const data = await useFetch('/api/report',{
+        method:'POST',
+        body:JSON.stringify({
+          title:forumTitle.val,
+          sumbittype:forumType.val,
+          content:forumContent.val,
+        })
+      });
+      console.log(data);
+      if(closed){
+        closed.val = true;
+      }
+    }catch(e){
+      console.log("ERROR",e)
+    }
   }
 
   return div({id:'createReportForm', class:"ccontent"},

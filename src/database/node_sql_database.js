@@ -74,13 +74,15 @@ class SQLDB{
       update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );`);
   }
-
+  // https://stackoverflow.com/questions/54686650/in-sqlite-what-is-the-maximum-capacity-of-text/54687265
+  // 65535 characters (or 64Kbytes).
   async create_table_report(){
     await this.db.exec(`CREATE TABLE IF NOT EXISTS report (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       aliasId varchar(255),
       title varchar(255) NOT NULL,
-      content varchar(255) NOT NULL,
+      sumbittype varchar(255) NOT NULL,
+      content TEXT(65535) NOT NULL,
       isdone BOOLEAN DEFAULT 0,
       isclose BOOLEAN DEFAULT 0,
       create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -136,13 +138,13 @@ class SQLDB{
   }
 
   async create_table_message(){
-    await this.db.exec(`CREATE TABLE IF NOT EXISTS comment (
+    await this.db.exec(`CREATE TABLE IF NOT EXISTS message (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       parentid varchar(64), 
       aliasId varchar(64),
       toAlias varchar(64),
       subject varchar(255) NOT NULL,
-      content varchar(255) NOT NULL,
+      content TEXT(65535) NOT NULL,
       create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );`);
   }
@@ -325,9 +327,9 @@ class SQLDB{
 //===============================================
 // REPORT
 //===============================================
-create_message(_aliasid, _toalias, _title,_content){
-  const stmt = this.db.prepare('INSERT INTO message (title, content) VALUES (?, ?)');
-  stmt.run(_title, _content);
+create_message(_aliasid, _toalias, _subject,_content){
+  const stmt = this.db.prepare('INSERT INTO message (toAlias, subject, content) VALUES (?, ?, ?)');
+  stmt.run(_toalias, _subject, _content);
   return {api:"CREATED"};
 }
 

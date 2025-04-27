@@ -13,13 +13,8 @@ import useFetch from "/libs/useFetch.js";
 const {button, h1, div, label, table, tbody, tr, td, input, textarea} = van.tags;
 
 function Page_Message(){
-  // return div({id:'message'},
-  //   HomeNavMenu(),
-  //   label('Message'),
-  //   El_CreateMessageForm()
-  // )
 
-  return div({id:"message" },
+  return div({id:"message"},
     HomeNavMenu(),
     div({class:"main-content"},
       div({class:"cheader"},
@@ -57,7 +52,10 @@ function createMessageForm({closed}){
   const content = van.state('test content');
 
   async function btnCreateForum(){
-    // console.log("create report form");
+    // console.log("create message form");
+    console.log("toAlias.val: ", toAlias.val);
+    console.log("subject.val: ", subject.val);
+    console.log("content.val: ", content.val);
     try{
       const data = await useFetch('/api/message',{
         method:'POST',
@@ -76,32 +74,25 @@ function createMessageForm({closed}){
     }
   }
 
-  return div({id:'createReportForm'},
-    table(
-      tbody(
-        tr(
-          td(label('To Alias:')),
-          td(input({value:toAlias, oninput:e=>toAlias.val=e.target.value})),
-        ),
-        tr(
-          td(label('Subject:')),
-          td(input({value:subject, oninput:e=>subject.val=e.target.value})),
-        ),
-        tr(
-          td({colspan:"2"},label('Content:')),
-        ),
-        tr(
-          td({colspan:"2"},textarea({style:"width:100%; height:200px;",value:content, oninput:e=>content.val=e.target.value})),
-        ),
-        tr(
-          button({onclick:btnCreateForum},'Send'),
-          button({onclick:()=>closed.val=true},'Cancel'),
-        )
-      )
-    )
-  )
+  return div({id:'pm',class:"ccontent"},
+    div({class:"form-group"},
+      label({class:"report-title"},"To Alias:"),
+      input({type:"text",value:toAlias, oninput:e=>toAlias.val=e.target.value}),
+    ),
+    div({class:"form-group"},
+      label({class:"report-title"},"Subject:"),
+      td(input({type:"text",value:subject, oninput:e=>subject.val=e.target.value})),
+    ),
+    div({class:"form-group"},
+      label({class:"report-content"},"Content:"),
+      textarea({style:"width:100%; height:200px;",value:content, oninput:e=>content.val=e.target.value})
+    ),
+    div({class:"form-group"},
+      button({class:"normal", onclick:btnCreateForum},'Send'),
+      button({class:"warn", onclick:()=>closed.val=true},'Cancel'),
+    ),
+  );
 }
-
 
 export {
   Page_Message,
