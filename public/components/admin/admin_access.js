@@ -14,7 +14,6 @@ import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { El_CreateReportForm } from "../report/report.js";
 const {button, div, span, label} = van.tags;
 
-
 // Mock dependencies (replace with actual imports)
 // const El_CreateReportForm = () => van.tags.div("Report Form Placeholder");
 const useFetch = async (url) => {
@@ -24,7 +23,6 @@ const useFetch = async (url) => {
     { id: 2, title: "Report 2", content: "Content 2", isdone: true, isclose: false },
   ];
 };
-
 
 function AdminNavMenus() {
   return div(
@@ -97,7 +95,6 @@ function Page_Accounts() {
     div({ class: "main-content" }, label("Accounts Page"))
   );
 }
-
 
 function Page_Reports() {
   const reports = van.state([]);
@@ -186,9 +183,9 @@ function ButtonMaintenanceMode() {
   }
 
   return div(
-    label("Maintenance Mode"),
-    button({ onclick: btn_Maintenance_on }, " On "),
-    button({ onclick: btn_Maintenance_off }, " Off ")
+    label("Maintenance Mode "),
+    button({ class: "btn-ok", onclick: btn_Maintenance_on }, " On "),
+    button({ class: "btn-cancel", onclick: btn_Maintenance_off }, " Off ")
   );
 }
 

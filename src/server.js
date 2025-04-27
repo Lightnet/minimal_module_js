@@ -87,8 +87,6 @@ app.route('/', admin);
 
 //<script type="module" src="/client.js"></script>
 
-app.route('/', pages);
-
 app.get('/', (c) => {
   // const db = c.get('db');
   // console.log('db', db);
@@ -100,7 +98,7 @@ app.get('/', (c) => {
 
 //set up static folder for public access
 app.use('/*', serveStatic({ root: './public' }));
-
+app.route('/', pages);
 
 //wild card url for router vanjs added last
 // app.use('/*',  (c) => {

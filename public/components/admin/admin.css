@@ -18,7 +18,7 @@ body {
 .header {
   background: #333;
   color: white;
-  padding: 1rem;
+  padding: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -90,6 +90,85 @@ body {
   flex-grow: 1;
 }
 
+/* Button Styles */
+button, .btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  margin-right: 0.5rem;
+}
+
+.btn-ok {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+.btn-ok:hover {
+  background-color: #218838;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-cancel {
+  background-color: #6c757d; /* Gray */
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-warning {
+  background-color: #ffc107; /* Yellow */
+  color: #212529;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-error {
+  background-color: #dc3545; /* Red */
+  color: white;
+}
+
+.btn-error:hover {
+  background-color: #c82333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-alert {
+  background-color: #007bff; /* Blue */
+  color: white;
+}
+
+.btn-alert:hover {
+  background-color: #0069d9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Reports Styling */
+.report-item {
+  margin-bottom: 1rem;
+}
+
+.report-header {
+  background: darkgray;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-content {
+  background: lightgray;
+  padding: 0.5rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .sidebar {
@@ -129,3 +208,8 @@ body {
   background: lightgray;
   padding: 0.5rem;
 }
+
+
+
+
+

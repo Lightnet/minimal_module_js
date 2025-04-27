@@ -20,5 +20,21 @@ const {style, link} = van.tags;
 //   href:"http://localhost:3000/components/forum/forum.css"
 // }))
 
-van.add(document.head, UIStyle);
+//van.add(document.head, UIStyle);
+console.log("init style...");
+van.add(document.head, link({
+  id:"index_style",
+  rel:"stylesheet",
+  type:"text/css",
+  href:"/components/theme/theme.css"
+}));
+
+van.add(document.head, link({
+  id:"index_style",
+  rel:"stylesheet",
+  type:"text/css",
+  href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+}))
+
+
 van.add(document.body, App());

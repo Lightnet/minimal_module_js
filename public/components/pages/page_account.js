@@ -11,17 +11,30 @@ import { Router, Link, getRouterParams, navigate, getRouterQuery } from "vanjs-r
 import { HomeNavMenu } from "../navmenu.js";
 import { AccountEL } from "../account/profile.js";
 
-const {button, div, pre, p} = van.tags
+const {button, h1, div, pre, p} = van.tags
 
 function AccountPage() {
   // van.derive(() => {
   //   console.log(getRouterQuery()); // { section: "profile" }
   // });
 
-  return div(
+  // return div(
+  //   HomeNavMenu(),
+  //   AccountEL(),
+  // );
+
+  return div({id:"account" },
     HomeNavMenu(),
-    AccountEL(),
+    div({class:"main-content"},
+      div({class:"cheader"},
+         h1("Header"),
+      ),
+      div({class:"ccontent"},
+        AccountEL(),
+      ),
+    ),
   );
+
 }
 
 export{

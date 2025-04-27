@@ -10,14 +10,28 @@ import { Modal } from "vanjs-ui";
 import { HomeNavMenu } from "../navmenu.js";
 import useFetch from "/libs/useFetch.js";
 
-const {button, div, label, table, tbody, tr, td, input, textarea} = van.tags;
+const {button, h1, div, label, table, tbody, tr, td, input, textarea} = van.tags;
 
 function Page_Message(){
-  return div({id:'message'},
+  // return div({id:'message'},
+  //   HomeNavMenu(),
+  //   label('Message'),
+  //   El_CreateMessageForm()
+  // )
+
+  return div({id:"home" },
     HomeNavMenu(),
-    label('Message'),
-    El_CreateMessageForm()
-  )
+    div({class:"main-content"},
+      div({class:"cheader"},
+         h1("Header"),
+      ),
+      div({class:"ccontent"},
+        label('Message'),
+        El_CreateMessageForm()
+      ),
+    ),
+  );
+
 }
 
 //BUTTON MODAL

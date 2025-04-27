@@ -18,9 +18,21 @@ function Page_Report() {
   //   console.log(getRouterQuery()); // { section: "profile" }
   // });
 
-  return div(
+  // return div(
+  //   HomeNavMenu(),
+  //   El_CreateReportForm(),
+  // );
+
+  return div({id:"report" },
     HomeNavMenu(),
-    El_CreateReportForm(),
+    div({class:"main-content"},
+      div({class:"cheader"},
+         h1("Header"),
+      ),
+      div({class:"ccontent"},
+        El_CreateReportForm(),
+      ),
+    ),
   );
 }
 

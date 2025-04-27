@@ -12,7 +12,7 @@ import { HomeNavMenu } from "../navmenu.js";
 import {aliasState} from "/components/context.js";
 //import { button_test } from "../tests/buttonname.js";
 
-const {button, div, label} = van.tags;
+const {button, h1, div, label} = van.tags;
 
 function Page_Home() {
 
@@ -21,11 +21,16 @@ function Page_Home() {
     return aliasState.val
   });
 
-  return div({id:"home"},
+  return div({id:"home" },
     HomeNavMenu(),
-    div(
-      label("[Home]"), 
-      label("User: ", username),
+    div({class:"main-content"},
+      div({class:"cheader"},
+         h1("Header"),
+      ),
+      div({class:"ccontent"},
+        label("[Home]"), 
+        label("User: ", username),
+      ),
     ),
   );
 }

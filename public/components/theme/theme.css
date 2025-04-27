@@ -1,0 +1,126 @@
+:root {
+  --cheader-color: #b3b3b3;
+  --ccontent-color: #d1d1d1;
+  --cbody-color: #d9d9d9;
+  --cfont-color: #1a1a1a;
+  --sidebar-width: 60px;
+  --sidebar-bg: #f5f5f5;
+  --sidebar-hover: #e0e0e0;
+  --transition: all 0.3s ease;
+}
+
+[data-theme='dark'] {
+  --cheader-color: #2a2a2a;
+  --ccontent-color: #3f3f3f;
+  --cbody-color: #1c1c1c;
+  --cfont-color: #c7c7c7;
+  --sidebar-bg: #252525;
+  --sidebar-hover: #383838;
+}
+
+[data-theme='light'] {
+  --cheader-color: #b3b3b3;
+  --ccontent-color: #d1d1d1;
+  --cbody-color: #d9d9d9;
+  --cfont-color: #1a1a1a;
+  --sidebar-bg: #f5f5f5;
+  --sidebar-hover: #e0e0e0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--cbody-color);
+  color: var(--cfont-color);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--sidebar-bg);
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  transition: var(--transition);
+  z-index: 1000;
+}
+
+.sidebar-item {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sidebar-item:hover {
+  background-color: var(--sidebar-hover);
+}
+
+.sidebar-item i {
+  font-size: 20px;
+  color: var(--cfont-color);
+}
+
+.theme-toggle {
+  margin-top: auto;
+  padding-bottom: 10px;
+}
+
+.main-content {
+  margin-left: var(--sidebar-width); /* Offset for fixed sidebar */
+  padding: 20px;
+  min-height: 100vh;
+  background-color: var(--cbody-color);
+}
+
+.cheader {
+  background-color: var(--cheader-color);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.ccontent {
+  background-color: var(--ccontent-color);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+@media (max-width: 500px) {
+  .sidebar {
+      width: 100%;
+      height: auto;
+      flex-direction: row;
+      justify-content: space-around;
+      padding: 10px;
+      position: fixed;
+      top: auto;
+      bottom: 0;
+      left: 0;
+  }
+
+  .main-content {
+      margin-left: 0; /* Remove sidebar offset */
+      padding-bottom: 70px; /* Space for bottom sidebar */
+  }
+
+  .theme-toggle {
+      margin-top: 0;
+      padding-bottom: 0;
+  }
+}

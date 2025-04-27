@@ -88,15 +88,14 @@ function scriptHtml03(_script){
 //   const pageHtml = scriptHtml03("/van_threeammo.js");
 //   return c.html(pageHtml);
 // });
-
 // https://threejs.org/docs/index.html#manual/en/introduction/Installation
 
 var urlandjs = [
-  {url:'/admin/logs',         file:'/admin.js'},
-  {url:'/admin/accounts',     file:'/admin.js'},
-  {url:'/admin/tickets',      file:'/admin.js'},
-  {url:'/admin/report',       file:'/admin.js'},
-  {url:'/admin/settings',     file:'/admin.js'},
+  // {url:'/admin/logs',         file:'/admin.js'},
+  // {url:'/admin/accounts',     file:'/admin.js'},
+  // {url:'/admin/tickets',      file:'/admin.js'},
+  // {url:'/admin/report',       file:'/admin.js'},
+  // {url:'/admin/settings',     file:'/admin.js'},
   {url:'/admin',                                      file:'/admin.js'},
   {url:'/chat',                                       file:'/van_chat.js'},
   {url:'/login',                                      file:'/login.js'}
