@@ -37,16 +37,14 @@
   --cfont-color: #c7c7c7;
   --sidebar-bg: #252525;
   --sidebar-hover: #383838;
-  /* Button colors */
   --btn-normal-bg: #357abd;
   --btn-normal-text: #e6e6e6;
-  --btn-warn-bg: #   --btn-warn-bg: #d4a607;
+  --btn-warn-bg: #d4a607;
   --btn-warn-text: #e6e6e6;
   --btn-error-bg: #c0392b;
   --btn-error-text: #e6e6e6;
   --btn-alert-bg: #27ae60;
   --btn-alert-text: #e6e6e6;
-  /* Input colors */
   --input-bg: #333333;
   --input-border: #666666;
   --input-text: #c7c7c7;
@@ -54,7 +52,6 @@
   --input-error: #c0392b;
   --input-disabled-bg: #444444;
   --input-disabled-text: #888888;
-  /* Toggle checkbox colors */
   --toggle-bg-off: #666666;
   --toggle-bg-on: #357abd;
   --toggle-knob: #e6e6e6;
@@ -81,7 +78,7 @@
   --input-focus: #4a90e2;
   --input-error: #e74c3c;
   --input-disabled-bg: #e0e0e0;
-  --input-disabled-text: #YU666666;
+  --input-disabled-text: #666666;
   --toggle-bg-off: #b3b3b3;
   --toggle-bg-on: #4a90e2;
   --toggle-knob: #ffffff;
@@ -191,16 +188,6 @@ button.warn {
   color: var(--btn-warn-text);
 }
 
-button.error {
-  background-color: var(--btn-error-bg);
-  color: var(--btn-error-text);
-}
-
-button.alert {
-  background-color: var(--btn-alert-bg);
-  color: var(--btn-alert-text);
-}
-
 /* Input Styles */
 input[type="text"],
 input[type="email"],
@@ -242,16 +229,6 @@ input[type="number"]::placeholder {
   opacity: 0.7;
 }
 
-input[type="text"]:disabled,
-input[type="email"]:disabled,
-input[type="password"]:disabled,
-input[type="number"]:disabled {
-  background-color: var(--input-disabled-bg);
-  color: var(--input-disabled-text);
-  cursor: not-allowed;
-  border-color: var(--input-disabled-text);
-}
-
 input.error {
   border-color: var(--input-error);
   background-color: rgba(231, 76, 60, 0.1);
@@ -261,7 +238,47 @@ input.error:focus {
   box-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
 }
 
-/* Select and Option Styles */
+/* Textarea Styles */
+textarea {
+  padding: 12px;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  font-size: 16px;
+  outline: none;
+  transition: var(--transition);
+  width: 100%;
+  max-width: 300px;
+  min-height: 100px;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+}
+
+textarea:hover {
+  border-color: var(--input-focus);
+}
+
+textarea:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+}
+
+textarea::placeholder {
+  color: var(--input-border);
+  opacity: 0.7;
+}
+
+textarea.error {
+  border-color: var(--input-error);
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+textarea.error:focus {
+  box-shadow: 0 0 5px rgba(231, 76, 60, 0.3);
+}
+
+/* Select Styles */
 select {
   padding: 12px;
   border: 2px solid var(--input-border);
@@ -274,7 +291,7 @@ select {
   width: 100%;
   max-width: 300px;
   font-family: Arial, sans-serif;
-  appearance: none; /* Remove default browser styling */
+  appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a1a1a' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
@@ -295,14 +312,6 @@ select:focus {
   box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
 }
 
-select:disabled {
-  background-color: var(--input-disabled-bg);
-  color: var(--input-disabled-text);
-  cursor: not-allowed;
-  border-color: var(--input-disabled-text);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666666' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
-}
-
 select.error {
   border-color: var(--input-error);
   background-color: rgba(231, 76, 60, 0.1);
@@ -318,54 +327,29 @@ option {
   font-size: 16px;
 }
 
-/* Toggle Checkbox Styles */
-.toggle-checkbox {
-  display: none;
+/* Report Form Styles */
+#createReportForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
 }
 
-.toggle-label {
-  display: inline-block;
-  width: 40px;
-  height: 20px;
-  background-color: var(--toggle-bg-off);
-  border-radius: 10px;
-  position: relative;
-  cursor: pointer;
-  transition: var(--transition);
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.toggle-label::after {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  background-color: var(--toggle-knob);
-  border-radius: 50%;
-  top: 2px;
-  left: 2px;
-  transition: var(--transition);
+.form-group label {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--cfont-color);
 }
 
-.toggle-checkbox:checked + .toggle-label {
-  background-color: var(--toggle-bg-on);
-}
-
-.toggle-checkbox:checked + .toggle-label::after {
-  transform: translateX(20px);
-}
-
-.toggle-checkbox:focus + .toggle-label {
-  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
-}
-
-.toggle-checkbox:disabled + .toggle-label {
-  background-color: var(--input-disabled-bg);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.toggle-checkbox:disabled + .toggle-label::after {
-  background-color: var(--input-disabled-text);
+.form-buttons {
+  display: flex;
+  gap: 10px;
 }
 
 @media (max-width: 500px) {

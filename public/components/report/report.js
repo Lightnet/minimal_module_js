@@ -9,7 +9,7 @@
 import { van } from "/dps.js";
 import { Modal } from "vanjs-ui";
 import useFetch from "/libs/useFetch.js";
-const {button, div, label, table, tbody, tr, td, input} = van.tags;
+const {button, div, label, select, option, textarea, input} = van.tags;
 
 
 //BUTTON MODAL
@@ -31,45 +31,77 @@ function El_CreateReportForm(){
 function createReportForm({closed}){
 
   const forumTitle = van.state('test');
+  const forumType = van.state('user');
   const forumContent = van.state('test');
 
   async function btnCreateForum(){
-    console.log("create report form")
-    try{
-      const data = await useFetch('/api/report',{
-        method:'POST',
-        body:JSON.stringify({
-          title:forumTitle.val,
-          content:forumContent.val,
-        })
-      });
-      console.log(data);
-      if(closed){
-        closed.val = true;
-      }
-    }catch(e){
-      console.log("ERROR",e)
-    }
+    console.log("create report form");
+    console.log(forumTitle.val);
+    console.log(forumType.val);
+    console.log(forumContent.val);
+    // try{
+    //   const data = await useFetch('/api/report',{
+    //     method:'POST',
+    //     body:JSON.stringify({
+    //       title:forumTitle.val,
+    //       content:forumContent.val,
+    //     })
+    //   });
+    //   console.log(data);
+    //   if(closed){
+    //     closed.val = true;
+    //   }
+    // }catch(e){
+    //   console.log("ERROR",e)
+    // }
   }
 
-  return div({id:'createReportForm'},
-    table(
-      tbody(
-        tr(
-          td(label('Title:')),
-          td(input({value:forumTitle, oninput:e=>forumTitle.val=e.target.value})),
-        ),
-        tr(
-          td(label('Content:')),
-          td(input({value:forumContent, oninput:e=>forumContent.val=e.target.value})),
-        ),
-        tr(
-          button({onclick:btnCreateForum},'Create'),
-          button({onclick:()=>closed.val=true},'Cancel'),
-        )
+  return div({id:'createReportForm', class:"ccontent"},
+    div({class:"form-group"},
+      label({class:"report-title"},"Title:"),
+      input({value:forumTitle,oninput: e => forumTitle.val = e.target.value, type:"text",placeholder:"Enter Report Title"}),
+    ),
+    div({class:"form-group"},
+      label({class:"report-type"},"Submit Type:"),
+      select({value:forumType,oninput: e => forumType.val = e.target.value,},
+        option({},"User"),
+        option({},"Bugs"),
+        option({},"Feedback"),
       )
-    )
-  )
+    ),
+    div({class:"form-group"},
+      label({class:"report-content"},"Content:"),
+      textarea({value:forumContent,oninput: e => forumContent.val = e.target.value,placeholder:"Enter report details"}),
+    ),
+
+    div({class:"form-group"},
+      button({class:"normal",onclick:btnCreateForum},'Create'),
+      button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
+    ),
+
+
+  );
+
+
+
+  // return div({id:'createReportForm', class:"ccontent"},
+  //   table(
+  //     tbody(
+  //       tr(
+  //         td(label('Title:')),
+  //         td(input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})),
+  //       ),
+  //       tr(
+  //         td(label('Content:')),
+  //         td(input({type:"text",value:forumContent, oninput:e=>forumContent.val=e.target.value})),
+  //       ),
+  //       tr(
+  //         button({class:"normal",onclick:btnCreateForum},'Create'),
+  //         button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
+  //       )
+  //     )
+  //   )
+  // )
 }
 
 export {
