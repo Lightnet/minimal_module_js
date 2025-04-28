@@ -50,6 +50,9 @@ const baseLayout = ({ children }) => {
       children
     )
   );
+
+
+  
 };
 
 function forumNavMenu(){

@@ -110,7 +110,7 @@ export async function getTopicIDComments(topicEl, _id){
         van.add(topicEl, div({class:"comment-item"},
           div({class:"comment-header"},
             div({class:"comment-title"},
-              h2(`here[Comment] [ Title ] ${item.title}`), 
+              h2(`[Comment] ${item.title}`), 
             ),
             div({class:"comment-actions"},
               button({class:"like-btn"},"Like"),

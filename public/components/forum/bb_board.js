@@ -13,6 +13,7 @@ import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { baseLayout } from "./base_layout.js";
 import { displayButtonCreateTopic, getBoardIDTopics } from "./bb_topic.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
+import { HomeNavMenu } from "../navmenu.js";
 
 const {button, link, input, label, p, div, table, tbody, tr, td, h2} = van.tags;
 
@@ -78,14 +79,14 @@ function createBoardForm({closed}){
 // PAGE BOARD
 function pageBoard() {
 
-  if(!document.getElementById("forum_style")){
-    van.add(document.head, link({
-      id:"forum_style",
-      rel:"stylesheet",
-      type:"text/css",
-      href:"/components/forum/forum.css"
-    }))
-  }
+  // if(!document.getElementById("forum_style")){
+  //   van.add(document.head, link({
+  //     id:"forum_style",
+  //     rel:"stylesheet",
+  //     type:"text/css",
+  //     href:"/components/forum/forum.css"
+  //   }))
+  // }
 
   const topicEl = div('TOPICS');
 
@@ -97,9 +98,19 @@ function pageBoard() {
     }
   });
 
-  return baseLayout({children:
-    topicEl
-  });
+  // return baseLayout({children:
+  //   topicEl
+  // });
+
+  return div({id:"home",class:"forum-container" },
+    HomeNavMenu(),
+    div({class:"main-content"},
+      //bbPostTypeEL,
+      div({class:"forum-main"},
+        topicEl
+      )
+    ),
+  );
 
 }
 
@@ -123,14 +134,14 @@ export async function getForumIDBoards(boardEl, _id){
         van.add(boardEl, div({class:"board-container"},
           div({class:'board-header'},
             div({class:"board-title"},
-              h2({onclick:()=>getBoardID(item.id)},`here[Board] [ Title ] ${item.title}`), 
+              h2({onclick:()=>getBoardID(item.id)},`[Board] ${item.title}`), 
             ),
             div({class:"action-buttons"},
               button({class:"edit-btn"},"Edit"),
               button({class:"delete-btn"},"Delete"),
             )
           ),
-          p({class:"board-content",onclick:()=>getBoardID(item.id)},label(" [ Content ] "+ item.content),)
+          p({class:"board-description",onclick:()=>getBoardID(item.id)},label(" [ Content ] "+ item.content),)
         ));
       }
     }
@@ -138,8 +149,6 @@ export async function getForumIDBoards(boardEl, _id){
     console.log("ERROR",e)
   }
 }
-
-
 
 export {
   displayButtonCreateBoard,

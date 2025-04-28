@@ -13,6 +13,7 @@ import {forumIDState} from "/components/context.js";
 import useFetch from "../../libs/useFetch.js";
 import { baseLayout } from "./base_layout.js";
 import { getForumIDBoards } from "./bb_board.js";
+import { HomeNavMenu } from "../navmenu.js";
 
 const {button, input, label, link, div, span, h2, table, tbody, tr,td} = van.tags;
 
@@ -43,7 +44,7 @@ const getForumsEL = () => {
           van.add(forumList, div({class:'forum-item'},
               div({class:'forum-header'},
                 div({class:"forum-title"},
-                  h2({onclick:()=>enterForum(data[i].id)},`?[ Forum ] ${data[i].title}`),
+                  h2({onclick:()=>enterForum(data[i].id)},`[ Forum ] ${data[i].title}`),
                 ),
                 div({class:"action-buttons"},
                   button({class:"edit-btn",onclick:()=>editForum(data[i].id)},'Edit'),
@@ -132,14 +133,14 @@ function createForumForm({closed}){
 function pageForumID() {
   // console.log("FORUM ID???");
   //If url > forum/:id
-  if(!document.getElementById("forum_style")){
-    van.add(document.head, link({
-      id:"forum_style",
-      rel:"stylesheet",
-      type:"text/css",
-      href:"/components/forum/forum.css"
-    }))
-  }
+  // if(!document.getElementById("forum_style")){
+  //   van.add(document.head, link({
+  //     id:"forum_style",
+  //     rel:"stylesheet",
+  //     type:"text/css",
+  //     href:"/components/forum/forum.css"
+  //   }))
+  // }
 
   const boardEl = div({id:"BOARDS",class:""});
 
@@ -156,9 +157,20 @@ function pageForumID() {
     }
   });
 
-  return baseLayout({children:
-    boardEl
-  });
+  // return baseLayout({children:
+  //   boardEl
+  // });
+
+  return div({id:"home",class:"forum-container" },
+    HomeNavMenu(),
+    div({class:"main-content"},
+      // bbPostTypeEL,
+      div({class:"forum-main"},
+        boardEl
+      )
+    ),
+  );
+
 }
 
 export {
