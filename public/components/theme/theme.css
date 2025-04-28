@@ -508,13 +508,13 @@ option {
 }
 
 .modal-actions .cancel-btn {
-  background-color: var(--input-disabled-bg);
+  background-color: var(--btn-warn-bg);
   color: var(--input-disabled-text);
   border: none;
 }
 
 .modal-actions .cancel-btn:hover {
-  background-color: var(--input-border);
+  background-color: var(--btn-warn-bg);
 }
 
 .modal-actions .submit-btn {

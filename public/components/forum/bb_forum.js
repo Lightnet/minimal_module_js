@@ -117,17 +117,17 @@ function createForumForm({closed}){
   }
 
   return div({id:'forumForm',class:"ccontent"},
-    div({class:"form-group"},
-      label({class:"report-title"},"Title:"),
-      input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+    div({class:"modal-form-group"},
+      label({for:"forumTitle"},"Title:"),
+      input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
     ),
-    div({class:"form-group"},
-      label({class:"report-content"},'Content:'),
-      textarea({value:forumContent, oninput:e=>forumContent.val=e.target.value})
+    div({class:"modal-form-group"},
+      label({class:""},'Content:'),
+      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
     ),
-    div({class:"form-group"},
-      button({class:"normal",onclick:btnCreateForum},'Create'),
-      button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
+    div({class:"modal-actions"},
+      button({type:"button",class:"submit-btn",onclick:btnCreateForum},'Create'),
+      button({type:"submit",class:"cancel-btn",onclick:()=>closed.val=true},'Cancel'),
     ),
   );
 

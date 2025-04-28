@@ -57,17 +57,17 @@ function createTopicForm({closed}){
   }
 
   return div({id:'topicForm',class:"ccontent"},
-    div({class:"form-group"},
+    div({class:"modal-form-group"},
       label({class:"report-title"},"Topic Title:"),
       input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
     ),
-    div({class:"form-group"},
+    div({class:"modal-form-group"},
       label({class:"report-content"},'Content:'),
       textarea({value:forumContent, oninput:e=>forumContent.val=e.target.value})
     ),
-    div({class:"form-group"},
-      button({class:"normal",onclick:btnCreateTopic},'Create'),
-      button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
+    div({class:"modal-actions"},
+      button({type:"button",class:"submit-btn",onclick:btnCreateTopic},'Create'),
+      button({type:"submit",class:"cancel-btn",onclick:()=>closed.val=true},'Cancel'),
     ),
   );
 
