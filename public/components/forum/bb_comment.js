@@ -12,7 +12,7 @@ import {useFetch} from "/libs/useFetch.js";
 import { baseLayout } from "./base_layout.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 
-const {button, input, h2, label, div, table, tbody, tr,td} = van.tags;
+const {button, input, i, h2, label, div, table, tbody, tr,td} = van.tags;
 
 import { aliasState, loginState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 
@@ -100,7 +100,10 @@ export async function getTopicIDComments(topicEl, _id){
     commentIDState.val = _id;
     //navigate('/comment/'+_id);
   }
-
+  // <i class="fa-solid fa-thumbs-up"></i>
+  // <i class="fa-solid fa-thumbs-down"></i>
+  // <i class="fa-solid fa-pen-to-square"></i>
+  // <i class="fa-solid fa-trash"></i>
   try{
     const data = await useFetch('/api/topic/'+_id);
     console.log(data);
@@ -109,14 +112,30 @@ export async function getTopicIDComments(topicEl, _id){
         // console.log("item: ", item);
         van.add(topicEl, div({class:"comment-item"},
           div({class:"comment-header"},
-            div({class:"comment-title"},
-              h2(`[Comment] ${item.title}`), 
-            ),
+            // div({class:"comment-title"},
+            //   h2(`[Comment] ${item.title}`), 
+            // ),
             div({class:"comment-actions"},
-              button({class:"like-btn"},"Like"),
-              button({class:"reply-btn"},"Reply"),
-              button({class:"edit-btn"},"Edit"),
-              button({class:"delete-btn"},"Delete"),
+              button({class:"like-btn"},
+                i({class:"fas fa-thumbs-up"}),
+                label(" Like")
+              ),
+              button({class:"dislike-btn"},
+                i({class:"fas fa-thumbs-down"}),
+                label(" Dislike")
+              ),
+              button({class:"reply-btn"},
+                i({class:"fa-solid fa-reply"}),
+                label(" Reply")
+              ),
+              button({class:"edit-btn"},
+                i({class:"fa-solid fa-pen-to-square"}),
+                label(" Edit")
+              ),
+              button({class:"delete-btn"},
+                i({class:"fa-solid fa-trash"}),
+                label(" Delete")
+              ),
             ),
           ),
           div({class:"comment-meta"}, label("Posted on XXX XX, XXXX")),

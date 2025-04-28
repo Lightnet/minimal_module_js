@@ -748,6 +748,15 @@ option {
   background-color: var(--input-focus);
 }
 
+.comment-actions .dislike-btn {
+  background-color: var(--btn-warn-bg);
+  color: var(--btn-warn-text);
+}
+
+.comment-actions .dislike-btn:hover {
+  background-color: #d4a607;
+}
+
 .comment-actions .reply-btn {
   background-color: var(--btn-warn-bg);
   color: var(--btn-warn-text);

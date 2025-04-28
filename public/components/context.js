@@ -23,6 +23,8 @@ const tokenState = van.state({});
 const forumIDState = van.state("");
 const boardIDState = van.state("");
 const topicIDState = van.state("");
+const topicTitleState = van.state("");
+const topicContentState = van.state("");
 const commentIDState = van.state("");
 const themeIDState = van.state('light');
 
@@ -35,6 +37,8 @@ export {
   forumIDState,
   boardIDState,
   topicIDState,
+  topicTitleState,
+  topicContentState,
   commentIDState,
-  themeIDState
+  themeIDState,
 }

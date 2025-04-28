@@ -14,6 +14,7 @@ import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { displayButtonCreateComment, getTopicIDComments } from "./bb_comment.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
+import { topicContentState, topicTitleState } from "../context.js";
 
 const {button, input, link, label, h2, div, table, tbody, tr,td} = van.tags;
 
@@ -73,20 +74,21 @@ function createTopicForm({closed}){
         )
       )
     )
-  )
+  );
+
 }
 
 // PAGE TOPIC ID
 function pageTopic() {
 
-  if(!document.getElementById("forum_style")){
-    van.add(document.head, link({
-      id:"forum_style",
-      rel:"stylesheet",
-      type:"text/css",
-      href:"/components/forum/forum.css"
-    }))
-  }
+  // if(!document.getElementById("forum_style")){
+  //   van.add(document.head, link({
+  //     id:"forum_style",
+  //     rel:"stylesheet",
+  //     type:"text/css",
+  //     href:"/components/forum/forum.css"
+  //   }))
+  // }
 
   const topicEl = div({class:"comment-list"});
 
@@ -96,6 +98,22 @@ function pageTopic() {
 
     if(id){
       topicIDState.val = id;
+      while (topicEl.lastElementChild) {// clear children
+        topicEl.removeChild(topicEl.lastElementChild);
+      }
+
+      van.add(topicEl,div({id:id, class:'topic-item'},
+        div({class:'topic-header'},
+          div({class:"topic-title"},
+            h2("[Topic] "+ topicTitleState.val),
+          ),
+          // div({class:"action-buttons"},
+          //   button({class:"edit-btn"},'Edit'),
+          //   button({class:"delete-btn"},'Delete'),
+          // )
+        ),
+        div({class:"topic-content"},label(" [ Content ] "+ topicContentState.val))
+      )),
       getTopicIDComments(topicEl, id);
     }
   });
@@ -114,14 +132,15 @@ function pageTopic() {
     ),
   );
 
-
-
 }
 // BOARD get topics
 export async function getBoardIDTopics(topicEl,_id){
 
-  function getBoardID(_id){
-    boardIDState.val = _id;
+  function getTopicID(_id, _title, _content){
+    // topicIDState.val = _id;
+    topicIDState.val = _id;
+    topicTitleState.val = _title;
+    topicContentState.val = _content;
     navigate('/topic/'+_id);
   }
 
@@ -139,7 +158,7 @@ export async function getBoardIDTopics(topicEl,_id){
         // BOARD CONTENT
         van.add(topicEl, div({class:'topic-item'},
           div({class:'topic-header'},
-            div({class:"topic-title",onclick:()=>getBoardID(item.id)},
+            div({class:"topic-title",onclick:()=>getTopicID(item.id, item.title, item.content)},
               h2("[Topic] "+ item.title),
             ),
             div({class:"action-buttons"},
@@ -147,7 +166,7 @@ export async function getBoardIDTopics(topicEl,_id){
               button({class:"delete-btn"},'Delete'),
             )
           ),
-          div({class:"topic-content",onclick:()=>getBoardID(item.id)},label(" [ Content ] "+ item.content),)
+          div({class:"topic-content",onclick:()=>getTopicID(item.id, item.title, item.content)},label(" [ Content ] "+ item.content),)
         ));
       }
     }

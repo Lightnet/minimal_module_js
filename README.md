@@ -1,5 +1,7 @@
 # minimal_module_js
 
+# License: MIT
+
 # Information:
   Work in progress. Using minimal packages in style vanilla js.
 
@@ -56,3 +58,8 @@
   - Edit book
   - Books
       - Pages
+
+# Images:
+
+![Desktop](screenshots/basic_modulejs01.png)
+![Mobile](screenshots/basic_modulejs02.png)

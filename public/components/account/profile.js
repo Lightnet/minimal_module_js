@@ -39,7 +39,7 @@ const AccountEL = () => {
 
   return div({id:'account'},
     div(
-      label('Account'),
+      label(' Account '),
       button({onclick:c_info},'Info')
     ),
     ELInfon,
