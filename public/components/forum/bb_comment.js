@@ -10,10 +10,9 @@ import { Modal } from "vanjs-ui";
 import {useFetch} from "/libs/useFetch.js";
 import { baseLayout } from "./base_layout.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-
-const {button, input, textarea, i, h2, label, div, table, tbody, tr,td} = van.tags;
-
 import { aliasState, loginState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
+
+const {button, input, textarea, i, h2, label, div} = van.tags;
 
 function displayButtonCreateComment(){
 
@@ -73,10 +72,6 @@ function createCommentForm({closed}){
 
 // PAGE COMMENT
 function pageComment() {
-  // van.derive(() => {
-  //   console.log("[BOARD] FORUM ID:>> ",getRouterQuery()); // { section: "profile" }
-  //   console.log("getRouterParams >> ",getRouterParams()); 
-  // });
 
   return baseLayout({children:
     div({class:"comment-content"},
@@ -149,7 +144,6 @@ export async function getTopicIDComments(topicEl, _id){
   }
 
 }
-
 
 export {
   createCommentForm,

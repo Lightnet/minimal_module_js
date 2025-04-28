@@ -9,12 +9,11 @@ import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import {useFetch} from "/libs/useFetch.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-// import { baseLayout } from "./base_layout.js";
 import { displayButtonCreateTopic, getBoardIDTopics } from "./bb_topic.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
 
-const {button, i, textarea, link, input, label, p, div, table, tbody, tr, td, h2} = van.tags;
+const {button, i, textarea, link, input, label, p, div, h2} = van.tags;
 
 function displayButtonCreateBoard(){
 

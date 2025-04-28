@@ -324,12 +324,12 @@ option {
 
 .nav-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
+  /* justify-content: space-between; */
+  align-items: left;
+  padding: 8px;
   background-color: var(--cheader-color);
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 
 .nav-button {

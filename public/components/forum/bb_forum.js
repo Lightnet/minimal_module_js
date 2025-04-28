@@ -11,11 +11,10 @@ import { Modal } from "vanjs-ui";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import {forumIDState} from "/components/context.js";
 import useFetch from "../../libs/useFetch.js";
-// import { baseLayout } from "./base_layout.js";
 import { displayButtonCreateBoard, getForumIDBoards } from "./bb_board.js";
 import { HomeNavMenu } from "../navmenu.js";
 
-const {button, i, input, label,textarea, link, div, span, h2, table, tbody, tr, td} = van.tags;
+const {button, i, input, label,textarea, link, div, span, h2} = van.tags;
 
 const getForumsEL = () => {
 

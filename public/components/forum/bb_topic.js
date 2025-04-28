@@ -8,7 +8,6 @@
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import {useFetch} from "/libs/useFetch.js";
-// import { baseLayout } from "./base_layout.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { displayButtonCreateComment, getTopicIDComments } from "./bb_comment.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
