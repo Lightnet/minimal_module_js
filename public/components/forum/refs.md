@@ -1,3 +1,15 @@
+```js
+if(!document.getElementById("forum_style")){
+    van.add(document.head, link({
+      id:"forum_style",
+      rel:"stylesheet",
+      type:"text/css",
+      href:"/components/forum/forum.css"
+    }))
+  }
+```
+
+
 larger, more prominent title and description to distinguish it from topics and comments.
 - **Topic Layout**: Topics are lighter (`#f9f9f9`) and more compact, with a clickable title and metadata for quick scanning.
 - **Comment Layout**: Comments are nested within topics, with a clean, minimal design and interaction buttons for engagement.

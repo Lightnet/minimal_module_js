@@ -11,7 +11,7 @@ import { Modal } from "vanjs-ui";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import {forumIDState} from "/components/context.js";
 import useFetch from "../../libs/useFetch.js";
-import { baseLayout } from "./base_layout.js";
+// import { baseLayout } from "./base_layout.js";
 import { displayButtonCreateBoard, getForumIDBoards } from "./bb_board.js";
 import { HomeNavMenu } from "../navmenu.js";
 
@@ -136,16 +136,6 @@ function createForumForm({closed}){
 // GET CURRENT FORUM ID for boards
 function pageForumID() {
   // console.log("FORUM ID???");
-  //If url > forum/:id
-  // if(!document.getElementById("forum_style")){
-  //   van.add(document.head, link({
-  //     id:"forum_style",
-  //     rel:"stylesheet",
-  //     type:"text/css",
-  //     href:"/components/forum/forum.css"
-  //   }))
-  // }
-
   const boardEl = div({id:"BOARDS",class:""});
   const bbForumNav = div({id:'nav'});
 
@@ -168,7 +158,7 @@ function pageForumID() {
     // forumIDState
     console.log("forumIDState:", forumIDState.val)
     van.add(bbForumNav,
-      button({class:"normal",onclick:()=>navigate('/forum')}, "Forum"),
+      button({class:"nav-button",onclick:()=>navigate('/forum')}, "Forum"),
     );
 
     van.add(bbForumNav,

@@ -9,7 +9,7 @@ import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import {useFetch} from "/libs/useFetch.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-import { baseLayout } from "./base_layout.js";
+// import { baseLayout } from "./base_layout.js";
 import { displayButtonCreateTopic, getBoardIDTopics } from "./bb_topic.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
@@ -75,19 +75,10 @@ function createBoardForm({closed}){
 // PAGE BOARD
 function pageBoard() {
 
-  // if(!document.getElementById("forum_style")){
-  //   van.add(document.head, link({
-  //     id:"forum_style",
-  //     rel:"stylesheet",
-  //     type:"text/css",
-  //     href:"/components/forum/forum.css"
-  //   }))
-  // }
-
+  const topicEl = div({id:'topics'});
   const bbforumNav = div();
 
-  const topicEl = div({id:'topics'});
-
+  // get topics and create nav menu.
   van.derive(() => {
     const { id } = getRouterParams();
     if(id){
@@ -97,10 +88,10 @@ function pageBoard() {
         bbforumNav.removeChild(bbforumNav.lastElementChild);
       }
       van.add(bbforumNav,
-        button({class:"normal",onclick:()=>navigate('/forum/'+boardIDState.val)},"Forum"),
+        button({class:"nav-button",onclick:()=>navigate('/forum/'+boardIDState.val)},"Forum"),
       );
       van.add(bbforumNav,
-        button({class:"normal",onclick:()=>navigate('/forum/'+forumIDState.val)},"Board"),
+        button({class:"nav-button",onclick:()=>navigate('/forum/'+forumIDState.val)},"Board"),
       );
 
       van.add(bbforumNav,

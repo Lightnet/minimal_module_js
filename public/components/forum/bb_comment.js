@@ -133,6 +133,10 @@ export async function getTopicIDComments(topicEl, _id){
                 i({class:"fa-solid fa-trash"}),
                 label(" Delete")
               ),
+              button({class:"report-btn"},
+                i({class:"fa-solid fa-flag"}),
+                label(" Report")
+              ),
             ),
           ),
           div({class:"comment-meta"}, label("Posted on XXX XX, XXXX")),

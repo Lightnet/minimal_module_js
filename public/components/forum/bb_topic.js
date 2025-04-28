@@ -8,7 +8,7 @@
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import {useFetch} from "/libs/useFetch.js";
-import { baseLayout } from "./base_layout.js";
+// import { baseLayout } from "./base_layout.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { displayButtonCreateComment, getTopicIDComments } from "./bb_comment.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
@@ -77,15 +77,6 @@ function createTopicForm({closed}){
 // This get comments
 function pageTopic() {
 
-  // if(!document.getElementById("forum_style")){
-  //   van.add(document.head, link({
-  //     id:"forum_style",
-  //     rel:"stylesheet",
-  //     type:"text/css",
-  //     href:"/components/forum/forum.css"
-  //   }))
-  // }
-
   const topicEl = div({class:"comment-list"});
   const bbforumNav = div();
 
@@ -104,10 +95,20 @@ function pageTopic() {
           div({class:"topic-title"},
             h2("[Topic] "+ topicTitleState.val),
           ),
-          // div({class:"action-buttons"},
-          //   button({class:"edit-btn"},'Edit'),
-          //   button({class:"delete-btn"},'Delete'),
-          // )
+          div({class:"action-buttons"},
+            button({class:"edit-btn"},
+              i({class:"fa-solid fa-pen-to-square"}),
+              label(' Edit')
+            ),
+            button({class:"delete-btn"},
+              i({class:"fa-solid fa-trash"}),
+              label(' Delete')
+            ),
+            button({class:"delete-btn"},
+              i({class:"fa-solid fa-trash"}),
+              label(' Report')
+            ),
+          )
         ),
         div({class:"topic-content"},label(" [ Content ] "+ topicContentState.val))
       )),
@@ -120,15 +121,14 @@ function pageTopic() {
       bbforumNav.removeChild(bbforumNav.lastElementChild);
     }
     van.add(bbforumNav,
-      button({class:"normal",onclick:()=>navigate('/forum')},"Forums"),
+      button({class:"nav-button",onclick:()=>navigate('/forum')},"Forums"),
     );
     van.add(bbforumNav,
-      button({class:"normal",onclick:()=>navigate('/forum/'+forumIDState.val)},"Boards"),
+      button({class:"nav-button",onclick:()=>navigate('/forum/'+forumIDState.val)},"Boards"),
     );
     van.add(bbforumNav,
-      button({class:"normal",onclick:()=>navigate('/board/'+boardIDState.val)},"Topics"),
+      button({class:"nav-button",onclick:()=>navigate('/board/'+boardIDState.val)},"Topics"),
     );
-
     van.add(bbforumNav,
       displayButtonCreateComment(),
     );
@@ -179,9 +179,13 @@ export async function getBoardIDTopics(topicEl,_id){
                 i({class:"fa-solid fa-pen-to-square"}),
                 label(' Edit')
               ),
-              button({class:"delete-btn"},
+              button({class:"report-btn"},
                 i({class:"fa-solid fa-trash"}),
                 label(' Delete')
+              ),
+              button({class:"report-btn"},
+                i({class:"fa-solid fa-flag"}),
+                label(' Report')
               ),
             )
           ),

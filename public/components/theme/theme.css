@@ -431,6 +431,19 @@ option {
   background-color: var(--input-error);
 }
 
+.action-buttons .report-btn {
+  background-color: var(--btn-error-bg);
+  color: var(--btn-error-text);
+  border: none;
+}
+
+.action-buttons .report-btn:hover {
+  background-color: var(--input-error);
+}
+
+
+
+
 [data-admin-only="true"] {
   display: none;
 }
@@ -665,6 +678,18 @@ option {
   background-color: var(--input-error);
 }
 
+.topic-actions .report-btn {
+  background-color: var(--btn-error-bg);
+  color: var(--btn-error-text);
+  border: none;
+}
+
+.topic-actions .report-btn:hover {
+  background-color: var(--input-error);
+}
+
+
+
 /* Comment Layout */
 .comment-list {
   list-style: none;
@@ -735,6 +760,16 @@ option {
 }
 
 .comment-actions .delete-btn:hover {
+  background-color: var(--input-error);
+}
+
+.comment-actions .report-btn {
+  background-color: var(--btn-error-bg);
+  color: var(--btn-error-text);
+  border: none;
+}
+
+.comment-actions .report-btn:hover {
   background-color: var(--input-error);
 }
 
