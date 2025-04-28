@@ -12,10 +12,10 @@ import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import {forumIDState} from "/components/context.js";
 import useFetch from "../../libs/useFetch.js";
 import { baseLayout } from "./base_layout.js";
-import { getForumIDBoards } from "./bb_board.js";
+import { displayButtonCreateBoard, getForumIDBoards } from "./bb_board.js";
 import { HomeNavMenu } from "../navmenu.js";
 
-const {button, i, input, label, link, div, span, h2, table, tbody, tr, td} = van.tags;
+const {button, i, input, label,textarea, link, div, span, h2, table, tbody, tr, td} = van.tags;
 
 const getForumsEL = () => {
 
@@ -116,24 +116,21 @@ function createForumForm({closed}){
     }
   }
 
-  return div({id:'createForum'},
-    table(
-      tbody(
-        tr(
-          td(label('Title:')),
-          td(input({value:forumTitle, oninput:e=>forumTitle.val=e.target.value})),
-        ),
-        tr(
-          td(label('Content:')),
-          td(input({value:forumContent, oninput:e=>forumContent.val=e.target.value})),
-        ),
-        tr(
-          button({class:"action-buttons",onclick:btnCreateForum},'Create'),
-          button({class:"action-buttons",onclick:()=>closed.val=true},'Cancel'),
-        )
-      )
-    )
-  )
+  return div({id:'forumForm',class:"ccontent"},
+    div({class:"form-group"},
+      label({class:"report-title"},"Title:"),
+      input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+    ),
+    div({class:"form-group"},
+      label({class:"report-content"},'Content:'),
+      textarea({value:forumContent, oninput:e=>forumContent.val=e.target.value})
+    ),
+    div({class:"form-group"},
+      button({class:"normal",onclick:btnCreateForum},'Create'),
+      button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
+    ),
+  );
+
 }
 
 // GET CURRENT FORUM ID for boards
@@ -163,21 +160,21 @@ function pageForumID() {
     }
   });
 
-  function goToForum(_id){
-    console.log("Go Forum ID?", _id);
-    navigate('/forum/'+forumIDState.val);
-  }
-
   van.derive(() => {
     
-    while (bbForumNav.lastElementChild) {// clear children
+    while (bbForumNav.lastElementChild) { // clear children
       bbForumNav.removeChild(bbForumNav.lastElementChild);
     }
     // forumIDState
     console.log("forumIDState:", forumIDState.val)
     van.add(bbForumNav,
-      button({class:"normal",onclick:()=>navigate('/forum')}, "Home"),
+      button({class:"normal",onclick:()=>navigate('/forum')}, "Forum"),
     );
+
+    van.add(bbForumNav,
+      displayButtonCreateBoard()
+    );
+
     // van.add(bbForumNav,
     //   button({class:"normal",onclick:()=>goToForum(forumIDState.val)}, "Index"),
     // );

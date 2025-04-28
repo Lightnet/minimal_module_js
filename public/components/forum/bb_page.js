@@ -1,9 +1,8 @@
 /*
-  Project Name: threepolygonenginejs
+  Project Name: minimal_module_js
   License: MIT
   Created By: Lightnet
-  GitHub: https://github.com/Lightnet/threepolygonenginejs
-  
+  GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
 import van from "vanjs-core";
@@ -18,40 +17,34 @@ import { displayButtonCreateTopic, pageTopic} from "./bb_topic.js";
 import { displayButtonCreateComment, pageComment} from "./bb_comment.js";
 import { HomeNavMenu } from "../navmenu.js";
 
-
-const { div, i, link } = van.tags;
+const { button, div, i, link } = van.tags;
 
 // DEFAULT GET PULBIC FORUMS
 // GET CURRENT FORUM IS PUBLIC
 function pageForum() {
   console.log("init style");
 
-  const bbPostTypeEL = van.derive(()=>{
+  const bbForumNav = div();
+
+  van.derive(()=>{
     let path = getRouterPathname();
-    if(path.startsWith("/topic/")){
-      // console.log("FOUND TOPIC...");
-      return displayButtonCreateComment();
+
+    // if(path.startsWith("/forum")){
+    //   // console.log("FOUND forum...");
+    //   return displayButtonCreateForum();
+    // }
+
+    while (bbForumNav.lastElementChild) { // clear children
+      bbForumNav.removeChild(bbForumNav.lastElementChild);
     }
 
-    if(path.startsWith("/board/")){
-      // console.log("FOUND board...");
-      return displayButtonCreateTopic();
-    }
+    van.add(bbForumNav,
+      displayButtonCreateForum(),
+    );
 
-    if(path.startsWith("/forum/message")){
-      // console.log("FOUND forum...");
-      return;
-    }
-
-    if(path.startsWith("/forum/")){
-      // console.log("FOUND forum...");
-      return displayButtonCreateBoard();
-    }
-
-    if(path.startsWith("/forum")){
-      // console.log("FOUND forum...");
-      return displayButtonCreateForum();
-    }
+    van.add(bbForumNav,
+      button('test')
+    );
 
   });
 
@@ -70,7 +63,7 @@ function pageForum() {
   return div({id:"home",class:"forum-container" },
     HomeNavMenu(),
     div({class:"main-content"},
-      bbPostTypeEL,
+      bbForumNav,
       div({class:"forum-main"},
         getForumsEL()
       )

@@ -1,9 +1,8 @@
 /*
-  Project Name: threepolygonenginejs
+  Project Name: minimal_module_js
   License: MIT
   Created By: Lightnet
-  GitHub: https://github.com/Lightnet/threepolygonenginejs
-  
+  GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
 import van from "vanjs-core";
@@ -15,7 +14,7 @@ import { displayButtonCreateTopic, getBoardIDTopics } from "./bb_topic.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
 
-const {button, i, link, input, label, p, div, table, tbody, tr, td, h2} = van.tags;
+const {button, i, textarea, link, input, label, p, div, table, tbody, tr, td, h2} = van.tags;
 
 function displayButtonCreateBoard(){
 
@@ -56,24 +55,21 @@ function createBoardForm({closed}){
     }
   }
 
-  return div({id:'createBoard'},
-    table(
-      tbody(
-        tr(
-          td(label('Title:')),
-          td(input({value:forumTitle, oninput:e=>forumTitle.val=e.target.value})),
-        ),
-        tr(
-          td(label('Content:')),
-          td(input({value:forumContent, oninput:e=>forumContent.val=e.target.value})),
-        ),
-        tr(
-          button({class:"nav-button",onclick:btnCreateBoard},'Create'),
-          button({class:"nav-button",onclick:()=>closed.val=true},'Cancel'),
-        )
-      )
-    )
-  )
+  return div({id:'boardForm',class:"ccontent"},
+    div({class:"form-group"},
+      label({class:"report-title"},"Board Title:"),
+      input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+    ),
+    div({class:"form-group"},
+      label({class:"report-content"},'Content:'),
+      textarea({value:forumContent, oninput:e=>forumContent.val=e.target.value})
+    ),
+    div({class:"form-group"},
+      button({class:"normal",onclick:btnCreateBoard},'Create'),
+      button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
+    ),
+  );
+
 }
 
 // PAGE BOARD
@@ -88,39 +84,36 @@ function pageBoard() {
   //   }))
   // }
 
-  const bbforumTypeNav = div();
+  const bbforumNav = div();
 
   const topicEl = div({id:'topics'});
 
   van.derive(() => {
     const { id } = getRouterParams();
     if(id){
-      // boardIDState.val = id;
       getBoardIDTopics(topicEl, id);
 
-      while (bbforumTypeNav.lastElementChild) {// clear children
-        bbforumTypeNav.removeChild(bbforumTypeNav.lastElementChild);
+      while (bbforumNav.lastElementChild) {// clear children
+        bbforumNav.removeChild(bbforumNav.lastElementChild);
       }
-      van.add(bbforumTypeNav,
+      van.add(bbforumNav,
         button({class:"normal",onclick:()=>navigate('/forum/'+boardIDState.val)},"Forum"),
       );
-      van.add(bbforumTypeNav,
+      van.add(bbforumNav,
         button({class:"normal",onclick:()=>navigate('/forum/'+forumIDState.val)},"Board"),
       );
-      // van.add(bbforumTypeNav,
-      //   button({class:"normal",onclick:()=>navigate('/board/'+boardIDState.val)},"Board"),
-      // );
+
+      van.add(bbforumNav,
+        displayButtonCreateTopic()
+      );
+
     }
   });
-
-  // return baseLayout({children:
-  //   topicEl
-  // });
 
   return div({id:"home",class:"forum-container" },
     HomeNavMenu(),
     div({class:"main-content"},
-      bbforumTypeNav,
+      bbforumNav,
       div({class:"forum-main"},
         topicEl
       )

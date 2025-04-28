@@ -1,9 +1,8 @@
 /*
-  Project Name: threepolygonenginejs
+  Project Name: minimal_module_js
   License: MIT
   Created By: Lightnet
-  GitHub: https://github.com/Lightnet/threepolygonenginejs
-  
+  GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
 import van from "vanjs-core";
@@ -16,7 +15,7 @@ import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } 
 import { HomeNavMenu } from "../navmenu.js";
 import { topicContentState, topicTitleState } from "../context.js";
 
-const {button, input, i, link, label, h2, div, table, tbody, tr,td} = van.tags;
+const {button, input, textarea, i, link, label, h2, div, table, tbody, tr,td} = van.tags;
 
 function displayButtonCreateTopic(){
 
@@ -57,23 +56,19 @@ function createTopicForm({closed}){
     }
   }
 
-  return div({id:'createTopic'},
-    table(
-      tbody(
-        tr(
-          td(label('Title:')),
-          td(input({value:forumTitle, oninput:e=>forumTitle.val=e.target.value})),
-        ),
-        tr(
-          td(label('Content:')),
-          td(input({value:forumContent, oninput:e=>forumContent.val=e.target.value})),
-        ),
-        tr(
-          button({onclick:btnCreateTopic},'Create'),
-          button({onclick:()=>closed.val=true},'Cancel'),
-        )
-      )
-    )
+  return div({id:'topicForm',class:"ccontent"},
+    div({class:"form-group"},
+      label({class:"report-title"},"Topic Title:"),
+      input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+    ),
+    div({class:"form-group"},
+      label({class:"report-content"},'Content:'),
+      textarea({value:forumContent, oninput:e=>forumContent.val=e.target.value})
+    ),
+    div({class:"form-group"},
+      button({class:"normal",onclick:btnCreateTopic},'Create'),
+      button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
+    ),
   );
 
 }
@@ -132,6 +127,10 @@ function pageTopic() {
     );
     van.add(bbforumNav,
       button({class:"normal",onclick:()=>navigate('/board/'+boardIDState.val)},"Topics"),
+    );
+
+    van.add(bbforumNav,
+      displayButtonCreateComment(),
     );
   });
 

@@ -1,9 +1,8 @@
 /*
-  Project Name: threepolygonenginejs
+  Project Name: minimal_module_js
   License: MIT
   Created By: Lightnet
-  GitHub: https://github.com/Lightnet/threepolygonenginejs
-  
+  GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
 import van from "vanjs-core";
@@ -12,7 +11,7 @@ import {useFetch} from "/libs/useFetch.js";
 import { baseLayout } from "./base_layout.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 
-const {button, input, i, h2, label, div, table, tbody, tr,td} = van.tags;
+const {button, input, textarea, i, h2, label, div, table, tbody, tr,td} = van.tags;
 
 import { aliasState, loginState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 
@@ -35,7 +34,7 @@ function createCommentForm({closed}){
   const forumTitle = van.state('test');
   const forumContent = van.state('test');
 
-  async function btnCreateTopic(){
+  async function btnCreateComment(){
     // console.log("create Topic");
     try{
       const data = await useFetch('/api/comment',{
@@ -55,24 +54,21 @@ function createCommentForm({closed}){
     }
   }
 
-  return div({id:'createComment'},
-    table(
-      tbody(
-        tr(
-          td(label('Title:')),
-          td(input({value:forumTitle, oninput:e=>forumTitle.val=e.target.value})),
-        ),
-        tr(
-          td(label('Content:')),
-          td(input({value:forumContent, oninput:e=>forumContent.val=e.target.value})),
-        ),
-        tr(
-          button({onclick:btnCreateTopic},'Create'),
-          button({onclick:()=>closed.val=true},'Cancel'),
-        )
-      )
-    )
-  )
+  return div({id:'commentForm',class:"ccontent"},
+    div({class:"form-group"},
+      label({class:"report-title"},"Comment Title:"),
+      input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+    ),
+    div({class:"form-group"},
+      label({class:"report-content"},'Content:'),
+      textarea({value:forumContent, oninput:e=>forumContent.val=e.target.value})
+    ),
+    div({class:"form-group"},
+      button({class:"normal",onclick:btnCreateComment},'Create'),
+      button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
+    ),
+  );
+
 }
 
 // PAGE COMMENT
@@ -90,6 +86,7 @@ function pageComment() {
       div({class:"comment-list"}, topicEl)
     )
   });
+
 }
 
 export async function getTopicIDComments(topicEl, _id){
@@ -146,6 +143,7 @@ export async function getTopicIDComments(topicEl, _id){
   }catch(e){
     console.log(e);
   }
+
 }
 
 
