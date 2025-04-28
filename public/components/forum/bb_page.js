@@ -19,7 +19,7 @@ import { displayButtonCreateComment, pageComment} from "./bb_comment.js";
 import { HomeNavMenu } from "../navmenu.js";
 
 
-const { div, link } = van.tags;
+const { div, i, link } = van.tags;
 
 // DEFAULT GET PULBIC FORUMS
 // GET CURRENT FORUM IS PUBLIC

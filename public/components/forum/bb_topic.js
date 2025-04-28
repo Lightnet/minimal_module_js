@@ -16,7 +16,7 @@ import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } 
 import { HomeNavMenu } from "../navmenu.js";
 import { topicContentState, topicTitleState } from "../context.js";
 
-const {button, input, link, label, h2, div, table, tbody, tr,td} = van.tags;
+const {button, input, i, link, label, h2, div, table, tbody, tr,td} = van.tags;
 
 function displayButtonCreateTopic(){
 
@@ -79,6 +79,7 @@ function createTopicForm({closed}){
 }
 
 // PAGE TOPIC ID
+// This get comments
 function pageTopic() {
 
   // if(!document.getElementById("forum_style")){
@@ -91,6 +92,7 @@ function pageTopic() {
   // }
 
   const topicEl = div({class:"comment-list"});
+  const bbforumNav = div();
 
   van.derive(() => {
     // console.log("Page_Topic getRouterParams >> ",getRouterParams()); 
@@ -118,14 +120,26 @@ function pageTopic() {
     }
   });
 
-  // return baseLayout({children:
-  //   topicEl
-  // });
+  van.derive(() => {
+    while (bbforumNav.lastElementChild) {// clear children
+      bbforumNav.removeChild(bbforumNav.lastElementChild);
+    }
+    van.add(bbforumNav,
+      button({class:"normal",onclick:()=>navigate('/forum')},"Forums"),
+    );
+    van.add(bbforumNav,
+      button({class:"normal",onclick:()=>navigate('/forum/'+forumIDState.val)},"Boards"),
+    );
+    van.add(bbforumNav,
+      button({class:"normal",onclick:()=>navigate('/board/'+boardIDState.val)},"Topics"),
+    );
+  });
 
   return div({id:"home",class:"forum-container" },
     HomeNavMenu(),
     div({class:"main-content"},
       // bbPostTypeEL,
+      bbforumNav,
       div({class:"forum-main"},
         topicEl
       )
@@ -162,8 +176,14 @@ export async function getBoardIDTopics(topicEl,_id){
               h2("[Topic] "+ item.title),
             ),
             div({class:"action-buttons"},
-              button({class:"edit-btn"},'Edit'),
-              button({class:"delete-btn"},'Delete'),
+              button({class:"edit-btn"},
+                i({class:"fa-solid fa-pen-to-square"}),
+                label(' Edit')
+              ),
+              button({class:"delete-btn"},
+                i({class:"fa-solid fa-trash"}),
+                label(' Delete')
+              ),
             )
           ),
           div({class:"topic-content",onclick:()=>getTopicID(item.id, item.title, item.content)},label(" [ Content ] "+ item.content),)

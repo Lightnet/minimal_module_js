@@ -15,7 +15,7 @@ import { baseLayout } from "./base_layout.js";
 import { getForumIDBoards } from "./bb_board.js";
 import { HomeNavMenu } from "../navmenu.js";
 
-const {button, input, label, link, div, span, h2, table, tbody, tr,td} = van.tags;
+const {button, i, input, label, link, div, span, h2, table, tbody, tr, td} = van.tags;
 
 const getForumsEL = () => {
 
@@ -30,7 +30,7 @@ const getForumsEL = () => {
   }
 
   function enterForum(id){
-    // console.log("Forum ID HERE?: ",id);
+    console.log("Forum ID HERE?: ",id);
     forumIDState.val = id;
     navigate('/forum/'+id);
   }
@@ -40,19 +40,25 @@ const getForumsEL = () => {
       const data = await useFetch('/api/forum');
       console.log(data);
       if(data){
-        for(let i=0; i < data.length;i++){
+        for(let ii=0; ii < data.length;ii++){
           van.add(forumList, div({class:'forum-item'},
               div({class:'forum-header'},
                 div({class:"forum-title"},
-                  h2({onclick:()=>enterForum(data[i].id)},`[ Forum ] ${data[i].title}`),
+                  h2({onclick:()=>enterForum(data[ii].id)},`[ Forum ] ${data[ii].title}`),
                 ),
                 div({class:"action-buttons"},
-                  button({class:"edit-btn",onclick:()=>editForum(data[i].id)},'Edit'),
-                  button({class:"delete-btn",onclick:()=>deleteForum(data[i].id)},'Delete'),
+                  button({class:"edit-btn",onclick:()=>editForum(data[ii].id)},
+                    i({class:"fa-solid fa-pen-to-square"}),
+                    label(' Edit'),
+                  ),
+                  button({class:"delete-btn",onclick:()=>deleteForum(data[ii].id)},
+                    i({class:"fa-solid fa-trash"}),
+                    label(' Delete')
+                  ),
                 ),
               ),
-              div({class:'forum-content',onclick:()=>enterForum(data[i].id)},
-                data[i].content
+              div({class:'forum-content',onclick:()=>enterForum(data[ii].id)},
+                data[ii].content
               ),
             ),
           );
@@ -73,6 +79,7 @@ const getForumsEL = () => {
 function displayButtonCreateForum(){
 
   const isCreated = van.state(false);
+  
 
   function btnCreateForum(){
     isCreated.val = false;
@@ -143,6 +150,7 @@ function pageForumID() {
   // }
 
   const boardEl = div({id:"BOARDS",class:""});
+  const bbForumNav = div({id:'nav'});
 
   //get forums
   van.derive(() => {
@@ -150,21 +158,36 @@ function pageForumID() {
     // console.log("FORUM ID:", id);
     if(id){
       if(id.length > 0){
-        // console.log("BOARD HERE???");
-        forumIDState.val = id;
         getForumIDBoards(boardEl, id);
       }
     }
   });
 
-  // return baseLayout({children:
-  //   boardEl
-  // });
+  function goToForum(_id){
+    console.log("Go Forum ID?", _id);
+    navigate('/forum/'+forumIDState.val);
+  }
+
+  van.derive(() => {
+    
+    while (bbForumNav.lastElementChild) {// clear children
+      bbForumNav.removeChild(bbForumNav.lastElementChild);
+    }
+    // forumIDState
+    console.log("forumIDState:", forumIDState.val)
+    van.add(bbForumNav,
+      button({class:"normal",onclick:()=>navigate('/forum')}, "Home"),
+    );
+    // van.add(bbForumNav,
+    //   button({class:"normal",onclick:()=>goToForum(forumIDState.val)}, "Index"),
+    // );
+  });
 
   return div({id:"home",class:"forum-container" },
     HomeNavMenu(),
     div({class:"main-content"},
       // bbPostTypeEL,
+      bbForumNav,
       div({class:"forum-main"},
         boardEl
       )

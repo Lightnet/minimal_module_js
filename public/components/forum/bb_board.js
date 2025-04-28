@@ -15,7 +15,7 @@ import { displayButtonCreateTopic, getBoardIDTopics } from "./bb_topic.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
 
-const {button, link, input, label, p, div, table, tbody, tr, td, h2} = van.tags;
+const {button, i, link, input, label, p, div, table, tbody, tr, td, h2} = van.tags;
 
 function displayButtonCreateBoard(){
 
@@ -88,13 +88,28 @@ function pageBoard() {
   //   }))
   // }
 
-  const topicEl = div('TOPICS');
+  const bbforumTypeNav = div();
+
+  const topicEl = div({id:'topics'});
 
   van.derive(() => {
     const { id } = getRouterParams();
     if(id){
-      boardIDState.val = id;
+      // boardIDState.val = id;
       getBoardIDTopics(topicEl, id);
+
+      while (bbforumTypeNav.lastElementChild) {// clear children
+        bbforumTypeNav.removeChild(bbforumTypeNav.lastElementChild);
+      }
+      van.add(bbforumTypeNav,
+        button({class:"normal",onclick:()=>navigate('/forum/'+boardIDState.val)},"Forum"),
+      );
+      van.add(bbforumTypeNav,
+        button({class:"normal",onclick:()=>navigate('/forum/'+forumIDState.val)},"Board"),
+      );
+      // van.add(bbforumTypeNav,
+      //   button({class:"normal",onclick:()=>navigate('/board/'+boardIDState.val)},"Board"),
+      // );
     }
   });
 
@@ -105,7 +120,7 @@ function pageBoard() {
   return div({id:"home",class:"forum-container" },
     HomeNavMenu(),
     div({class:"main-content"},
-      //bbPostTypeEL,
+      bbforumTypeNav,
       div({class:"forum-main"},
         topicEl
       )
@@ -137,8 +152,14 @@ export async function getForumIDBoards(boardEl, _id){
               h2({onclick:()=>getBoardID(item.id)},`[Board] ${item.title}`), 
             ),
             div({class:"action-buttons"},
-              button({class:"edit-btn"},"Edit"),
-              button({class:"delete-btn"},"Delete"),
+              button({class:"edit-btn"},
+                i({class:"fa-solid fa-pen-to-square"}),
+                label(" Edit")
+              ),
+              button({class:"delete-btn"},
+                i({class:"fa-solid fa-trash"}),
+                label(" Delete")
+              ),
             )
           ),
           p({class:"board-description",onclick:()=>getBoardID(item.id)},label(" [ Content ] "+ item.content),)
