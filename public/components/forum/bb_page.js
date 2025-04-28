@@ -23,7 +23,7 @@ const { button, div, i, link } = van.tags;
 function pageForum() {
   console.log("init style");
 
-  const bbForumNav = div();
+  const bbForumNav = div({id:'nav',class:"nav-container"});
 
   van.derive(()=>{
 
@@ -41,7 +41,7 @@ function pageForum() {
 
   });
 
-  return div({id:"home",class:"forum-container" },
+  return div({id:"forum",class:"forum-container" },
     HomeNavMenu(),
     div({class:"main-content"},
       bbForumNav,

@@ -441,9 +441,6 @@ option {
   background-color: var(--input-error);
 }
 
-
-
-
 [data-admin-only="true"] {
   display: none;
 }

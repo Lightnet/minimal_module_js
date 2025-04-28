@@ -78,7 +78,7 @@ function createTopicForm({closed}){
 function pageTopic() {
 
   const topicEl = div({class:"comment-list"});
-  const bbforumNav = div();
+  const bbforumNav = div({class:"nav-container"});
 
   van.derive(() => {
     // console.log("Page_Topic getRouterParams >> ",getRouterParams()); 

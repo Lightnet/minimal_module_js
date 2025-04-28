@@ -137,7 +137,7 @@ function createForumForm({closed}){
 function pageForumID() {
   // console.log("FORUM ID???");
   const boardEl = div({id:"BOARDS",class:""});
-  const bbForumNav = div({id:'nav'});
+  const bbForumNav = div({id:'nav',class:"nav-container"});
 
   //get forums
   van.derive(() => {
@@ -164,13 +164,9 @@ function pageForumID() {
     van.add(bbForumNav,
       displayButtonCreateBoard()
     );
-
-    // van.add(bbForumNav,
-    //   button({class:"normal",onclick:()=>goToForum(forumIDState.val)}, "Index"),
-    // );
   });
 
-  return div({id:"home",class:"forum-container" },
+  return div({id:"forum",class:"forum-container" },
     HomeNavMenu(),
     div({class:"main-content"},
       // bbPostTypeEL,

@@ -76,7 +76,7 @@ function createBoardForm({closed}){
 function pageBoard() {
 
   const topicEl = div({id:'topics'});
-  const bbforumNav = div();
+  const bbforumNav = div({class:"nav-container"});
 
   // get topics and create nav menu.
   van.derive(() => {
@@ -97,7 +97,6 @@ function pageBoard() {
       van.add(bbforumNav,
         displayButtonCreateTopic()
       );
-
     }
   });
 
