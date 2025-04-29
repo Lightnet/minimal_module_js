@@ -9,6 +9,7 @@ import { notify } from "./notify.js";
 
 const {button, style, div, span} = van.tags;
 
+// test for button ui notify alert
 function NotifyTest(){
 
   function btnInfo(){
@@ -42,7 +43,7 @@ function NotifyTest(){
   function btnWarn2(){
     notify({
       color:"warn",
-      content:"Test warn"
+      content:"Test warn  sdfs df sdf sdf sd sd s sd fsd"
     })
   }
 
