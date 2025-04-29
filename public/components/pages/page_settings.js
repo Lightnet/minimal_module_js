@@ -8,7 +8,7 @@
 import van from "vanjs-core";
 import { HomeNavMenu } from "../navmenu.js";
 
-const {button, input, h1, label, div, table, tbody, tr, td} = van.tags;
+const {button, input, h1, label, div} = van.tags;
 
 const Page_Setting = () => {
 
@@ -32,7 +32,6 @@ const Page_Setting = () => {
       ),
     ),
   );
-
 
 }
 

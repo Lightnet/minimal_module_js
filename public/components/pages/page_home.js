@@ -6,7 +6,7 @@
 */
 
 import van from "vanjs-core";
-import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
+// import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { HomeNavMenu } from "../navmenu.js";
 import {aliasState} from "/components/context.js";
 //import { button_test } from "../tests/buttonname.js";

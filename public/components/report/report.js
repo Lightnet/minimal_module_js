@@ -10,12 +10,10 @@ import { Modal } from "vanjs-ui";
 import useFetch from "/libs/useFetch.js";
 const {button, div, label, select, option, textarea, input} = van.tags;
 
-
 //BUTTON MODAL
 function El_CreateReportForm(){
 
   const isCreated = van.state(false);
-
   function btnCreateForum(){
     isCreated.val = false;
     van.add(document.body, Modal({closed:isCreated},
@@ -78,30 +76,8 @@ function createReportForm({closed}){
       button({class:"normal",onclick:btnCreateForum},'Create'),
       button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
     ),
-
-
   );
 
-
-
-  // return div({id:'createReportForm', class:"ccontent"},
-  //   table(
-  //     tbody(
-  //       tr(
-  //         td(label('Title:')),
-  //         td(input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})),
-  //       ),
-  //       tr(
-  //         td(label('Content:')),
-  //         td(input({type:"text",value:forumContent, oninput:e=>forumContent.val=e.target.value})),
-  //       ),
-  //       tr(
-  //         button({class:"normal",onclick:btnCreateForum},'Create'),
-  //         button({class:"warn",onclick:()=>closed.val=true},'Cancel'),
-  //       )
-  //     )
-  //   )
-  // )
 }
 
 export {

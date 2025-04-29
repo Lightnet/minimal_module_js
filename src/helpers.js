@@ -1,3 +1,10 @@
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
 // https://stackoverflow.com/questions/24597634/how-to-generate-an-array-of-the-alphabet
 //import { nanoid } from 'nanoid/non-secure';
 //import { customAlphabet  } from 'nanoid/non-secure';

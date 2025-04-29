@@ -1,9 +1,14 @@
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
 // NODE SQLITE 
 // https://www.sqlite.org/datatype3.html
-/*
-SQLite does not have a separate Boolean storage class. Instead, Boolean values are stored as integers 0 (false) and 1 (true).
+// SQLite does not have a separate Boolean storage class. Instead, Boolean values are stored as integers 0 (false) and 1 (true).
 
-*/
 
 import Database from 'better-sqlite3';
 import { compareHashPassword, hashPassword, nanoid } from '../helpers.js';

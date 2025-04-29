@@ -23,7 +23,7 @@ import { pageForumIDboards, pageForum, pageBoard, pageTopic, pageComment } from 
 import { checkTheme } from "./theme/theme.js";
 import { HelpPage } from "./pages/page_help.js";
 import { Page_UI_Test } from "./pages/page_ui_test.js";
-const {button, div, pre, p} = van.tags
+// const {button, div, pre, p} = van.tags
 //const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const App = () => {
@@ -36,7 +36,7 @@ const App = () => {
     if(data){
       if(data.api){
         if(data.api == 'PASS'){
-          //console.log("[[ data.alias: ", data.alias)
+          //console.log("[[ data.alias: ", data.alias);
           aliasState.val = data.alias
           loginState.val = true;
         }else{

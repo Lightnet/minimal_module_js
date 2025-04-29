@@ -16,7 +16,6 @@ function Page_Novel(){
   return div(
     HomeNavMenu(),
     label('Novel')
-
   )
 }
 

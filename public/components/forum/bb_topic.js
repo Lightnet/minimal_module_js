@@ -14,7 +14,7 @@ import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } 
 import { HomeNavMenu } from "../navmenu.js";
 import { topicContentState, topicTitleState } from "../context.js";
 
-const {button, input, textarea, i, link, label, h2, div, table, tbody, tr,td} = van.tags;
+const {button, input, textarea, i, link, label, h2, div} = van.tags;
 
 function displayButtonCreateTopic(){
 

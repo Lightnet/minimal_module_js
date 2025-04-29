@@ -1,9 +1,8 @@
 /*
-  Project Name: threepolygonenginejs
+  Project Name: minimal_module_js
   License: MIT
   Created By: Lightnet
-  GitHub: https://github.com/Lightnet/threepolygonenginejs
-  
+  GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
 // pages for url
@@ -36,8 +35,8 @@ function scriptHtml02(_script){
     "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/",
     "remove-array-items": "https://unpkg.com/remove-array-items@3.0.0/src/remove-array-items.js",
     "ecs":"https://cdn.skypack.dev/ecs",
-    "vanjs-core":"https://cdn.jsdelivr.net/npm/vanjs-core@1.5.2/src/van.min.js",
-    "van":"https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.2.min.js",
+    "vanjs-core":"https://cdn.jsdelivr.net/npm/vanjs-core@1.5.5/src/van.min.js",
+    "van":"https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.5.min.js",
     "vanjs-ui":"https://cdn.jsdelivr.net/npm/vanjs-ui@0.10.1/dist/van-ui.min.js",
     "vanjs-ext":"https://cdn.jsdelivr.net/npm/vanjs-ext@0.6.1/src/van-x.js",
     "vanjs-routing":"https://cdn.jsdelivr.net/npm/vanjs-routing@1.1.3/dist/index.min.js"

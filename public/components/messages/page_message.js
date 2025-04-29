@@ -33,14 +33,12 @@ function Page_Message(){
 function El_CreateMessageForm(){
 
   const isCreated = van.state(false);
-
   function btnMessageForm(){
     isCreated.val = false;
     van.add(document.body, Modal({closed:isCreated},
       createMessageForm({closed:isCreated})
     ));
   }
-
   return button({onclick:()=>btnMessageForm()},"Create Message");
 }
 
