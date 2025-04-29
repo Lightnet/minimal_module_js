@@ -115,23 +115,22 @@ function pageTopic() {
     }
   });
 
-  van.derive(() => {
-    while (bbforumNav.lastElementChild) {// clear children
-      bbforumNav.removeChild(bbforumNav.lastElementChild);
-    }
-    van.add(bbforumNav,
-      button({class:"nav-button",onclick:()=>navigate('/forum')},"Forums"),
-    );
-    van.add(bbforumNav,
-      button({class:"nav-button",onclick:()=>navigate('/forum/'+forumIDState.val)},"Boards"),
-    );
-    van.add(bbforumNav,
-      button({class:"nav-button",onclick:()=>navigate('/board/'+boardIDState.val)},"Topics"),
-    );
-    van.add(bbforumNav,
-      displayButtonCreateComment(),
-    );
-  });
+  // nav menu
+  while (bbforumNav.lastElementChild) {// clear children
+    bbforumNav.removeChild(bbforumNav.lastElementChild);
+  }
+  van.add(bbforumNav,
+    button({class:"nav-button",onclick:()=>navigate('/forum')},"Forums"),
+  );
+  van.add(bbforumNav,
+    button({class:"nav-button",onclick:()=>navigate('/forum/'+forumIDState.val)},"Boards"),
+  );
+  van.add(bbforumNav,
+    button({class:"nav-button",onclick:()=>navigate('/board/'+boardIDState.val)},"Topics"),
+  );
+  van.add(bbforumNav,
+    displayButtonCreateComment(),
+  );
 
   return div({id:"home",class:"forum-container" },
     HomeNavMenu(),

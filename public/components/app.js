@@ -19,7 +19,7 @@ import { Page_Report } from "./pages/page_report.js";
 import { AccountPage } from "./pages/page_account.js";
 import { Page_Message } from "./messages/page_message.js";
 import { Page_Setting } from "./pages/page_settings.js";
-import { pageForumID, pageForum, pageBoard, pageTopic, pageComment } from "./forum/bb_page.js";
+import { pageForumIDboards, pageForum, pageBoard, pageTopic, pageComment } from "./forum/bb_page.js";
 import { checkTheme } from "./theme/theme.js";
 import { HelpPage } from "./pages/page_help.js";
 const {button, div, pre, p} = van.tags
@@ -60,7 +60,7 @@ const App = () => {
       { path: "/settings", component: Page_Setting },
       { path: "/message", component: Page_Message },
       { path: "/forum", component: pageForum },
-      { path: "/forum/:id", component: pageForumID },
+      { path: "/forum/:id", component: pageForumIDboards },
       { path: "/board/:id", component: pageBoard },
       { path: "/topic/:id", component: pageTopic },
       { path: "/report", component: Page_Report },

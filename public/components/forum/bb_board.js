@@ -82,22 +82,21 @@ function pageBoard() {
     const { id } = getRouterParams();
     if(id){
       getBoardIDTopics(topicEl, id);
-
-      while (bbforumNav.lastElementChild) {// clear children
-        bbforumNav.removeChild(bbforumNav.lastElementChild);
-      }
-      van.add(bbforumNav,
-        button({class:"nav-button",onclick:()=>navigate('/forum/'+boardIDState.val)},"Forum"),
-      );
-      van.add(bbforumNav,
-        button({class:"nav-button",onclick:()=>navigate('/forum/'+forumIDState.val)},"Board"),
-      );
-
-      van.add(bbforumNav,
-        displayButtonCreateTopic()
-      );
     }
   });
+
+  while (bbforumNav.lastElementChild) {// clear children
+    bbforumNav.removeChild(bbforumNav.lastElementChild);
+  }
+  van.add(bbforumNav,
+    button({class:"nav-button",onclick:()=>navigate('/forum')},"Forum"),
+  );
+  van.add(bbforumNav,
+    button({class:"nav-button",onclick:()=>navigate('/forum/'+forumIDState.val)},"Board"),
+  );
+  van.add(bbforumNav,
+    displayButtonCreateTopic()
+  );
 
   return div({id:"home",class:"forum-container" },
     HomeNavMenu(),

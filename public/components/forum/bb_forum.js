@@ -78,7 +78,6 @@ const getForumsEL = () => {
 function displayButtonCreateForum(){
 
   const isCreated = van.state(false);
-  
 
   function btnCreateForum(){
     isCreated.val = false;
@@ -132,8 +131,31 @@ function createForumForm({closed}){
 
 }
 
+// DEFAULT GET PULBIC FORUMS
+// GET CURRENT FORUM IS PUBLIC
+function pageForum() {
+  const bbForumNav = div({id:'nav',class:"nav-container"});
+  //nav menus
+  while (bbForumNav.lastElementChild) { // clear children
+    bbForumNav.removeChild(bbForumNav.lastElementChild);
+  }
+  van.add(bbForumNav,
+    displayButtonCreateForum(),
+  );
+
+  return div({id:"forum",class:"forum-container" },
+    HomeNavMenu(),
+    div({class:"main-content"},
+      bbForumNav,
+      div({class:"forum-main"},
+        getForumsEL()
+      )
+    ),
+  );
+}
+
 // GET CURRENT FORUM ID for boards
-function pageForumID() {
+function pageForumIDboards() {
   // console.log("FORUM ID???");
   const boardEl = div({id:"BOARDS",class:""});
   const bbForumNav = div({id:'nav',class:"nav-container"});
@@ -149,21 +171,16 @@ function pageForumID() {
     }
   });
 
-  van.derive(() => {
-    
-    while (bbForumNav.lastElementChild) { // clear children
-      bbForumNav.removeChild(bbForumNav.lastElementChild);
-    }
-    // forumIDState
-    console.log("forumIDState:", forumIDState.val)
-    van.add(bbForumNav,
-      button({class:"nav-button",onclick:()=>navigate('/forum')}, "Forum"),
-    );
-
-    van.add(bbForumNav,
-      displayButtonCreateBoard()
-    );
-  });
+  //nav menu
+  while (bbForumNav.lastElementChild) { // clear children
+    bbForumNav.removeChild(bbForumNav.lastElementChild);
+  }
+  van.add(bbForumNav,
+    button({class:"nav-button",onclick:()=>navigate('/forum')}, "Forum"),
+  );
+  van.add(bbForumNav,
+    displayButtonCreateBoard()
+  );
 
   return div({id:"forum",class:"forum-container" },
     HomeNavMenu(),
@@ -180,7 +197,8 @@ function pageForumID() {
 
 export {
   getForumsEL,
-  pageForumID,
+  pageForum,
+  pageForumIDboards,
   displayButtonCreateForum,
   createForumForm,
 }
