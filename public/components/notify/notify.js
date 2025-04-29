@@ -7,7 +7,7 @@
 
 // Theme variables for light and dark modes
 import van from "vanjs-core";
-import { notifies, objNotify, timeToClose } from "./notifycontext.js";
+import { notifies, objNotify, timeToClose, timeToDelete } from "./notifycontext.js";
 
 const {button, style, div, span} = van.tags;
 
@@ -31,15 +31,27 @@ function NotifyContainer(props){
   }
 
   function clickClose(){
-    // onClose();
-    timeoutId = setTimeout(() => onClose(true), timeToClose);
+    console.log("CLOSE");
+    timeoutId = setTimeout(() => onClose(), timeToDelete);
+    callFade();
   }
 
   function callFade(){
-
+    fade.val=false;
   }
 
-  return ()=> isClose.val ? null : div({id:ID,class:``},
+  const cssRender = van.derive(() => {
+    let slide = '';
+    if(fade.val){
+      slide = 'slideIn';
+    }else{
+      slide = 'slideOut';
+    }
+    console.log(`slide > ${slide}`);
+    return `notification ${nColor.val} ${slide}`
+  });
+
+  return ()=> isClose.val ? null : div({id:ID,class:cssRender.val},
     span(
       props.children,
       span({class:"float:left;"},

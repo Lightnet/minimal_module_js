@@ -72,3 +72,41 @@
   }
 }
 */
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0%);
+    right:0px;
+  }
+
+  to {
+    /* transform: translateX(-100%); */
+    position: relative;
+    right:calc(-100%);
+    /* right:1000px; */
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.notification.slideIn {
+  animation-name: slideIn;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+}
+
+.notification.slideOut {
+  transform: translateX(150%);
+  animation-name: slideOut;
+  animation-duration: 0.3s;
+  flex: 0;
+}
+
