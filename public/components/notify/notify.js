@@ -7,7 +7,7 @@
 
 // Theme variables for light and dark modes
 import van from "vanjs-core";
-import { notifies, objNotify } from "./notifycontext.js";
+import { notifies, objNotify, timeToClose } from "./notifycontext.js";
 
 const {button, style, div, span} = van.tags;
 
@@ -17,21 +17,29 @@ function NotifyContainer(props){
   const nColor = van.state(props.color || 'info');
   const ID = van.state(props.id);
   const isClose = van.state(false);
+  const autoClose = props.autoClose || true;
+  let timeoutId;
+
+  if (autoClose) {
+    timeoutId = setTimeout(() => onClose(), timeToClose);
+  }
 
   function onClose(){
      document.getElementById(ID);
      isClose.val = true;
+     clearTimeout(timeoutId);
   }
 
   function clickClose(){
-    onClose();
+    // onClose();
+    timeoutId = setTimeout(() => onClose(true), timeToClose);
   }
 
   function callFade(){
 
   }
 
-  return ()=> isClose.val ? null : div({},
+  return ()=> isClose.val ? null : div({id:ID,class:``},
     span(
       props.children,
       span({class:"float:left;"},
@@ -47,17 +55,10 @@ const NotifyManager = ()=>{
     let newNotify = objNotify.val;
     console.log("New: ", newNotify);
     if(newNotify){
-      // newNotify.onDeleteID=onDeleteID(newNotify.id);
       let newNotifyContainer = NotifyContainer(newNotify);
-      // notifies.val.push(newNotifyContainer);
-      van.add(notifiesDiv,newNotifyContainer);
+      van.add(notifiesDiv, newNotifyContainer);
     }
   });
-
-  // function onDeleteID(id){
-  // }
-  // const renderNotifies = van.derive(()=>{
-  // })
 
   return div({style:"position:fixed;top:4px;right:4px;overflow:hidden;"},
     notifiesDiv
