@@ -1,0 +1,61 @@
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+import van from "vanjs-core";
+import { notify } from "./notify.js";
+
+const {button, style, div, span} = van.tags;
+
+function NotifyTest(){
+
+  function btnInfo(){
+    notify({
+      color:"info",
+      content:"Test Info"
+    })
+  }
+
+  function btnSuccess(){
+    notify({
+      color:"success",
+      content:"Test success"
+    })
+  }
+
+  function btnError(){
+    notify({
+      color:"error",
+      content:"Test error"
+    })
+  }
+
+  function btnWarn(){
+    notify({
+      color:"warn",
+      content:"Test warn"
+    })
+  }
+
+  function btnWarn2(){
+    notify({
+      color:"warn",
+      content:"Test warn"
+    })
+  }
+
+  return div(
+    button({onclick:btnInfo},'Test Info'),
+    button({onclick:btnSuccess},'Test Success'),
+    button({onclick:btnError},'Test Error'),
+    button({onclick:btnWarn},'Test Warn'),
+    button({onclick:btnWarn2},'Test Warn 2'),
+  )
+
+}
+
+export {
+  NotifyTest
+}

@@ -10,6 +10,7 @@
 import van from "vanjs-core";
 import App from "./components/app.js";
 import { UIStyle } from "/components/theme/theme.js";
+import { NotifyManager } from "./components/notify/notify.js";
 const {style, link} = van.tags;
 
 // van.add(document.body, link({
@@ -32,7 +33,15 @@ van.add(document.head, link({
   id:"index_style",
   rel:"stylesheet",
   type:"text/css",
+  href:"/components/notify/notify.css"
+}));
+
+van.add(document.head, link({
+  id:"index_style",
+  rel:"stylesheet",
+  type:"text/css",
   href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 }))
 
 van.add(document.body, App());
+van.add(document.body, NotifyManager());

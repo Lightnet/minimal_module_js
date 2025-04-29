@@ -5,8 +5,10 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-function Page_UI_Test(){
+import { NotifyTest } from "../notify/notifytest.js";
 
+function Page_UI_Test(){
+  return NotifyTest();
 }
 
 export {

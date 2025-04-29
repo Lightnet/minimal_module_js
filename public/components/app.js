@@ -22,6 +22,7 @@ import { Page_Setting } from "./pages/page_settings.js";
 import { pageForumIDboards, pageForum, pageBoard, pageTopic, pageComment } from "./forum/bb_page.js";
 import { checkTheme } from "./theme/theme.js";
 import { HelpPage } from "./pages/page_help.js";
+import { Page_UI_Test } from "./pages/page_ui_test.js";
 const {button, div, pre, p} = van.tags
 //const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -65,6 +66,7 @@ const App = () => {
       { path: "/topic/:id", component: pageTopic },
       { path: "/report", component: Page_Report },
       { path: "/help", component: HelpPage },
+      { path: "/test", component: Page_UI_Test },
       // { path: "/help/:section", component: HelpPage },
       // { path: "/novel", component: Page_Novel },
     ]

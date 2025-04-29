@@ -96,6 +96,15 @@ app.get('/', (c) => {
   return c.html(pageHtml);
 });
 
+app.get('/test', (c) => {
+  // const db = c.get('db');
+  // console.log('db', db);
+  // return c.text('Hono!')
+  // background:gray;
+  const pageHtml = scriptHtml02("/index.js");
+  return c.html(pageHtml);
+});
+
 //set up static folder for public access
 app.use('/*', serveStatic({ root: './public' }));
 app.route('/', pages);
