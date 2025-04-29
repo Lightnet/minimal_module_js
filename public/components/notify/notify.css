@@ -22,8 +22,8 @@
 /* Notification wrapper for move-up transition */
 .notification-wrapper {
   /* transition: transform 300ms ease-in-out linear; Smooth vertical movement */
-  transition: transform 100ms ease-in-out; /*//Smooth vertical movement*/
-  margin-bottom: 8px; /* Space between notifications */
+  transition: transform 100ms ease-in-out forwards; /*//Smooth vertical movement*/
+  margin: 2px; /* Space between notifications */
 }
 
 /* Notification container */
@@ -72,19 +72,21 @@
 @keyframes slideOut {
   0% {
     transform: translateX(0);
-    opacity: 1;
+    top:0px;
   }
   50% {
-    transform: translateX(150%); 
+    transform: translateX(150%);
     opacity: 0;
-    height: 0;
-    margin-bottom: 0;
+    height: 0px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
   }
   100% {
     transform: translateX(150%);
     opacity: 0;
-    height: 0;
-    margin-bottom: 0; /* Remove margin */
+    height: 0px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
   }
 }
 
