@@ -6,6 +6,7 @@
 */
 import van from "vanjs-core";
 import { notify } from "./notify.js";
+import { Color } from "./notifycontext.js";
 
 const {button, style, div, span} = van.tags;
 
@@ -14,35 +15,35 @@ function NotifyTest(){
 
   function btnInfo(){
     notify({
-      color:"info",
+      color:Color.info,
       content:"Test Info"
     })
   }
 
   function btnSuccess(){
     notify({
-      color:"success",
+      color:Color.success,
       content:"Test success"
     })
   }
 
   function btnError(){
     notify({
-      color:"error",
+      color:Color.error,
       content:"Test error"
     })
   }
 
   function btnWarn(){
     notify({
-      color:"warn",
+      color:Color.warn,
       content:"Test warn"
     })
   }
 
   function btnWarn2(){
     notify({
-      color:"warn",
+      color:Color.warn,
       content:"Test warn  sdfs df sdf sdf sd sd s sd fsd"
     })
   }

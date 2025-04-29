@@ -1,27 +1,28 @@
 /* Notification color themes */
 .info {
-  background-color: aqua;
-  color: black;
+  background-color: #4dabf7; /* Softer blue, less intense than rgb(0, 123, 255) */
+  color: #333; /* Dark gray for better readability */
 }
 
 .success {
-  background-color: darkseagreen;
-  color: black;
+  background-color: #a8e4a0; /* Lighter, more pastel green than darkseagreen */
+  color: #333;
 }
 
 .error {
-  background-color: tomato;
-  color: black;
+  background-color: #ff9999; /* Softer red than tomato for less harshness */
+  color: #333;
 }
 
 .warn {
-  background-color: orangered;
-  color: black;
+  background-color: #ffc107; /* Muted amber instead of orangered */
+  color: #333;
 }
 
 /* Notification wrapper for move-up transition */
 .notification-wrapper {
-  transition: transform 0.3s ease-in-out; /* Smooth vertical movement */
+  /* transition: transform 300ms ease-in-out linear; Smooth vertical movement */
+  transition: transform 100ms ease-in-out; /*//Smooth vertical movement*/
   margin-bottom: 8px; /* Space between notifications */
 }
 
@@ -67,20 +68,22 @@
     opacity: 1;
   }
 }
-
+/* transform: translateX(150%);*/ /* Slide out to the right */
 @keyframes slideOut {
   0% {
     transform: translateX(0);
     opacity: 1;
   }
   50% {
-    transform: translateX(150%); /* Slide out to the right */
+    transform: translateX(150%); 
     opacity: 0;
+    height: 0;
+    margin-bottom: 0;
   }
   100% {
-    transform: translateX(150%); /* Stay off-screen */
+    transform: translateX(150%);
     opacity: 0;
-    height: 0; /* Collapse for move-up trigger */
+    height: 0;
     margin-bottom: 0; /* Remove margin */
   }
 }
@@ -89,9 +92,13 @@
 .notification.slideIn {
   animation: slideIn 0.3s ease-in-out forwards;
 }
-
+/*
+animation: slideOut 300ms ease-in-out 100ms forwards;
+animation: slideOut 400ms ease-in-out forwards;
+*/
 .notification.slideOut {
-  animation: slideOut 0.6s ease-in-out forwards; /* 0.3s slide + 0.3s collapse */
+  animation: slideOut 600ms ease-in-out forwards; /* 0.3s slide + 0.3s collapse */
+  /* -webkit-animation: slideOut 300ms ease-in-out; */
 }
 
 /* Responsive adjustments */

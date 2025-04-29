@@ -110,7 +110,7 @@ const AccessNavMenu=()=>{
       // button({class:"fas fa-home",onclick:()=>navigate("/signout")},'Sign Out'),
     ),
     div({class:"sidebar-item",title:"test",onclick:()=>navigate("/test")},
-      i({class:"fas fa-sign-out"},''),
+      i({class:"fas fa-flask"},''),
       // button({class:"fas fa-home",onclick:()=>navigate("/signout")},'Sign Out'),
     ),
     

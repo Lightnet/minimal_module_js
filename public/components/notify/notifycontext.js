@@ -12,13 +12,13 @@ import van from "vanjs-core";
 export const Color = {
   info: "info",
   success: "success",
-  warning: "warning",
+  warn: "warn",
   error: "error",
 };
 // timer predfine
 const timeToDelete = 600;
 const timeToClose = 1000 * 10;
-const animToClose = 1000 * 9;
+const animToClose = timeToClose - timeToDelete;
 
 const objNotify = van.state(null);
 
