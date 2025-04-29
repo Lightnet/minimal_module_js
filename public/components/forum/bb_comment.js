@@ -11,6 +11,8 @@ import {useFetch} from "/libs/useFetch.js";
 import { baseLayout } from "./base_layout.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { aliasState, loginState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
+import { notify } from "../notify/notify.js";
+import { Color } from "../notify/notifycontext.js";
 
 const {button, input, textarea, i, h2, label, div} = van.tags;
 
@@ -45,11 +47,30 @@ function createCommentForm({closed}){
         })
       });
       // console.log(data);
-      if(closed){
-        closed.val = true;
+      if(data){
+        console.log(">>>");
+        if(data?.api == "CREATED"){
+          notify({
+            color:Color.success,
+            content:"Create Comment!"
+          });
+          closed.val = true;
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Comment!"
+        });
       }
+      // if(closed){
+      //   closed.val = true;
+      // }
     }catch(e){
       console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Comment Fail!"
+      });
     }
   }
 

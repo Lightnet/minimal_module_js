@@ -12,6 +12,8 @@ import {
   aliasState,
   loginState
 } from "/components/context.js";
+import { notify } from "../notify/notify.js";
+import { Color } from "../notify/notifycontext.js";
 const {button, input, label, div, table, tbody, tr, td,center} = van.tags;
 
 const SignOutEL = () => {
@@ -26,6 +28,10 @@ const SignOutEL = () => {
       console.log("OKAY");
       aliasState.val = 'Guest';
       loginState.val = false;
+      notify({
+        color:Color.success,
+        content:"Sign Out Success!"
+      })
       navigate('/');
     }
   }

@@ -12,6 +12,8 @@ import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { displayButtonCreateTopic, getBoardIDTopics } from "./bb_topic.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
+import { Color } from "../notify/notifycontext.js";
+import { notify } from "../notify/notify.js";
 
 const {button, i, textarea, link, input, label, p, div, h2} = van.tags;
 
@@ -45,12 +47,32 @@ function createBoardForm({closed}){
           content:forumContent.val,
         })
       });
-      // console.log(data);
-      if(closed){
-        closed.val = true;
+      console.log(data);
+      if(data){
+        console.log(">>>");
+        if(data?.api == "CREATED"){
+          notify({
+            color:Color.success,
+            content:"Create Board!"
+          });
+          closed.val = true;
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Board!"
+        });
       }
+
+      // if(closed){
+      //   closed.val = true;
+      // }
     }catch(e){
       console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Board Fail!"
+      });
     }
   }
 

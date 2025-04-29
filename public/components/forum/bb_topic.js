@@ -13,6 +13,8 @@ import { displayButtonCreateComment, getTopicIDComments } from "./bb_comment.js"
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
 import { topicContentState, topicTitleState } from "../context.js";
+import { Color } from "../notify/notifycontext.js";
+import { notify } from "../notify/notify.js";
 
 const {button, input, textarea, i, link, label, h2, div} = van.tags;
 
@@ -47,11 +49,32 @@ function createTopicForm({closed}){
         })
       });
       console.log(data);
-      if(closed){
-        closed.val = true;
+      if(data){
+        console.log(">>>");
+        if(data?.api == "CREATED"){
+          notify({
+            color:Color.success,
+            content:"Create Topic!"
+          });
+          closed.val = true;
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Topic!"
+        });
       }
+
+
+      // if(closed){
+      //   closed.val = true;
+      // }
     }catch(e){
-      console.log("ERROR",e)
+      console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Topic Fail!"
+      });
     }
   }
 

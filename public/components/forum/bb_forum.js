@@ -13,6 +13,8 @@ import {forumIDState} from "/components/context.js";
 import useFetch from "../../libs/useFetch.js";
 import { displayButtonCreateBoard, getForumIDBoards } from "./bb_board.js";
 import { HomeNavMenu } from "../navmenu.js";
+import { Color } from "../notify/notifycontext.js";
+import { notify } from "../notify/notify.js";
 
 const {button, i, input, label,textarea, link, div, span, h2} = van.tags;
 
@@ -105,12 +107,36 @@ function createForumForm({closed}){
           content:forumContent.val,
         })
       });
-      // console.log(data);
-      if(closed){
-        closed.val = true;
+      console.log(data);
+      if(data){
+        console.log(">>>");
+        if(data?.api == "CREATED"){
+          notify({
+            color:Color.success,
+            content:"Create Forum!"
+          });
+          closed.val = true;
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Forum!"
+          });
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Forum!"
+        });
       }
+      // if(closed){
+      //   closed.val = true;
+      // }
     }catch(e){
-      console.log("ERROR",e)
+      console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Forum Fail!"
+      });
     }
   }
 

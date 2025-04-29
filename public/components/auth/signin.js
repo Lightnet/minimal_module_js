@@ -13,6 +13,8 @@ import {
   aliasState,
   loginState
 } from "/components/context.js";
+import { notify } from "../notify/notify.js";
+import { Color } from "../notify/notifycontext.js";
 
 const SignInEL = () => {
   const user = van.state('guest');
@@ -37,7 +39,16 @@ const SignInEL = () => {
           aliasState.val = user.val
           loginState.val = true;
           pass.val = '';
+          notify({
+            color:Color.success,
+            content:"Sign In Success!"
+          })
           navigate('/')
+        }else{
+          notify({
+            color:Color.warn,
+            content:"Fail Sign In!"
+          })
         }
       }
     }
