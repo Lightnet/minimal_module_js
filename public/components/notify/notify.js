@@ -37,7 +37,7 @@ function NotifyContainer(props){
       isClose.val = true; // Remove from DOM
     }, timeToDelete); // 600ms to match slideOut duration
   }
-
+  // user close
   function clickClose() {
     console.log("CLOSE");
     clearTimeout(timeoutId);
@@ -58,14 +58,18 @@ function NotifyContainer(props){
   });
 
   //check if close, render notify alert and close button
-  return ()=> isClose.val ? null : div({id:ID,class:'notification-wrapper'},
+  return ()=> isClose.val ? null : div({id:ID,
+    class:'notification-wrapper'
+  },
     div({class: cssRender.val },
-      span({ class: "notification-content" },props.children),
+      span({ 
+        class: "notification-content" 
+      },props.children),
       button({class:"button",onclick:clickClose}," X ")
     )
   )
 }
-
+// add top html element for handle notify
 const NotifyManager = ()=>{
   // html element
   const notifiesDiv = div();
@@ -86,7 +90,7 @@ const NotifyManager = ()=>{
     notifiesDiv
   )
 }
-
+//sent notify args it will detect change on van.derive from NotifyManager
 function notify(args){
   let color = args.color || "info";
   let content = args.content || "None";
@@ -98,7 +102,6 @@ function notify(args){
     autoClose:autoClose
   }
   objNotify.val = obNote;
-
 }
 
 export {
