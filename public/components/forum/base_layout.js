@@ -58,8 +58,6 @@ const baseLayout = ({ children }) => {
     )
   );
 
-
-  
 };
 
 function forumNavMenu(){
@@ -86,8 +84,20 @@ function debugIds(){
   return div();
 }
 
+function navForum(){
+  forumIDState.val = null;
+  navigate('/forum');
+}
+
+function getQueryId(defaultValue = null) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id') || defaultValue;
+}
+
 export {
   baseLayout,
   forumNavMenu,
-  debugIds
+  debugIds,
+  getQueryId,
+  navForum
 }

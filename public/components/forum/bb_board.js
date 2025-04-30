@@ -14,6 +14,7 @@ import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } 
 import { HomeNavMenu } from "../navmenu.js";
 import { Color } from "../notify/notifycontext.js";
 import { notify } from "../notify/notify.js";
+import { getQueryId } from "./base_layout.js";
 
 const {button, i, textarea, link, input, label, p, div, h2} = van.tags;
 
@@ -266,8 +267,10 @@ function pageBoard() {
   //     getBoardIDTopics(topicEl, id);
   //   }
   // });
-
-  let id = boardIDState.val;
+  let id = getQueryId();
+  if(!id){
+    id = boardIDState.val;
+  }
   if(id){
     console.log("BOARD ID:", id);
     getBoardIDTopics(topicEl, id);

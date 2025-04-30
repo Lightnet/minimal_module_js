@@ -15,6 +15,7 @@ import { HomeNavMenu } from "../navmenu.js";
 import { topicContentState, topicTitleState } from "../context.js";
 import { Color } from "../notify/notifycontext.js";
 import { notify } from "../notify/notify.js";
+import { getQueryId } from "./base_layout.js";
 
 const {button, input, textarea, i, p, link, label, h2, div} = van.tags;
 
@@ -265,7 +266,11 @@ function pageTopic() {
   console.log("q:", q)
   console.log("getRouterQuery: ",getRouterQuery())
   console.log("getRouterParams: ",getRouterParams())
-  let id = topicIDState.val;
+
+  let id = getQueryId();
+  if(!id){
+    id = topicIDState.val;
+  }
 
   if(id){
     // topicIDState.val = id;
