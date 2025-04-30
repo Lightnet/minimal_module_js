@@ -16,7 +16,7 @@ import { HomeNavMenu } from "../navmenu.js";
 import { Color } from "../notify/notifycontext.js";
 import { notify } from "../notify/notify.js";
 
-const {button, i, input, label,textarea, link, div, span, h2} = van.tags;
+const {button, i, input, label,textarea, link, div, span, h2, p} = van.tags;
 
 const getForumsEL = () => {
 
@@ -106,7 +106,6 @@ function displayButtonCreateForum(){
 
   return button({class:"nav-button", onclick:()=>btnCreateForum()},"Create Forum");
 }
-
 // CREATE FORUM
 function createForumForm({closed}){
 
@@ -172,7 +171,7 @@ function createForumForm({closed}){
   );
 
 }
-
+// EDIT FORUM
 function editForumForm({closed,id,title,content}){
 
   console.log(id);
@@ -180,10 +179,10 @@ function editForumForm({closed,id,title,content}){
   const forumTitle = van.state(title);
   const forumContent = van.state(content);
 
-  async function btnCreateForum(){
+  async function btnUpdateForum(){
     // console.log("create forum");
     try{
-      const data = await useFetch('/api/forum',{
+      const data = await useFetch(`/api/forum/${forumId.val}`,{
         method:'PUT',
         body:JSON.stringify({
           id:forumId.val,
@@ -194,11 +193,26 @@ function editForumForm({closed,id,title,content}){
       console.log(data);
       if(data){
         console.log(">>>");
-        if(data?.api == "CREATED"){
+        if(data?.api == "UPDATE"){
           notify({
             color:Color.success,
-            content:"Create Forum!"
+            content:"Update Forum!"
           });
+
+          let content = document.getElementById(forumId.val);
+
+          console.log(content);
+          
+          console.log(content.children[0].children[0].children[0]);
+          let elTitle = content.children[0].children[0].children[0]
+          elTitle.textContent = `[ Forum ] ${forumTitle.val}`;
+
+          let elContent = content.children[1]
+          
+          console.log(elContent);
+          elContent.textContent = forumContent.val
+
+
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -225,21 +239,25 @@ function editForumForm({closed,id,title,content}){
 
   return div({id:'forumForm',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
+      label({for:"forumID"},"ID:"),
+      label({},forumId.val)
+    ),
+    div({class:"modal-form-group"},
       label({for:"forumTitle"},"Title:"),
       input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
     ),
     div({class:"modal-form-group"},
-      label({class:""},'Content:'),
+      label({class:""},'Description:'),
       textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
     ),
     div({class:"modal-actions"},
-      button({type:"button",class:"submit-btn",onclick:btnCreateForum},'Create'),
+      button({type:"button",class:"submit-btn",onclick:btnUpdateForum},'Update'),
       button({type:"submit",class:"cancel-btn",onclick:()=>closed.val=true},'Cancel'),
     ),
   );
 
 }
-
+// DELETE FORUM
 function deleteForumForm({closed,id,title,content}){
 
   console.log(id);
@@ -247,26 +265,25 @@ function deleteForumForm({closed,id,title,content}){
   const forumTitle = van.state(title);
   const forumContent = van.state(content);
 
-  async function btnCreateForum(){
+  async function btnDeleteForum(){
     // console.log("create forum");
     try{
-      const data = await useFetch('/api/forum',{
-        method:'DELETE',
-        body:JSON.stringify({
-          id:forumId.val,
-          title:forumTitle.val,
-          content:forumContent.val,
-        })
+      const data = await useFetch(`/api/forum/${forumId.val}`,{
+        method:'DELETE'
       });
       console.log(data);
       if(data){
         console.log(">>>");
-        if(data?.api == "CREATED"){
+        if(data?.api == "DELETE"){
           notify({
             color:Color.success,
-            content:"Create Forum!"
+            content:"Delete Forum!"
           });
           // closed.val = true;
+          let ccontent = document.getElementById(forumId.val);
+          if(ccontent.parentNode){
+            ccontent.parentNode.removeChild(ccontent);
+          }
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -293,23 +310,24 @@ function deleteForumForm({closed,id,title,content}){
 
   return div({id:'forumForm',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
-      label({for:"forumTitle"},"Title:"),
-      input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+      label({for:"forumTitle"},"ID:"),
+      p({},forumId.val)
     ),
     div({class:"modal-form-group"},
-      label({class:""},'Content:'),
-      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
+      label({for:"forumTitle"},"Title:"),
+      p({},forumTitle.val)
+    ),
+    div({class:"modal-form-group"},
+      label({class:""},'Description:'),
+      p({},forumContent.val)
     ),
     div({class:"modal-actions"},
-      button({type:"button",class:"submit-btn",onclick:btnCreateForum},'Create'),
-      button({type:"submit",class:"cancel-btn",onclick:()=>closed.val=true},'Cancel'),
+      button({type:"button",class:"warn",onclick:btnDeleteForum},'Delete'),
+      button({type:"submit",class:"normal",onclick:()=>closed.val=true},'Cancel'),
     ),
   );
 
 }
-
-
-
 // DEFAULT GET PULBIC FORUMS
 // GET CURRENT FORUM IS PUBLIC
 function pageForum() {
@@ -332,7 +350,6 @@ function pageForum() {
     ),
   );
 }
-
 // GET CURRENT FORUM ID for boards
 function pageForumIDboards() {
   // console.log("FORUM ID???");
