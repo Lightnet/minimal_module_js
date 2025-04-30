@@ -11,6 +11,7 @@ import van from "vanjs-core";
 import App from "./components/app.js";
 // import { UIStyle } from "/components/theme/theme.js";
 import { NotifyManager } from "./components/notify/notify.js";
+import { debugIds } from "./components/forum/base_layout.js";
 const {style, link} = van.tags;
 
 // van.add(document.body, link({
@@ -45,3 +46,4 @@ van.add(document.head, link({
 
 van.add(document.body, App());
 van.add(document.body, NotifyManager());
+van.add(document.body, debugIds());

@@ -7,13 +7,12 @@
 
 // import van from "vanjs-core";
 // import { baseLayout } from "./base_layout.js";
-import { pageForum, pageForumIDboards } from "./bb_forum.js";
+import { pageForum } from "./bb_forum.js";
 import { pageBoard } from "./bb_board.js";
 import { pageTopic} from "./bb_topic.js";
 import { pageComment} from "./bb_comment.js";
 
 export{
-  pageForumIDboards,
   pageForum,
   pageBoard,
   pageTopic,

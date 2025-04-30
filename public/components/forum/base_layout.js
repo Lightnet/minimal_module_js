@@ -6,6 +6,7 @@ import { displayButtonCreateForum } from "./bb_forum.js";
 import { displayButtonCreateBoard } from "./bb_board.js";
 import { displayButtonCreateTopic } from "./bb_topic.js";
 import { displayButtonCreateComment } from "./bb_comment.js";
+import { boardIDState, commentIDState, forumIDState, topicIDState } from "../context.js";
 
 const { div, button, label, style, link } = van.tags;
 
@@ -68,7 +69,19 @@ function forumNavMenu(){
 
 }
 
+function debugIds(){
+  van.derive(()=>{
+    console.log("[forumIDState]: ",forumIDState.val);
+    console.log("[boardIDState]: ",boardIDState.val);
+    console.log("[topicIDState]: ",topicIDState.val);
+    console.log("[commentIDState]: ",commentIDState.val);
+  })
+
+  return div();
+}
+
 export {
   baseLayout,
-  forumNavMenu
+  forumNavMenu,
+  debugIds
 }

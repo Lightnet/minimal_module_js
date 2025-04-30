@@ -259,7 +259,8 @@ function pageTopic() {
 
   van.derive(() => {
     // console.log("Page_Topic getRouterParams >> ",getRouterParams()); 
-    const { id } = getRouterQuery();
+    // const { id } = getRouterQuery();
+    let id = topicIDState.val;
 
     if(id){
       // topicIDState.val = id;
@@ -300,12 +301,17 @@ function pageTopic() {
   // http://localhost:3000/board/4
   // http://localhost:3000/board/4
 
-  // nav menu
-  while (bbforumNav.lastElementChild) {// clear children
-    bbforumNav.removeChild(bbforumNav.lastElementChild);
+  function navForum(){
+    forumIDState.val = null;
+    navigate('/forum');
   }
+
+  // nav menu
+  // while (bbforumNav.lastElementChild) {// clear children
+  //   bbforumNav.removeChild(bbforumNav.lastElementChild);
+  // }
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navigate('/forum')},"Forums"),
+    button({class:"nav-button",onclick:()=>navForum()},"Forums"),
   );
   van.add(bbforumNav,
     button({class:"nav-button",onclick:()=>NavFormTopic('/forum?id='+forumIDState.val)},"Boards"),

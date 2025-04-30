@@ -254,29 +254,38 @@ function pageBoard() {
 
   const topicEl = div({id:'topics'});
   const bbforumNav = div({class:"nav-container"});
+  while (topicEl.lastElementChild) {// clear children
+    topicEl.removeChild(topicEl.lastElementChild);
+  }
 
   // get topics and create nav menu.
-  van.derive(() => {
-    const { id } = getRouterQuery();
-    if(id){
-      console.log("BOARD ID:", id);
+  // van.derive(() => {
+  //   const { id } = getRouterQuery();
+  //   if(id){
+  //     console.log("BOARD ID:", id);
+  //     getBoardIDTopics(topicEl, id);
+  //   }
+  // });
 
-      while (topicEl.lastElementChild) {// clear children
-        topicEl.removeChild(topicEl.lastElementChild);
-      }
+  let id = boardIDState.val;
+  if(id){
+    console.log("BOARD ID:", id);
+    getBoardIDTopics(topicEl, id);
+  }
 
-      getBoardIDTopics(topicEl, id);
-    }
-  });
+  function navForum(){
+    forumIDState.val = null;
+    navigate('/forum');
+  }
 
   while (bbforumNav.lastElementChild) {// clear children
     bbforumNav.removeChild(bbforumNav.lastElementChild);
   }
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navigate('/forum')},"Forum"),
+    button({class:"nav-button",onclick:()=>navForum()},"Forum"),
   );
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navigate('/forum?id='+forumIDState.val)},"Board"),
+    button({class:"nav-button",onclick:()=>navigate('/forum?id='+forumIDState.val)},"[xx]Boards"),
   );
   van.add(bbforumNav,
     displayButtonCreateTopic()
@@ -294,7 +303,7 @@ function pageBoard() {
 
 }
 
-export async function getForumIDBoards(boardEl, _id){
+export async function getForumIDBoards(isClosed,boardEl, _id){
 
   const isEditModal = van.state(false);
   const isDeleteModal = van.state(false);
@@ -302,6 +311,7 @@ export async function getForumIDBoards(boardEl, _id){
   function getBoardID(_id){
     console.log("Board ID", _id);
     boardIDState.val = _id;
+    isClosed.val = true;
     navigate('/board?id='+_id);
   }
 

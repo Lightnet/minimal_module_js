@@ -9,7 +9,7 @@
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import { Router, Link, getRouterPathname,getRouterQuery , getRouterParams, navigate } from "vanjs-routing";
-import {forumIDState} from "/components/context.js";
+import { forumIDState } from "/components/context.js";
 import useFetch from "../../libs/useFetch.js";
 import { displayButtonCreateBoard, getForumIDBoards } from "./bb_board.js";
 import { HomeNavMenu } from "../navmenu.js";
@@ -19,7 +19,7 @@ import { notify } from "../notify/notify.js";
 const {button, i, input, label,textarea, link, div, span, h2, p} = van.tags;
 
 // get forums
-const getForumsEL = () => {
+const getForums = (isClosed) => {
 
   const forumList = div({class:"forum-container"});
   const isEditModal = van.state(false);
@@ -50,7 +50,8 @@ const getForumsEL = () => {
   function enterForum(id){
     console.log("Forum ID HERE?: ",id);
     forumIDState.val = id;
-    navigate('/forum?id='+id);
+    isClosed.val = true;
+    navigate(`/forum?id=${id}`);
   }
 
   async function getForums(){
@@ -323,24 +324,26 @@ function deleteForumForm({closed,id,title,content}){
 }
 // DEFAULT GET PULBIC FORUMS
 // GET CURRENT FORUM IS PUBLIC
+//need clean up html
 function pageForum() {
+  const isClose = van.state(false);
 
-  // console.log("getRouterPathname()",getRouterPathname())
-  // console.log("getRouterParams()",getRouterParams())
-  // console.log("getRouterQuery()",getRouterQuery())
-  const { id } = getRouterQuery();
+  const bbForumNav = div({id:'nav',class:"nav-container"});
+  console.log("getRouterPathname()",getRouterPathname())
+  console.log("getRouterParams()",getRouterParams())
+  console.log("getRouterQuery()",getRouterQuery())
+
+  //const { id } = getRouterQuery();
+  let id = forumIDState.val;
   console.log("forum id:", id)
   if(id){
+    console.log("FOUND ID");
     const boardEl = div({id:"BOARDS",class:""});
-    const bbForumNav = div({id:'nav',class:"nav-container"});
+    
     console.log("XXX FORUM ID:", id);
-    if(id){
-      getForumIDBoards(boardEl, id);
-    }
-    //nav menu
-    // while (bbForumNav.lastElementChild) { // clear children
-    //   bbForumNav.removeChild(bbForumNav.lastElementChild);
-    // }
+    
+    getForumIDBoards(isClose,boardEl, id);
+
     van.add(bbForumNav,
       button({class:"nav-button",onclick:()=>navigate('/forum')}, "Forum"),
     );
@@ -348,7 +351,7 @@ function pageForum() {
       displayButtonCreateBoard()
     );
 
-    return div({id:"forum",class:"forum-container" },
+    return isClose.val ? null : div({id:"forum",class:"forum-container" },
       HomeNavMenu(),
       div({class:"main-content"},
         bbForumNav,
@@ -358,21 +361,18 @@ function pageForum() {
       ),
     );
   }else{
+    console.log("NOT FOUND ID");
     const bbForumNav = div({id:'nav',class:"nav-container"});
-    //nav menus
-    // while (bbForumNav.lastElementChild) { // clear children
-    //   bbForumNav.removeChild(bbForumNav.lastElementChild);
-    // }
     van.add(bbForumNav,
       displayButtonCreateForum(),
     );
 
-    return div({id:"forum",class:"forum-container" },
+    return isClose.val ? null : div({id:"forum",class:"forum-container" },
       HomeNavMenu(),
       div({class:"main-content"},
         bbForumNav,
         div({class:"forum-main"},
-          getForumsEL()
+          getForums(isClose)
         )
       ),
     );
@@ -424,7 +424,6 @@ function pageForumIDboards() {
 }
 
 export {
-  getForumsEL,
   pageForum,
   pageForumIDboards,
   displayButtonCreateForum,
