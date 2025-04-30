@@ -21,25 +21,29 @@ const {button, i, input, label,textarea, link, div, span, h2} = van.tags;
 const getForumsEL = () => {
 
   const forumList = div({class:"forum-container"});
-  const isEditModel = van.state(false);
+  const isEditModal = van.state(false);
+  const isDeleteModal = van.state(false);
 
   function editForum(id,title,content){
     console.log("editForum:",id);
-    van.add(document.body, editForumForm({
+    isEditModal.val = false;
+    van.add(document.body, Modal({closed:isEditModal},editForumForm({
+      closed:isEditModal,
       id:id,
       title:title,
       content:content
-    }));
-
+    })));
   }
 
   function deleteForum(id,title,content){
     console.log("deleteForum:",id);
-    van.add(document.body, deleteForumForm({
+    isDeleteModal.val = false;
+    van.add(document.body, Modal({closed:isDeleteModal},deleteForumForm({
+      closed:isDeleteModal,
       id:id,
       title:title,
       content:content
-    }));
+    })));
   }
 
   function enterForum(id){
@@ -169,13 +173,12 @@ function createForumForm({closed}){
 
 }
 
-function editForumForm({id,title,content}){
+function editForumForm({closed,id,title,content}){
 
   console.log(id);
   const forumId = van.state(id);
   const forumTitle = van.state(title);
   const forumContent = van.state(content);
-  const isClose = van.state(false);
 
   async function btnCreateForum(){
     // console.log("create forum");
@@ -196,7 +199,6 @@ function editForumForm({id,title,content}){
             color:Color.success,
             content:"Create Forum!"
           });
-          // closed.val = true;
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -209,9 +211,9 @@ function editForumForm({id,title,content}){
           content:"Null Forum!"
         });
       }
-      // if(closed){
-      //   closed.val = true;
-      // }
+      if(closed){
+        closed.val = true;
+      }
     }catch(e){
       console.log("ERROR",e);
       notify({
@@ -221,7 +223,7 @@ function editForumForm({id,title,content}){
     }
   }
 
-  return ()=> isClose.val ? null : div({id:'forumForm',style:"position:fixed;top:0px;left:50%;",class:"ccontent"},
+  return div({id:'forumForm',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
       label({for:"forumTitle"},"Title:"),
       input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
@@ -232,20 +234,18 @@ function editForumForm({id,title,content}){
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnCreateForum},'Create'),
-      button({type:"submit",class:"cancel-btn",onclick:()=>isClose.val=true},'Cancel'),
+      button({type:"submit",class:"cancel-btn",onclick:()=>closed.val=true},'Cancel'),
     ),
   );
 
 }
 
-
-function deleteForumForm({id,title,content}){
+function deleteForumForm({closed,id,title,content}){
 
   console.log(id);
   const forumId = van.state(id);
   const forumTitle = van.state(title);
   const forumContent = van.state(content);
-  const isClose = van.state(false);
 
   async function btnCreateForum(){
     // console.log("create forum");
@@ -279,9 +279,9 @@ function deleteForumForm({id,title,content}){
           content:"Null Forum!"
         });
       }
-      // if(closed){
-      //   closed.val = true;
-      // }
+      if(closed){
+        closed.val = true;
+      }
     }catch(e){
       console.log("ERROR",e);
       notify({
@@ -291,7 +291,7 @@ function deleteForumForm({id,title,content}){
     }
   }
 
-  return ()=> isClose.val ? null : div({id:'forumForm',style:"position:fixed;top:0px;left:50%;",class:"ccontent"},
+  return div({id:'forumForm',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
       label({for:"forumTitle"},"Title:"),
       input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
@@ -302,7 +302,7 @@ function deleteForumForm({id,title,content}){
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnCreateForum},'Create'),
-      button({type:"submit",class:"cancel-btn",onclick:()=>isClose.val=true},'Cancel'),
+      button({type:"submit",class:"cancel-btn",onclick:()=>closed.val=true},'Cancel'),
     ),
   );
 

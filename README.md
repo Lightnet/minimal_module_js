@@ -32,81 +32,68 @@
   - [x] toggle theme
   - [x] check theme
   - [ ] custom color
-
-# Pages:
-- [ ] Home
-  - [ ] fetch data
-- [ ] Blog
-  - [ ] fetch data
-- [ ] Account
-  - [ ] fetch data
 - [ ] Message
-  - [ ] fetch data
-- [ ]- Forum
-  - [x] fetch data
-  - [x] layout
+  - [ ] sent message
+  - [ ] delete message
+  - [ ] blacklist alias
+- [ ] Auth
+  - [ ] Account
+  - [x] Sign in
+  - [x] Sign up
+  - [ ] Recovery
+- [ ] Blog
 - [ ] Novels
-- [ ] Sign in
-  - [ ] fetch data
-- [ ] Sign up
-  - [ ] fetch data
-- [ ] Recovery
-  - [ ] fetch data
 - [ ] test
   - [x] notify test
+- [ ] Book
+    - [ ] Table of content
+    - [ ] Next Page
+    - [ ] Previst Page
+    - [ ] Create book
+    - [ ] Edit book
+    - [ ] Books
+    - [ ] Pages
 
 # Page Admin
 - [ ] Server status
-  - [ ] layout
 - [ ] Database
-  - [ ] layout
 - [ ] Loggings
-  - [ ] layout
 - [ ] Members
-  - [ ] layout
 - [ ] Permissions
-  - [ ] layout
 - [ ] Ban List
-  - [ ] layout
 - [ ] Forums
-  - [ ] layout
 - [ ] Novels
-  - [ ] layout
 - [ ] Monitor
-  - [ ] layout
 - [ ] Tickets
-  - [ ] layout
 - [ ] Report
   - [ ] layout
 
 # Forum 
 - [ ] permission
+    - [ ] members
 - [ ] settings
+    - [ ] cookies
+    - [ ] theme
 - [ ] Forum
     - [x] create forum
-    - [x] Boards
-        - [x] nav menu
-        - [x] create board
-        - [x] get forum id by boards
-        - [x] Topic
-          - [x] nav menu
-          - [x] create topic
-          - [x] get board id by topics
-          - [x] Comment
-              - [x] create comment
-              - [x] get topic id by comments
-
-# Novel
-- [ ] Books
-    - [ ] Book
-        - [ ] Table of content
-        - [ ] Next Page
-        - [ ] Previst Page
-- [ ] User books
-  - [ ] Create book
-  - [ ] Edit book
-  - [ ] Books
-      - [ ] Pages
+- [x] Board
+    - [x] nav menu
+    - [x] create board
+    - [x] get forum id by boards
+- [x] Topic
+    - [x] nav menu
+    - [x] create topic
+    - [x] get board id by topics
+- [x] Comment
+    - [x] nav menu
+    - [x] create comment
+    - [x] get topic id by comments
+- [ ] actions
+  - Edit
+  - Delete
+  - Report
+  - Create
+  - Nav Menu
 
 # Images:
 
