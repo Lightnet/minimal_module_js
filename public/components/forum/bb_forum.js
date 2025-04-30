@@ -21,13 +21,25 @@ const {button, i, input, label,textarea, link, div, span, h2} = van.tags;
 const getForumsEL = () => {
 
   const forumList = div({class:"forum-container"});
+  const isEditModel = van.state(false);
 
-  function editForum(id){
+  function editForum(id,title,content){
     console.log("editForum:",id);
+    van.add(document.body, editForumForm({
+      id:id,
+      title:title,
+      content:content
+    }));
+
   }
 
-  function deleteForum(id){
+  function deleteForum(id,title,content){
     console.log("deleteForum:",id);
+    van.add(document.body, deleteForumForm({
+      id:id,
+      title:title,
+      content:content
+    }));
   }
 
   function enterForum(id){
@@ -42,17 +54,17 @@ const getForumsEL = () => {
       console.log(data);
       if(data){
         for(let ii=0; ii < data.length;ii++){
-          van.add(forumList, div({class:'forum-item'},
+          van.add(forumList, div({id:data[ii].id, class:'forum-item'},
               div({class:'forum-header'},
                 div({class:"forum-title"},
                   h2({onclick:()=>enterForum(data[ii].id)},`[ Forum ] ${data[ii].title}`),
                 ),
                 div({class:"action-buttons"},
-                  button({class:"edit-btn",onclick:()=>editForum(data[ii].id)},
+                  button({class:"edit-btn",onclick:()=>editForum(data[ii].id, data[ii].title, data[ii].content)},
                     i({class:"fa-solid fa-pen-to-square"}),
                     label(' Edit'),
                   ),
-                  button({class:"delete-btn",onclick:()=>deleteForum(data[ii].id)},
+                  button({class:"delete-btn",onclick:()=>deleteForum(data[ii].id, data[ii].title, data[ii].content)},
                     i({class:"fa-solid fa-trash"}),
                     label(' Delete')
                   ),
@@ -156,6 +168,147 @@ function createForumForm({closed}){
   );
 
 }
+
+function editForumForm({id,title,content}){
+
+  console.log(id);
+  const forumId = van.state(id);
+  const forumTitle = van.state(title);
+  const forumContent = van.state(content);
+  const isClose = van.state(false);
+
+  async function btnCreateForum(){
+    // console.log("create forum");
+    try{
+      const data = await useFetch('/api/forum',{
+        method:'PUT',
+        body:JSON.stringify({
+          id:forumId.val,
+          title:forumTitle.val,
+          content:forumContent.val,
+        })
+      });
+      console.log(data);
+      if(data){
+        console.log(">>>");
+        if(data?.api == "CREATED"){
+          notify({
+            color:Color.success,
+            content:"Create Forum!"
+          });
+          // closed.val = true;
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Forum!"
+          });
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Forum!"
+        });
+      }
+      // if(closed){
+      //   closed.val = true;
+      // }
+    }catch(e){
+      console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Forum Fail!"
+      });
+    }
+  }
+
+  return ()=> isClose.val ? null : div({id:'forumForm',style:"position:fixed;top:0px;left:50%;",class:"ccontent"},
+    div({class:"modal-form-group"},
+      label({for:"forumTitle"},"Title:"),
+      input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+    ),
+    div({class:"modal-form-group"},
+      label({class:""},'Content:'),
+      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
+    ),
+    div({class:"modal-actions"},
+      button({type:"button",class:"submit-btn",onclick:btnCreateForum},'Create'),
+      button({type:"submit",class:"cancel-btn",onclick:()=>isClose.val=true},'Cancel'),
+    ),
+  );
+
+}
+
+
+function deleteForumForm({id,title,content}){
+
+  console.log(id);
+  const forumId = van.state(id);
+  const forumTitle = van.state(title);
+  const forumContent = van.state(content);
+  const isClose = van.state(false);
+
+  async function btnCreateForum(){
+    // console.log("create forum");
+    try{
+      const data = await useFetch('/api/forum',{
+        method:'DELETE',
+        body:JSON.stringify({
+          id:forumId.val,
+          title:forumTitle.val,
+          content:forumContent.val,
+        })
+      });
+      console.log(data);
+      if(data){
+        console.log(">>>");
+        if(data?.api == "CREATED"){
+          notify({
+            color:Color.success,
+            content:"Create Forum!"
+          });
+          // closed.val = true;
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Forum!"
+          });
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Forum!"
+        });
+      }
+      // if(closed){
+      //   closed.val = true;
+      // }
+    }catch(e){
+      console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Forum Fail!"
+      });
+    }
+  }
+
+  return ()=> isClose.val ? null : div({id:'forumForm',style:"position:fixed;top:0px;left:50%;",class:"ccontent"},
+    div({class:"modal-form-group"},
+      label({for:"forumTitle"},"Title:"),
+      input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+    ),
+    div({class:"modal-form-group"},
+      label({class:""},'Content:'),
+      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
+    ),
+    div({class:"modal-actions"},
+      button({type:"button",class:"submit-btn",onclick:btnCreateForum},'Create'),
+      button({type:"submit",class:"cancel-btn",onclick:()=>isClose.val=true},'Cancel'),
+    ),
+  );
+
+}
+
+
 
 // DEFAULT GET PULBIC FORUMS
 // GET CURRENT FORUM IS PUBLIC

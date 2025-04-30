@@ -57,6 +57,11 @@ function createTopicForm({closed}){
             content:"Create Topic!"
           });
           closed.val = true;
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Create!"
+          });
         }
       }else{
         notify({

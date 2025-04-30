@@ -56,6 +56,11 @@ function createBoardForm({closed}){
             content:"Create Board!"
           });
           closed.val = true;
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Board!"
+          });
         }
       }else{
         notify({

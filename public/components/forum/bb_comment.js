@@ -55,6 +55,11 @@ function createCommentForm({closed}){
             content:"Create Comment!"
           });
           closed.val = true;
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Comment!"
+          });
         }
       }else{
         notify({
@@ -108,7 +113,6 @@ function pageComment() {
 export async function getTopicIDComments(topicEl, _id){
 
   // console.log("get comments");
-
   function getCommentID(_id){
     commentIDState.val = _id;
     //navigate('/comment/'+_id);

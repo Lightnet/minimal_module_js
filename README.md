@@ -16,6 +16,23 @@
 - @hono/node-server 1.14.1
 - socket.io 4.8.1
 
+# Module:
+- [x] notify
+  - [x] context
+    - [x] timeToDelete 600
+    - [x] timeToClose 1000 * 10
+    - [x] animToClose = timeToClose - timeToDelete;
+  - [x] NotifyContainer (notice message html)
+  - [x] NotifyManager (handle messages element ancher)
+  - [x] notify (set variable args to push message notice)
+
+- [ ] theme
+  - [x] light
+  - [x] dark
+  - [x] toggle theme
+  - [x] check theme
+  - [ ] custom color
+
 # Pages:
 - [ ] Home
   - [ ] fetch data

@@ -9,7 +9,7 @@
 import van from "vanjs-core";
 import { animToClose, objNotify, timeToClose, timeToDelete } from "./notifycontext.js";
 
-const {button, div, span} = van.tags;
+const {button, div, span, i} = van.tags;
 
 // render notify alert html
 function NotifyContainer(props){
@@ -65,7 +65,12 @@ function NotifyContainer(props){
       span({ 
         class: "notification-content" 
       },props.children),
-      button({class:"button",onclick:clickClose}," X ")
+      // button({class:"button",onclick:clickClose}," X ")
+      // <i class="fa-solid fa-square-xmark"></i>
+      // <i class="fa-solid fa-circle-xmark"></i>
+      button({class:"button",onclick:clickClose},
+        i({class:"fa-solid fa-circle-xmark"})
+      )
     )
   )
 }
