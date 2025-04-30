@@ -9,7 +9,6 @@
   Informtion: Context
 */
 
-//import van from 'van';
 import van from "vanjs-core";
 import { MessageBoard } from 'vanjs-ui';
 

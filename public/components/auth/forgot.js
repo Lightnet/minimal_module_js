@@ -5,7 +5,7 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-import van from "van";
+import van from "vanjs-core";
 import { useFetch } from "./useFetch.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 

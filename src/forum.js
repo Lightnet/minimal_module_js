@@ -35,7 +35,6 @@ route.get('/comment/*', (c) => {
   return c.html(pageHtml);
 });
 
-
 //===============================================
 // FORUM
 //===============================================
@@ -143,7 +142,6 @@ route.delete('/api/board/:id',(c)=>{
   //console.log(db);
   return c.json(result);
 })
-
 //===============================================
 // TOPIC
 //===============================================
@@ -157,7 +155,6 @@ route.post('/api/topic', async(c)=>{
   console.log(results);
   return c.json(results);
 })
-
 // TOPIC UPDATE
 route.put('/api/topic/:id',async (c)=>{
   const id = await c.req.param('id')
@@ -181,7 +178,6 @@ route.delete('/api/topic/:id',(c)=>{
   //console.log(db);
   return c.json(result);
 })
-
 //get comments?
 route.get('/api/topic/:id',(c)=>{
   const db = c.get('db');
@@ -191,8 +187,6 @@ route.get('/api/topic/:id',(c)=>{
   //console.log(results);
   return c.json(results);
 })
-
-
 //===============================================
 // COMMENT
 //===============================================
@@ -205,7 +199,6 @@ route.post('/api/comment', async(c)=>{
   console.log(results);
   return c.json(results);
 })
-
 // COMMENT UPDATE
 route.put('/api/comment/:id',async (c)=>{
   const id = await c.req.param('id')
@@ -229,7 +222,6 @@ route.delete('/api/comment/:id',(c)=>{
   //console.log(db);
   return c.json(result);
 })
-
 //===============================================
 // EXPORT
 //===============================================

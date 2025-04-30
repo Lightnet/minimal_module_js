@@ -5,7 +5,7 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-import van from "van";
+import van from "vanjs-core";
 const {button, input, label, div, table, tbody, tr, td, center} = van.tags;
 
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";

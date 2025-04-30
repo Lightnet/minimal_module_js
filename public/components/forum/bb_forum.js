@@ -18,6 +18,11 @@ import { notify } from "../notify/notify.js";
 
 const {button, i, input, label,textarea, link, div, span, h2, p} = van.tags;
 
+function getQueryId(defaultValue = null) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id') || defaultValue;
+}
+
 // get forums
 const getForums = (isClosed) => {
 
@@ -322,6 +327,10 @@ function deleteForumForm({closed,id,title,content}){
   );
 
 }
+function navForum(){
+  forumIDState.val = null;
+  navigate('/forum');
+}
 // DEFAULT GET PULBIC FORUMS
 // GET CURRENT FORUM IS PUBLIC
 //need clean up html
@@ -332,9 +341,12 @@ function pageForum() {
   console.log("getRouterPathname()",getRouterPathname())
   console.log("getRouterParams()",getRouterParams())
   console.log("getRouterQuery()",getRouterQuery())
-
+  
+  let id = getQueryId();
   //const { id } = getRouterQuery();
-  let id = forumIDState.val;
+  if(!id){
+    id = forumIDState.val;  
+  }
   console.log("forum id:", id)
   if(id){
     console.log("FOUND ID");
@@ -345,7 +357,7 @@ function pageForum() {
     getForumIDBoards(isClose,boardEl, id);
 
     van.add(bbForumNav,
-      button({class:"nav-button",onclick:()=>navigate('/forum')}, "Forum"),
+      button({class:"nav-button",onclick:()=>navForum()}, "Forums[x]"),
     );
     van.add(bbForumNav,
       displayButtonCreateBoard()
@@ -379,53 +391,9 @@ function pageForum() {
   }
 
 }
-// GET CURRENT FORUM ID for boards
-function pageForumIDboards() {
-  // console.log("FORUM ID???");
-  const boardEl = div({id:"BOARDS",class:""});
-  const bbForumNav = div({id:'nav',class:"nav-container"});
-
-  //get forums
-  // van.derive(() => {
-  // });
-
-  console.log("getRouterPathname()",getRouterPathname())
-  console.log("getRouterParams()",getRouterParams())
-  console.log("getRouterQuery()",getRouterQuery())
-
-  const { id } = getRouterParams();  
-  console.log("XXX FORUM ID:", id);
-  if(id){
-    getForumIDBoards(boardEl, id);
-  }
-
-  //nav menu
-  while (bbForumNav.lastElementChild) { // clear children
-    bbForumNav.removeChild(bbForumNav.lastElementChild);
-  }
-  van.add(bbForumNav,
-    button({class:"nav-button",onclick:()=>navigate('/forum')}, "Forum"),
-  );
-  van.add(bbForumNav,
-    displayButtonCreateBoard()
-  );
-
-  return div({id:"forum",class:"forum-container" },
-    HomeNavMenu(),
-    div({class:"main-content"},
-      // bbPostTypeEL,
-      bbForumNav,
-      div({class:"forum-main"},
-        boardEl
-      )
-    ),
-  );
-
-}
 
 export {
   pageForum,
-  pageForumIDboards,
   displayButtonCreateForum,
   createFormForum,
 }

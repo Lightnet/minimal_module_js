@@ -7,8 +7,7 @@
 
 // https://www.w3schools.com/howto/howto_js_redirect_webpage.asp
 
-//import van from "van";
-import { THREE, ECS, van } from "../../triengine/dps.js";
+import van from "vanjs-core";
 import { useFetch } from "./useFetch.js";
 const {button, input, label, div, table, tbody, tr, td, center} = van.tags;
 

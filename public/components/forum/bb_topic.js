@@ -8,7 +8,7 @@
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import {useFetch} from "/libs/useFetch.js";
-import { Router, Link, getRouterParams,getRouterQuery, navigate } from "vanjs-routing";
+import { Router, Link,getRouterPathname, getRouterParams,getRouterQuery, navigate } from "vanjs-routing";
 import { displayButtonCreateComment, getTopicIDComments } from "./bb_comment.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
@@ -257,42 +257,46 @@ function pageTopic() {
   const topicEl = div({class:"comment-list"});
   const bbforumNav = div({class:"nav-container"});
 
-  van.derive(() => {
-    // console.log("Page_Topic getRouterParams >> ",getRouterParams()); 
-    // const { id } = getRouterQuery();
-    let id = topicIDState.val;
+  // console.log("Page_Topic getRouterParams >> ",getRouterParams()); 
+  // const { id } = getRouterQuery();
 
-    if(id){
-      // topicIDState.val = id;
-      while (topicEl.lastElementChild) {// clear children
-        topicEl.removeChild(topicEl.lastElementChild);
-      }
+  console.log("getRouterPathname: ",getRouterPathname())
+  let q = getRouterQuery();
+  console.log("q:", q)
+  console.log("getRouterQuery: ",getRouterQuery())
+  console.log("getRouterParams: ",getRouterParams())
+  let id = topicIDState.val;
 
-      van.add(topicEl,div({id:id, class:'topic-item'},
-        div({class:'topic-header'},
-          div({class:"topic-title"},
-            h2("[Topic] "+ topicTitleState.val),
-          ),
-          div({class:"action-buttons"},
-            button({class:"edit-btn"},
-              i({class:"fa-solid fa-pen-to-square"}),
-              label(' Edit')
-            ),
-            button({class:"delete-btn"},
-              i({class:"fa-solid fa-trash"}),
-              label(' Delete')
-            ),
-            button({class:"delete-btn"},
-              i({class:"fa-solid fa-trash"}),
-              label(' Report')
-            ),
-          )
+  if(id){
+    // topicIDState.val = id;
+    // while (topicEl.lastElementChild) {// clear children
+    //   topicEl.removeChild(topicEl.lastElementChild);
+    // }
+
+    van.add(topicEl,div({id:id, class:'topic-item'},
+      div({class:'topic-header'},
+        div({class:"topic-title"},
+          h2("[Topic] "+ topicTitleState.val),
         ),
-        div({class:"topic-content"},label(" [ Content ] "+ topicContentState.val))
-      )),
-      getTopicIDComments(topicEl, id);
-    }
-  });
+        div({class:"action-buttons"},
+          button({class:"edit-btn"},
+            i({class:"fa-solid fa-pen-to-square"}),
+            label(' Edit')
+          ),
+          button({class:"delete-btn"},
+            i({class:"fa-solid fa-trash"}),
+            label(' Delete')
+          ),
+          button({class:"delete-btn"},
+            i({class:"fa-solid fa-trash"}),
+            label(' Report')
+          ),
+        )
+      ),
+      div({class:"topic-content"},label(" [ Content ] "+ topicContentState.val))
+    )),
+    getTopicIDComments(topicEl, id);
+  }
 
   function NavFormTopic(_url){
     console.log("URL: ",_url);
@@ -311,7 +315,7 @@ function pageTopic() {
   //   bbforumNav.removeChild(bbforumNav.lastElementChild);
   // }
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navForum()},"Forums"),
+    button({class:"nav-button",onclick:()=>navForum()},"[x]Forums"),
   );
   van.add(bbforumNav,
     button({class:"nav-button",onclick:()=>NavFormTopic('/forum?id='+forumIDState.val)},"Boards"),

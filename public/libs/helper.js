@@ -5,7 +5,6 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-// import van from "van";
 import van from "vanjs-core";
 
 // // https://github.com/vanjs-org/van/discussions/78
