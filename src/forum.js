@@ -28,7 +28,6 @@ route.get('/api/forum/:id',(c)=>{
   return c.json(results);
 });
 
-
 // FORUM CREATE
 route.post('/api/forum', async(c)=>{
   const data = await c.req.json();
@@ -65,7 +64,6 @@ route.delete('/api/forum/:id',(c)=>{
 //===============================================
 // BOARD
 //===============================================
-
 // BOARD GET test
 route.get('/api/board',(c)=>{
   const db = c.get('db');
@@ -133,6 +131,30 @@ route.post('/api/topic', async(c)=>{
   return c.json(results);
 })
 
+// TOPIC UPDATE
+route.put('/api/topic/:id',async (c)=>{
+  const id = await c.req.param('id')
+  const data = await c.req.json();
+  if(data){
+    console.log("data update... id: ", id);
+    console.log(data);
+    const db = c.get('db');
+    const result = db.topic_update(id, data.title,data.content);
+    return c.json(result);
+  }
+  return c.json({api:'ERROR'});
+})
+// TOPIC DELETE
+route.delete('/api/topic/:id',(c)=>{
+  const id = c.req.param('id');
+  console.log('ID: ', id);
+  const db = c.get('db');
+  const result = db.topic_delete(id);
+  console.log("result: ",result)
+  //console.log(db);
+  return c.json(result);
+})
+
 //get comments?
 route.get('/api/topic/:id',(c)=>{
   const db = c.get('db');
@@ -155,6 +177,30 @@ route.post('/api/comment', async(c)=>{
   console.log("results");
   console.log(results);
   return c.json(results);
+})
+
+// COMMENT UPDATE
+route.put('/api/comment/:id',async (c)=>{
+  const id = await c.req.param('id')
+  const data = await c.req.json();
+  if(data){
+    console.log("data update... id: ", id);
+    console.log(data);
+    const db = c.get('db');
+    const result = db.comment_update(id, data.title,data.content);
+    return c.json(result);
+  }
+  return c.json({api:'ERROR'});
+})
+// COMMENT DELETE
+route.delete('/api/comment/:id',(c)=>{
+  const id = c.req.param('id');
+  console.log('ID: ', id);
+  const db = c.get('db');
+  const result = db.comment_delete(id);
+  console.log("result: ",result)
+  //console.log(db);
+  return c.json(result);
 })
 
 //===============================================

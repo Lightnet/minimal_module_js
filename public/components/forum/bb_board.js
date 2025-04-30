@@ -30,7 +30,7 @@ function displayButtonCreateBoard(){
 
   return button({class:"nav-button",onclick:()=>btnCreateBoard()},"Create Board");
 }
-
+// CREATE BOARD
 function createBoardForm({closed}){
 
   const forumTitle = van.state('test');
@@ -56,6 +56,11 @@ function createBoardForm({closed}){
             content:"Create Board!"
           });
           closed.val = true;
+
+
+
+
+
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -97,7 +102,157 @@ function createBoardForm({closed}){
   );
 
 }
+// EDIT FORUM
+function editForumBoard({closed,id,title,content}){
 
+  console.log(id);
+  const forumId = van.state(id);
+  const forumTitle = van.state(title);
+  const forumContent = van.state(content);
+
+  async function btnUpdateForum(){
+    // console.log("create forum");
+    try{
+      const data = await useFetch(`/api/board/${forumId.val}`,{
+        method:'PUT',
+        body:JSON.stringify({
+          id:forumId.val,
+          title:forumTitle.val,
+          content:forumContent.val,
+        })
+      });
+      console.log(data);
+      if(data){
+        console.log(">>>");
+        if(data?.api == "UPDATE"){
+          notify({
+            color:Color.success,
+            content:"Update Board!"
+          });
+
+          let content = document.getElementById(forumId.val);
+          // console.log(content);
+          // console.log(content.children[0].children[0].children[0]);
+          let elTitle = content.children[0].children[0].children[0]
+          elTitle.textContent = `[Board] ${forumTitle.val}`;
+          let elContent = content.children[1]
+          // console.log(elContent);
+          elContent.textContent = forumContent.val
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Board!"
+          });
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Board!"
+        });
+      }
+      if(closed){
+        closed.val = true;
+      }
+    }catch(e){
+      console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Forum Fail!"
+      });
+    }
+  }
+
+  return div({id:'forumForm',style:"",class:"ccontent"},
+    div({class:"modal-form-group"},
+      label({for:"forumID"},"ID:"),
+      label({},forumId.val)
+    ),
+    div({class:"modal-form-group"},
+      label({for:"forumTitle"},"Title:"),
+      input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+    ),
+    div({class:"modal-form-group"},
+      label({class:""},'Description:'),
+      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
+    ),
+    div({class:"modal-actions"},
+      button({type:"button",class:"submit-btn",onclick:btnUpdateForum},'Update'),
+      button({type:"submit",class:"cancel-btn",onclick:()=>closed.val=true},'Cancel'),
+    ),
+  );
+
+}
+// DELETE FORUM
+function deleteForumBoard({closed,id,title,content}){
+
+  console.log(id);
+  const forumId = van.state(id);
+  const forumTitle = van.state(title);
+  const forumContent = van.state(content);
+
+  async function btnDeleteForum(){
+    // console.log("create forum");
+    try{
+      const data = await useFetch(`/api/board/${forumId.val}`,{
+        method:'DELETE'
+      });
+      console.log(data);
+      if(data){
+        console.log(">>>");
+        if(data?.api == "DELETE"){
+          notify({
+            color:Color.success,
+            content:"Delete Board!"
+          });
+          // closed.val = true;
+          let ccontent = document.getElementById(forumId.val);
+          if(ccontent.parentNode){
+            ccontent.parentNode.removeChild(ccontent);
+          }
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Board!"
+          });
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Board!"
+        });
+      }
+      if(closed){
+        closed.val = true;
+      }
+    }catch(e){
+      console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Board Fail!"
+      });
+    }
+  }
+
+  return div({id:'forumForm',style:"",class:"ccontent"},
+    div({class:"modal-form-group"},
+      label({for:"forumTitle"},"ID:"),
+      p({},forumId.val)
+    ),
+    div({class:"modal-form-group"},
+      label({for:"forumTitle"},"Title:"),
+      p({},forumTitle.val)
+    ),
+    div({class:"modal-form-group"},
+      label({class:""},'Description:'),
+      p({},forumContent.val)
+    ),
+    div({class:"modal-actions"},
+      button({type:"button",class:"warn",onclick:btnDeleteForum},'Delete'),
+      button({type:"submit",class:"normal",onclick:()=>closed.val=true},'Cancel'),
+    ),
+  );
+
+}
 // PAGE BOARD
 function pageBoard() {
 
@@ -139,9 +294,34 @@ function pageBoard() {
 
 export async function getForumIDBoards(boardEl, _id){
 
+  const isEditModal = van.state(false);
+  const isDeleteModal = van.state(false);
+
   function getBoardID(_id){
     boardIDState.val = _id;
     navigate('/board/'+_id);
+  }
+
+  function editBoard(id,title,content){
+    console.log("editForum:",id);
+    isEditModal.val = false;
+    van.add(document.body, Modal({closed:isEditModal},editForumBoard({
+      closed:isEditModal,
+      id:id,
+      title:title,
+      content:content
+    })));
+  }
+
+  function deleteBoard(id,title,content){
+    console.log("deleteForum:",id);
+    isDeleteModal.val = false;
+    van.add(document.body, Modal({closed:isDeleteModal},deleteForumBoard({
+      closed:isDeleteModal,
+      id:id,
+      title:title,
+      content:content
+    })));
   }
 
   try{
@@ -154,17 +334,17 @@ export async function getForumIDBoards(boardEl, _id){
         // div title (alight left)   Edit, Delete(align right)
         // div content
 
-        van.add(boardEl, div({class:"board-container"},
+        van.add(boardEl, div({id:item.id,class:"board-container"},
           div({class:'board-header'},
             div({class:"board-title"},
               h2({onclick:()=>getBoardID(item.id)},`[Board] ${item.title}`), 
             ),
             div({class:"action-buttons"},
-              button({class:"edit-btn"},
+              button({class:"edit-btn",onclick:()=>editBoard(item.id,item.title,item.content)},
                 i({class:"fa-solid fa-pen-to-square"}),
                 label(" Edit")
               ),
-              button({class:"delete-btn"},
+              button({class:"delete-btn",onclick:()=>deleteBoard(item.id,item.title,item.content)},
                 i({class:"fa-solid fa-trash"}),
                 label(" Delete")
               ),

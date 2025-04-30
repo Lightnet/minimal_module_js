@@ -76,23 +76,34 @@
     - [ ] theme
 - [ ] Forum
     - [x] create forum
+    - [x] update forum
+    - [x] delete forum
+    - [ ] report
+    - [ ] permission forum
 - [x] Board
     - [x] nav menu
     - [x] create board
+    - [ ] update Board
+    - [ ] delete Board
+    - [ ] report
+    - [ ] permission forum
     - [x] get forum id by boards
 - [x] Topic
     - [x] nav menu
-    - [x] create topic
+    - [x] create Topic
+    - [ ] update Topic
+    - [ ] delete Topic
+    - [ ] report
+    - [ ] permission forum
     - [x] get board id by topics
 - [x] Comment
     - [x] nav menu
     - [x] create comment
+    - [ ] update Comment
+    - [ ] delete Comment
+    - [ ] report
+    - [ ] permission forum
     - [x] get topic id by comments
-- [ ] actions
-  - Edit
-  - Delete
-  - Report
-  - Create
   - Nav Menu
 
 # Images:

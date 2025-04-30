@@ -16,7 +16,7 @@ import { topicContentState, topicTitleState } from "../context.js";
 import { Color } from "../notify/notifycontext.js";
 import { notify } from "../notify/notify.js";
 
-const {button, input, textarea, i, link, label, h2, div} = van.tags;
+const {button, input, textarea, i, p, link, label, h2, div} = van.tags;
 
 function displayButtonCreateTopic(){
 
@@ -99,7 +99,157 @@ function createTopicForm({closed}){
   );
 
 }
+// EDIT FORUM
+function editForumTopic({closed,id,title,content}){
 
+  console.log(id);
+  const forumId = van.state(id);
+  const forumTitle = van.state(title);
+  const forumContent = van.state(content);
+
+  async function btnUpdateForum(){
+    // console.log("create forum");
+    try{
+      const data = await useFetch(`/api/topic/${forumId.val}`,{
+        method:'PUT',
+        body:JSON.stringify({
+          id:forumId.val,
+          title:forumTitle.val,
+          content:forumContent.val,
+        })
+      });
+      console.log(data);
+      if(data){
+        console.log(">>>");
+        if(data?.api == "UPDATE"){
+          notify({
+            color:Color.success,
+            content:"Update Topic!"
+          });
+
+          let content = document.getElementById(forumId.val);
+          // console.log(content);
+          // console.log(content.children[0].children[0].children[0]);
+          let elTitle = content.children[0].children[0].children[0]
+          elTitle.textContent = `[Topic] ${forumTitle.val}`;
+          let elContent = content.children[1]
+          // console.log(elContent);
+          elContent.textContent = forumContent.val
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Topic!"
+          });
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Topic!"
+        });
+      }
+      if(closed){
+        closed.val = true;
+      }
+    }catch(e){
+      console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Topic Fail!"
+      });
+    }
+  }
+
+  return div({id:'formTopic',style:"",class:"ccontent"},
+    div({class:"modal-form-group"},
+      label({for:"forumID"},"ID:"),
+      label({},forumId.val)
+    ),
+    div({class:"modal-form-group"},
+      label({for:"forumTitle"},"Title:"),
+      input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+    ),
+    div({class:"modal-form-group"},
+      label({class:""},'Description:'),
+      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
+    ),
+    div({class:"modal-actions"},
+      button({type:"button",class:"submit-btn",onclick:btnUpdateForum},'Update'),
+      button({type:"submit",class:"cancel-btn",onclick:()=>closed.val=true},'Cancel'),
+    ),
+  );
+
+}
+// DELETE FORUM
+function deleteForumTopic({closed,id,title,content}){
+
+  console.log(id);
+  const forumId = van.state(id);
+  const forumTitle = van.state(title);
+  const forumContent = van.state(content);
+
+  async function btnDeleteForum(){
+    // console.log("create forum");
+    try{
+      const data = await useFetch(`/api/topic/${forumId.val}`,{
+        method:'DELETE'
+      });
+      console.log(data);
+      if(data){
+        console.log(">>>");
+        if(data?.api == "DELETE"){
+          notify({
+            color:Color.success,
+            content:"Delete Topic!"
+          });
+          // closed.val = true;
+          let ccontent = document.getElementById(forumId.val);
+          if(ccontent.parentNode){
+            ccontent.parentNode.removeChild(ccontent);
+          }
+        }else if(data?.api == "ERROR"){
+          notify({
+            color:Color.error,
+            content:"Error Fetch Topic!"
+          });
+        }
+      }else{
+        notify({
+          color:Color.error,
+          content:"Null Topic!"
+        });
+      }
+      if(closed){
+        closed.val = true;
+      }
+    }catch(e){
+      console.log("ERROR",e);
+      notify({
+        color:Color.error,
+        content:"Create Topic Fail!"
+      });
+    }
+  }
+
+  return div({id:'forumForm',style:"",class:"ccontent"},
+    div({class:"modal-form-group"},
+      label({for:"forumTitle"},"ID:"),
+      p({},forumId.val)
+    ),
+    div({class:"modal-form-group"},
+      label({for:"forumTitle"},"Title:"),
+      p({},forumTitle.val)
+    ),
+    div({class:"modal-form-group"},
+      label({class:""},'Description:'),
+      p({},forumContent.val)
+    ),
+    div({class:"modal-actions"},
+      button({type:"button",class:"warn",onclick:btnDeleteForum},'Delete'),
+      button({type:"submit",class:"normal",onclick:()=>closed.val=true},'Cancel'),
+    ),
+  );
+
+}
 // PAGE TOPIC ID
 // This get comments
 function pageTopic() {
@@ -112,7 +262,7 @@ function pageTopic() {
     const { id } = getRouterParams();
 
     if(id){
-      topicIDState.val = id;
+      // topicIDState.val = id;
       while (topicEl.lastElementChild) {// clear children
         topicEl.removeChild(topicEl.lastElementChild);
       }
@@ -154,7 +304,8 @@ function pageTopic() {
     button({class:"nav-button",onclick:()=>navigate('/forum/'+forumIDState.val)},"Boards"),
   );
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navigate('/board/'+boardIDState.val)},"Topics"),
+    // button({class:"nav-button",onclick:()=>navigate('/board/'+boardIDState.val)},"Topics"),
+    button({class:"nav-button",onclick:()=>navigate('/board/'+topicIDState.val)},"[x] Topics"),
   );
   van.add(bbforumNav,
     displayButtonCreateComment(),
@@ -175,12 +326,38 @@ function pageTopic() {
 // BOARD get topics
 export async function getBoardIDTopics(topicEl,_id){
 
+  const isEditModal = van.state(false);
+  const isDeleteModal = van.state(false);
+
   function getTopicID(_id, _title, _content){
     // topicIDState.val = _id;
+    console.log("TOPIC: ", _id);
     topicIDState.val = _id;
     topicTitleState.val = _title;
     topicContentState.val = _content;
     navigate('/topic/'+_id);
+  }
+
+  function editTopic(id,title,content){
+    console.log("edit topic:",id);
+    isEditModal.val = false;
+    van.add(document.body, Modal({closed:isEditModal},editForumTopic({
+      closed:isEditModal,
+      id:id,
+      title:title,
+      content:content
+    })));
+  }
+  
+  function deleteTopic(id,title,content){
+    console.log("delete topic:",id);
+    isDeleteModal.val = false;
+    van.add(document.body, Modal({closed:isDeleteModal},deleteForumTopic({
+      closed:isDeleteModal,
+      id:id,
+      title:title,
+      content:content
+    })));
   }
 
   // get board data
@@ -195,17 +372,17 @@ export async function getBoardIDTopics(topicEl,_id){
       for(let item of data){
         console.log("item: ", item);
         // BOARD CONTENT
-        van.add(topicEl, div({class:'topic-item'},
+        van.add(topicEl, div({id:item.id, class:'topic-item'},
           div({class:'topic-header'},
             div({class:"topic-title",onclick:()=>getTopicID(item.id, item.title, item.content)},
               h2("[Topic] "+ item.title),
             ),
             div({class:"action-buttons"},
-              button({class:"edit-btn"},
+              button({class:"edit-btn", onclick:()=>editTopic(item.id,item.title,item.content)},
                 i({class:"fa-solid fa-pen-to-square"}),
                 label(' Edit')
               ),
-              button({class:"report-btn"},
+              button({class:"report-btn",onclick:()=>deleteTopic(item.id,item.title,item.content)},
                 i({class:"fa-solid fa-trash"}),
                 label(' Delete')
               ),

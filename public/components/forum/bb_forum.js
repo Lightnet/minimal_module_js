@@ -18,6 +18,7 @@ import { notify } from "../notify/notify.js";
 
 const {button, i, input, label,textarea, link, div, span, h2, p} = van.tags;
 
+// get forums
 const getForumsEL = () => {
 
   const forumList = div({class:"forum-container"});
@@ -200,19 +201,13 @@ function editForumForm({closed,id,title,content}){
           });
 
           let content = document.getElementById(forumId.val);
-
-          console.log(content);
-          
-          console.log(content.children[0].children[0].children[0]);
+          // console.log(content);
+          // console.log(content.children[0].children[0].children[0]);
           let elTitle = content.children[0].children[0].children[0]
           elTitle.textContent = `[ Forum ] ${forumTitle.val}`;
-
           let elContent = content.children[1]
-          
-          console.log(elContent);
+          // console.log(elContent);
           elContent.textContent = forumContent.val
-
-
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,

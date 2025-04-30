@@ -483,6 +483,27 @@ delete_message(_id){
     //console.log(result);
     return result;
   }
+
+  topic_update(_id,_title,_content){
+    try{
+      const stmt = this.db.prepare('UPDATE topic SET title=?, content=? WHERE id=?;')
+      stmt.run(_title, _content, _id);
+      return {api:'UPDATE'};
+    }catch(e){
+      console.log(e)
+      return {api:'DBERROR'};
+    }
+  }
+
+  topic_delete(_id){
+    try{
+      const stmt = this.db.prepare('DELETE FROM topic WHERE id=?')
+      stmt.run(_id);
+      return {api:'DELETE'};
+    }catch(e){
+      return {api:'DBERROR'};
+    }
+  }
 //===================================
 // FORUM COMMENT
 //===================================
@@ -492,6 +513,29 @@ delete_message(_id){
     stmt.run(id,_title, _content);
     return {api:"CREATED"};
   }
+
+  comment_update(_id,_title,_content){
+    try{
+      const stmt = this.db.prepare('UPDATE comment SET title=?, content=? WHERE id=?;')
+      stmt.run(_title, _content, _id);
+      return {api:'UPDATE'};
+    }catch(e){
+      console.log(e)
+      return {api:'DBERROR'};
+    }
+  }
+
+  comment_delete(_id){
+    try{
+      const stmt = this.db.prepare('DELETE FROM comment WHERE id=?')
+      stmt.run(_id);
+      return {api:'DELETE'};
+    }catch(e){
+      return {api:'DBERROR'};
+    }
+  }
+
+
 //===================================
 // PROJECT
 //===================================
