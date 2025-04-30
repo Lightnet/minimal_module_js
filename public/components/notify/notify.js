@@ -78,10 +78,10 @@ function NotifyContainer(props){
 const NotifyManager = ()=>{
   // html element
   const notifiesDiv = div();
-  //check for objNotify changes
+  //detect for objNotify changes
   van.derive(() => {
     let newNotify = objNotify.val;
-    console.log("New: ", newNotify);
+    // console.log("New: ", newNotify);
     //if null ingore it
     if(newNotify){
       let newNotifyContainer = NotifyContainer(newNotify);

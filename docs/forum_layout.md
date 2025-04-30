@@ -177,7 +177,7 @@
 
   <!-- Create Forum Modal -->
   <div id="CreateForumModal" style="display: none;">
-    <form id="createForumForm">
+    <form id="createFormForum">
       <div class="modal-form-group">
         <label for="forumTitle">Forum Title</label>
         <input type="text" id="forumTitle" placeholder="Enter forum title">

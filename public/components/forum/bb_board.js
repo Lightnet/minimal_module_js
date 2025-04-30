@@ -8,7 +8,7 @@
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import {useFetch} from "/libs/useFetch.js";
-import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
+import { Router, Link, getRouterParams, getRouterQuery, navigate } from "vanjs-routing";
 import { displayButtonCreateTopic, getBoardIDTopics } from "./bb_topic.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
@@ -56,10 +56,6 @@ function createBoardForm({closed}){
             content:"Create Board!"
           });
           closed.val = true;
-
-
-
-
 
         }else if(data?.api == "ERROR"){
           notify({
@@ -261,8 +257,14 @@ function pageBoard() {
 
   // get topics and create nav menu.
   van.derive(() => {
-    const { id } = getRouterParams();
+    const { id } = getRouterQuery();
     if(id){
+      console.log("BOARD ID:", id);
+
+      while (topicEl.lastElementChild) {// clear children
+        topicEl.removeChild(topicEl.lastElementChild);
+      }
+
       getBoardIDTopics(topicEl, id);
     }
   });
@@ -274,7 +276,7 @@ function pageBoard() {
     button({class:"nav-button",onclick:()=>navigate('/forum')},"Forum"),
   );
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navigate('/forum/'+forumIDState.val)},"Board"),
+    button({class:"nav-button",onclick:()=>navigate('/forum?id='+forumIDState.val)},"Board"),
   );
   van.add(bbforumNav,
     displayButtonCreateTopic()
@@ -298,8 +300,9 @@ export async function getForumIDBoards(boardEl, _id){
   const isDeleteModal = van.state(false);
 
   function getBoardID(_id){
+    console.log("Board ID", _id);
     boardIDState.val = _id;
-    navigate('/board/'+_id);
+    navigate('/board?id='+_id);
   }
 
   function editBoard(id,title,content){

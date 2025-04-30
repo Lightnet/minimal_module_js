@@ -39,7 +39,7 @@ function scriptHtml02(_script){
     "van":"https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.5.min.js",
     "vanjs-ui":"https://cdn.jsdelivr.net/npm/vanjs-ui@0.10.1/dist/van-ui.min.js",
     "vanjs-ext":"https://cdn.jsdelivr.net/npm/vanjs-ext@0.6.1/src/van-x.js",
-    "vanjs-routing":"https://cdn.jsdelivr.net/npm/vanjs-routing@1.1.3/dist/index.min.js"
+    "vanjs-routing":"https://cdn.jsdelivr.net/npm/vanjs-routing@1.1.4/dist/index.min.js"
   }
 }
 `),

@@ -8,7 +8,7 @@
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import {useFetch} from "/libs/useFetch.js";
-import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
+import { Router, Link, getRouterParams,getRouterQuery, navigate } from "vanjs-routing";
 import { displayButtonCreateComment, getTopicIDComments } from "./bb_comment.js";
 import { aliasState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { HomeNavMenu } from "../navmenu.js";
@@ -259,7 +259,7 @@ function pageTopic() {
 
   van.derive(() => {
     // console.log("Page_Topic getRouterParams >> ",getRouterParams()); 
-    const { id } = getRouterParams();
+    const { id } = getRouterQuery();
 
     if(id){
       // topicIDState.val = id;
@@ -293,6 +293,13 @@ function pageTopic() {
     }
   });
 
+  function NavFormTopic(_url){
+    console.log("URL: ",_url);
+    navigate(_url);
+  }
+  // http://localhost:3000/board/4
+  // http://localhost:3000/board/4
+
   // nav menu
   while (bbforumNav.lastElementChild) {// clear children
     bbforumNav.removeChild(bbforumNav.lastElementChild);
@@ -301,11 +308,10 @@ function pageTopic() {
     button({class:"nav-button",onclick:()=>navigate('/forum')},"Forums"),
   );
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navigate('/forum/'+forumIDState.val)},"Boards"),
+    button({class:"nav-button",onclick:()=>NavFormTopic('/forum?id='+forumIDState.val)},"Boards"),
   );
   van.add(bbforumNav,
-    // button({class:"nav-button",onclick:()=>navigate('/board/'+boardIDState.val)},"Topics"),
-    button({class:"nav-button",onclick:()=>navigate('/board/'+topicIDState.val)},"[x] Topics"),
+    button({class:"nav-button",onclick:()=>NavFormTopic('/board?id='+boardIDState.val)},"[x] Topics"),
   );
   van.add(bbforumNav,
     displayButtonCreateComment(),
@@ -335,7 +341,7 @@ export async function getBoardIDTopics(topicEl,_id){
     topicIDState.val = _id;
     topicTitleState.val = _title;
     topicContentState.val = _content;
-    navigate('/topic/'+_id);
+    navigate('/topic?id='+_id);
   }
 
   function editTopic(id,title,content){
@@ -366,11 +372,12 @@ export async function getBoardIDTopics(topicEl,_id){
   // - title
   // - content
   try{
-    const data = await useFetch('/api/board/'+_id);
-    console.log(data);
+    console.log("BOARD ID: HERE?", _id);
+    const data = await useFetch(`/api/board/${_id}`);
+    // console.log(data);
     if(data){
       for(let item of data){
-        console.log("item: ", item);
+        // console.log("item: ", item);
         // BOARD CONTENT
         van.add(topicEl, div({id:item.id, class:'topic-item'},
           div({class:'topic-header'},

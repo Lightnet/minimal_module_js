@@ -266,6 +266,7 @@ export async function getTopicIDComments(topicEl, _id){
   const isDeleteModal = van.state(false);
   // console.log("get comments");
   function getCommentID(_id){
+    console.log("Comment ID", _id);
     commentIDState.val = _id;
     //navigate('/comment/'+_id);
   }
@@ -297,7 +298,7 @@ export async function getTopicIDComments(topicEl, _id){
   // <i class="fa-solid fa-trash"></i>
   try{
     const data = await useFetch('/api/topic/'+_id);
-    console.log(data);
+    // console.log(data);
     if(data){
       for(let item of data){
         // console.log("item: ", item);

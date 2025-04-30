@@ -8,7 +8,7 @@
 
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
-import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
+import { Router, Link, getRouterPathname,getRouterQuery , getRouterParams, navigate } from "vanjs-routing";
 import {forumIDState} from "/components/context.js";
 import useFetch from "../../libs/useFetch.js";
 import { displayButtonCreateBoard, getForumIDBoards } from "./bb_board.js";
@@ -50,13 +50,13 @@ const getForumsEL = () => {
   function enterForum(id){
     console.log("Forum ID HERE?: ",id);
     forumIDState.val = id;
-    navigate('/forum/'+id);
+    navigate('/forum?id='+id);
   }
 
   async function getForums(){
     try{
       const data = await useFetch('/api/forum');
-      console.log(data);
+      //console.log(data);
       if(data){
         for(let ii=0; ii < data.length;ii++){
           van.add(forumList, div({id:data[ii].id, class:'forum-item'},
@@ -95,20 +95,18 @@ const getForumsEL = () => {
 }
 //BUTTON MODAL
 function displayButtonCreateForum(){
-
   const isCreated = van.state(false);
-
   function btnCreateForum(){
     isCreated.val = false;
     van.add(document.body, Modal({closed:isCreated},
-      createForumForm({closed:isCreated})
+      createFormForum({closed:isCreated})
     ));
   }
 
   return button({class:"nav-button", onclick:()=>btnCreateForum()},"Create Forum");
 }
 // CREATE FORUM
-function createForumForm({closed}){
+function createFormForum({closed}){
 
   const forumTitle = van.state('test');
   const forumContent = van.state('test');
@@ -326,24 +324,60 @@ function deleteForumForm({closed,id,title,content}){
 // DEFAULT GET PULBIC FORUMS
 // GET CURRENT FORUM IS PUBLIC
 function pageForum() {
-  const bbForumNav = div({id:'nav',class:"nav-container"});
-  //nav menus
-  while (bbForumNav.lastElementChild) { // clear children
-    bbForumNav.removeChild(bbForumNav.lastElementChild);
-  }
-  van.add(bbForumNav,
-    displayButtonCreateForum(),
-  );
 
-  return div({id:"forum",class:"forum-container" },
-    HomeNavMenu(),
-    div({class:"main-content"},
-      bbForumNav,
-      div({class:"forum-main"},
-        getForumsEL()
-      )
-    ),
-  );
+  // console.log("getRouterPathname()",getRouterPathname())
+  // console.log("getRouterParams()",getRouterParams())
+  // console.log("getRouterQuery()",getRouterQuery())
+  const { id } = getRouterQuery();
+  console.log("forum id:", id)
+  if(id){
+    const boardEl = div({id:"BOARDS",class:""});
+    const bbForumNav = div({id:'nav',class:"nav-container"});
+    console.log("XXX FORUM ID:", id);
+    if(id){
+      getForumIDBoards(boardEl, id);
+    }
+    //nav menu
+    // while (bbForumNav.lastElementChild) { // clear children
+    //   bbForumNav.removeChild(bbForumNav.lastElementChild);
+    // }
+    van.add(bbForumNav,
+      button({class:"nav-button",onclick:()=>navigate('/forum')}, "Forum"),
+    );
+    van.add(bbForumNav,
+      displayButtonCreateBoard()
+    );
+
+    return div({id:"forum",class:"forum-container" },
+      HomeNavMenu(),
+      div({class:"main-content"},
+        bbForumNav,
+        div({class:"forum-main"},
+          boardEl
+        )
+      ),
+    );
+  }else{
+    const bbForumNav = div({id:'nav',class:"nav-container"});
+    //nav menus
+    // while (bbForumNav.lastElementChild) { // clear children
+    //   bbForumNav.removeChild(bbForumNav.lastElementChild);
+    // }
+    van.add(bbForumNav,
+      displayButtonCreateForum(),
+    );
+
+    return div({id:"forum",class:"forum-container" },
+      HomeNavMenu(),
+      div({class:"main-content"},
+        bbForumNav,
+        div({class:"forum-main"},
+          getForumsEL()
+        )
+      ),
+    );
+  }
+
 }
 // GET CURRENT FORUM ID for boards
 function pageForumIDboards() {
@@ -352,15 +386,18 @@ function pageForumIDboards() {
   const bbForumNav = div({id:'nav',class:"nav-container"});
 
   //get forums
-  van.derive(() => {
-    const { id } = getRouterParams();    
-    // console.log("FORUM ID:", id);
-    if(id){
-      if(id.length > 0){
-        getForumIDBoards(boardEl, id);
-      }
-    }
-  });
+  // van.derive(() => {
+  // });
+
+  console.log("getRouterPathname()",getRouterPathname())
+  console.log("getRouterParams()",getRouterParams())
+  console.log("getRouterQuery()",getRouterQuery())
+
+  const { id } = getRouterParams();  
+  console.log("XXX FORUM ID:", id);
+  if(id){
+    getForumIDBoards(boardEl, id);
+  }
 
   //nav menu
   while (bbForumNav.lastElementChild) { // clear children
@@ -391,5 +428,5 @@ export {
   pageForum,
   pageForumIDboards,
   displayButtonCreateForum,
-  createForumForm,
+  createFormForum,
 }

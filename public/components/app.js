@@ -19,7 +19,7 @@ import { Page_Report } from "./pages/page_report.js";
 import { AccountPage } from "./pages/page_account.js";
 import { Page_Message } from "./messages/page_message.js";
 import { Page_Setting } from "./pages/page_settings.js";
-import { pageForumIDboards, pageForum, pageBoard, pageTopic, pageComment } from "./forum/bb_page.js";
+import { pageForum, pageBoard, pageTopic, pageComment } from "./forum/bb_page.js";
 import { checkTheme } from "./theme/theme.js";
 import { HelpPage } from "./pages/page_help.js";
 import { Page_UI_Test } from "./pages/page_ui_test.js";
@@ -61,9 +61,8 @@ const App = () => {
       { path: "/settings", component: Page_Setting },
       { path: "/message", component: Page_Message },
       { path: "/forum", component: pageForum },
-      { path: "/forum/:id", component: pageForumIDboards },
-      { path: "/board/:id", component: pageBoard },
-      { path: "/topic/:id", component: pageTopic },
+      { path: "/board", component: pageBoard },
+      { path: "/topic", component: pageTopic },
       { path: "/report", component: Page_Report },
       { path: "/help", component: HelpPage },
       { path: "/test", component: Page_UI_Test },

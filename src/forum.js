@@ -6,8 +6,35 @@
 */
 
 import { Hono } from 'hono';
+import { scriptHtml02 } from './pages.js';
 
 const route = new Hono();
+
+route.get('/forum', (c) => {
+  const pageHtml = scriptHtml02("/index.js");
+  return c.html(pageHtml);
+});
+
+route.get('/forum/*', (c) => {
+  const pageHtml = scriptHtml02("/index.js");
+  return c.html(pageHtml);
+});
+
+route.get('/board/*', (c) => {
+  const pageHtml = scriptHtml02("/index.js");
+  return c.html(pageHtml);
+});
+
+route.get('/topic/*', (c) => {
+  const pageHtml = scriptHtml02("/index.js");
+  return c.html(pageHtml);
+});
+
+route.get('/comment/*', (c) => {
+  const pageHtml = scriptHtml02("/index.js");
+  return c.html(pageHtml);
+});
+
 
 //===============================================
 // FORUM
