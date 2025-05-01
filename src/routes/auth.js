@@ -13,9 +13,9 @@ import jwt from 'jsonwebtoken';
 import { Hono } from 'hono';
 import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
 const app = new Hono({ 
-  //strict: false 
+  //strict: false
 });
-import { checkUserExists, login, signup } from '../models/sqlite/sdlite_user.js';
+import { adminCreateUser, checkUserExists, login, signup } from '../models/sqlite/sqlite_user.js';
 
 app.use("*", checkAccess);
 
@@ -61,13 +61,18 @@ app.post('/api/auth/signin', async (c) => {
       if((!data.alias)||(!data.passphrase)){
         return c.json({api:"EMPTY"});  
       }
-      const db = c.get('db');
+      // const db = c.get('db');
       // const result = db.user_signin(data.alias, data.passphrase);
       try {
         const result = await login(data.alias, data.passphrase); 
         if(result){
           console.log("PASS", result);
-          let token = { id: data.id, alias: data.alias, role: data.role };
+          let token = {
+            id: result.id, 
+            alias: data.alias, 
+            role: result.role
+          };
+          console.log("token: ",token);
           token = jwt.sign(token, process.env.JWT_SECRET || 'SECRET', {
             expiresIn: '1d',
           });
@@ -86,25 +91,6 @@ app.post('/api/auth/signin', async (c) => {
       } catch (error) {
         return c.json({api:'DENIED'});
       }
-      // console.log("user DB");
-      // console.log(result);
-      // if(result){
-      //   if(result?.api=='PASS'){
-      //     let token = {alias: data.alias};
-      //     token=JSON.stringify(token)
-      //     setCookie(c, 'token', token,{
-      //       httpOnly:true,
-      //       path:"/"
-      //     });
-      //     return c.json(result);
-      //   }else if(result?.api=='NONEXIST'){
-      //     return c.json({api:'NONEXIST'}); 
-      //   }else{
-      //     return c.json({api:'DENIED'});  
-      //   }
-      // }else{
-      //   return c.json({api:'ACCESSNULL'});
-      // }
     }else{
       return c.json({api:'ACCESSNULL'});
     }
@@ -138,13 +124,28 @@ app.get('/api/auth/user', async (c) => {
   const tokenCookie = getCookie(c, 'token');
   if(tokenCookie){
     //deleteCookie(c, 'token');
-    //console.log('tokenCookie:', tokenCookie);
+    console.log('tokenCookie:', tokenCookie);
     //console.log('tokenCookie type:', typeof tokenCookie);
-    let jsonCookie = JSON.parse(tokenCookie);
+    // let jsonCookie = JSON.parse(tokenCookie);
     //console.log('tokenCookie:', jsonCookie);
     //console.log('tokenCookie alias:', jsonCookie.alias);
-    return c.json({api:"PASS",alias: jsonCookie.alias});
-    //return c.json({api:"PASS"});
+    // return c.json({api:"PASS",alias: jsonCookie.alias});
+    // return c.json({api:"PASS"});
+
+    try {
+      // var decoded = jwt.verify(tokenCookie, 'wrong-secret');
+      var userToken = jwt.verify(tokenCookie, process.env.JWT_SECRET || 'SECRET');
+      console.log(userToken)
+
+      return c.json({api:"PASS",alias:userToken.alias});
+    } catch(err) {
+      // err
+      return c.json({api:"ERROR"});
+    }
+
+
+
+    return c.json({api:"ERROR"});
   }
 
   //const data = c.req.query()
@@ -172,5 +173,29 @@ app.get('/api/user', async (c) => {
 
   return c.json({api:"ERROR"});
 });
+
+
+app.get('/api/admin', async (c) => {
+  let username = "admin";
+  let email = "admin";
+  let password = "admin";
+  let role = "admin";
+  let groupIds = 1;
+
+  try {
+    // const user = await adminCreateUser({ username, email, password, role, groupIds });
+    const user = await adminCreateUser({
+      username, 
+      email, 
+      password, 
+      role, 
+      groupIds 
+    });
+    return c.json(user, 201);
+  } catch (error) {
+    return c.json({ error: error.message }, 400);
+  }
+});
+
 
 export default app;

@@ -22,6 +22,9 @@ async function signup(username, email, password, role = 'user') {
 async function login(email, password) {
   const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
   const user = stmt.get(email);
+  console.log("[login] "+user);
+  console.log(user);
+  console.log(user.id);
   if (!user) throw new Error('User not found');
   // const isValid = await bcrypt.compare(password, user.password_hash);
   const isValid = compareHashPassword(password, user.password_hash,user.salt);
@@ -40,6 +43,8 @@ function getUserGroups(userId) {
 
 function checkPermission(user, resourceType, resourceId, action) {
   const groupIds = getUserGroups(user.id);
+  console.log("user.role:", user.role);
+  // user.role = "admin";
   const entities = [
     { type: 'role', id: user.role },
     ...groupIds.map((id) => ({ type: 'group', id: id.toString() })),
@@ -64,6 +69,7 @@ function checkPermission(user, resourceType, resourceId, action) {
       resourceId ?? null,
       action
     );
+    console.log("result: ", result);
     if (result && result.allowed) {
       return true;
     }
@@ -98,17 +104,86 @@ function checkUserExists({ email, username }) {
 }
 
 function createForum(name, description, creatorId, moderatorGroupId) {
-  const stmt = db.prepare(`
-    INSERT INTO forums (name, description, creator_id, moderator_group_id)
-    VALUES (?, ?, ?, ?)
-  `);
-  const result = stmt.run(name, description, creatorId, moderatorGroupId);
-  return db.prepare('SELECT * FROM forums WHERE id = ?').get(result.lastInsertRowid);
+  db.pragma('foreign_keys = 0');
+  console.log("name: ", name);
+  console.log("description: ", description);
+  console.log("creatorId: ", creatorId);
+  console.log("moderatorGroupId: ", moderatorGroupId);
+  try {
+    //need to fixed same name error forum...
+    console.log("db:",db);
+    const stmt = db.prepare(`INSERT INTO forums (name, description, creator_id, moderator_group_id)
+      VALUES (?, ?, ?, ?)`);
+    const result = stmt.run(name, description, creatorId, moderatorGroupId);
+    console.log("result:", result);
+    return db.prepare('SELECT * FROM forums WHERE id = ?').get(result.lastInsertRowid);  
+  } catch (error) {
+    console.log("ERROR FORUM QUERY...", error.message);
+    return null;
+  }
+  
 }
 
 function getForumById(forumId) {
   const stmt = db.prepare('SELECT * FROM forums WHERE id = ?');
   return stmt.get(forumId);
+}
+
+// New function for admin to create a user account
+async function adminCreateUser({ username, email, password, role = 'user', groupIds = [] }) {
+  if (!['user', 'moderator', 'admin'].includes(role)) {
+    throw new Error('Invalid role');
+  }
+
+  // Check if user already exists
+  if (checkUserExists({ email, username })) {
+    throw new Error('User with this email or username already exists');
+  }
+
+  // Create user
+  const user = await signup(username, email, password, role);
+
+  // Assign to groups
+  if (groupIds.length > 0) {
+    const stmt = db.prepare(`
+      INSERT INTO group_memberships (user_id, group_id)
+      VALUES (?, ?)
+    `);
+    for (const groupId of groupIds) {
+      // Validate group exists
+      const group = db.prepare('SELECT id FROM groups WHERE id = ?').get(groupId);
+      if (!group) {
+        throw new Error(`Group with ID ${groupId} does not exist`);
+      }
+      stmt.run(user.id, groupId);
+    }
+  }
+
+  return { ...user, groupIds };
+}
+
+// New function to add permissions
+function addPermission({ entity_type, entity_id, resource_type, resource_id, action, allowed }) {
+  if (!['role', 'group'].includes(entity_type)) {
+    throw new Error('Invalid entity_type');
+  }
+
+  // Validate entity exists
+  if (entity_type === 'group') {
+    const group = db.prepare('SELECT id FROM groups WHERE id = ?').get(entity_id);
+    if (!group) {
+      throw new Error(`Group with ID ${entity_id} does not exist`);
+    }
+  } else if (entity_type === 'role' && !['user', 'moderator', 'admin'].includes(entity_id)) {
+    throw new Error('Invalid role');
+  }
+
+  const stmt = db.prepare(`
+    INSERT OR REPLACE INTO permissions (entity_type, entity_id, resource_type, resource_id, action, allowed)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `);
+  const result = stmt.run(entity_type, entity_id, resource_type, resource_id || null, action, allowed ? 1 : 0);
+  return { id: result.lastInsertRowid, entity_type, entity_id, resource_type, resource_id, action, allowed };
 }
 
 // module.exports = { signup, login, getUserGroups, checkPermission };
@@ -119,5 +194,7 @@ export {
   checkPermission, 
   checkUserExists,
   createForum,
-  getForumById
+  getForumById,
+  adminCreateUser,
+  addPermission
 };

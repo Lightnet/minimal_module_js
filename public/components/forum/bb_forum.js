@@ -123,13 +123,14 @@ function createFormForum({closed}){
       const data = await useFetch('/api/forum',{
         method:'POST',
         body:JSON.stringify({
-          title:forumTitle.val,
-          content:forumContent.val,
+          name:forumTitle.val,
+          description:forumContent.val,
+          moderator_group_id:1,
         })
       });
       console.log(data);
       if(data){
-        console.log(">>>");
+        // console.log(">>>");
         if(data?.api == "CREATED"){
           notify({
             color:Color.success,

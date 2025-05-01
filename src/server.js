@@ -24,10 +24,15 @@ import { Hono } from 'hono';
 // import SQLDB from './database/node_sql_database.js';
 import auth from './routes/auth.js';
 // import blog from './routes/blog.js';
-// import forum from './routes/forum.js';
+
 import pages, { scriptHtml02 } from './routes/pages.js';
 // import admin from './routes/admin.js';
 // import message from './routes/message.js';
+
+import forum from './routes/forums.js';
+import board from './routes/boards.js';
+import topic from './routes/topics.js';
+import comment from './routes/comments.js';
 
 // middleware for db
 // note it reload for every request
@@ -81,7 +86,10 @@ const app = new Hono({
 app.route('/', auth);
 // app.route('/', message);
 // app.route('/', blog);
-// app.route('/', forum);
+app.route('/', forum);
+app.route('/', board);
+app.route('/', topic);
+app.route('/', comment);
 // app.route('/', admin);
 
 //<script type="module" src="/client.js"></script>

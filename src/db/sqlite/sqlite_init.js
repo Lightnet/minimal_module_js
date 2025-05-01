@@ -42,6 +42,8 @@ function initializeDatabase(dbPath) {
     ['role', 'admin', 'board', null, 'update', 1],
     ['role', 'admin', 'board', null, 'delete', 1],
     ['role', 'admin', 'user', null, 'manage', 1],
+    ['role', 'admin', 'user', null, 'manage', 1], // Allows account creation and management
+    ['role', 'admin', 'group', null, 'manage', 1], // Allows group and permission management
   ];
 
   const groupPermissions = [
@@ -54,14 +56,14 @@ function initializeDatabase(dbPath) {
     ['group', '2', 'topic', null, 'create', 1],
   ];
 
-  rolePermissions.forEach((perm) => insertPermission.run(...perm));
-  groupPermissions.forEach((perm) => insertPermission.run(...perm));
+  // rolePermissions.forEach((perm) => insertPermission.run(...perm));
+  // groupPermissions.forEach((perm) => insertPermission.run(...perm));
 
-  const insertGroup = db.prepare(`
-    INSERT OR IGNORE INTO groups (name, description) VALUES (?, ?)
-  `);
-  insertGroup.run('board1_moderators', 'Moderators for Board 1');
-  insertGroup.run('trusted_users', 'Users with extra privileges');
+  // const insertGroup = db.prepare(`
+  //   INSERT OR IGNORE INTO groups (name, description) VALUES (?, ?)
+  // `);
+  // insertGroup.run('board1_moderators', 'Moderators for Board 1');
+  // insertGroup.run('trusted_users', 'Users with extra privileges');
 
   return db;
 }

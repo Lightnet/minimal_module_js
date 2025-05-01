@@ -48,3 +48,14 @@ DATABASE_PATH=./data/forum.db
 JWT_SECRET=your_jwt_secret_key
 PORT=3000
 ```
+
+```sql
+CREATE TABLE audit_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  action TEXT NOT NULL,
+  details TEXT,
+  created_at TEXT DEFAULT (datetime('now')),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+```

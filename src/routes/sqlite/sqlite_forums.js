@@ -1,7 +1,8 @@
 const { Hono } = require('hono');
 const { authenticate, authorize } = require('../middleware/auth');
-const { createForum, getForumById } = require('../models');
+// const { createForum, getForumById } = require('../models');
 const db = require('../db');
+// const { createForum, getForumById } = require('../../models/sqlite/sqlite_user');
 
 const forums = new Hono();
 
