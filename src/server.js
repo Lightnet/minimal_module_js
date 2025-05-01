@@ -12,7 +12,7 @@
 import { Server } from 'socket.io'
 //import { Server as HttpServer } from 'http'
 import { serve } from '@hono/node-server';
-import van from "mini-van-plate/van-plate"
+// import van from "mini-van-plate/van-plate"
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 //import { html } from 'hono/html';
@@ -21,13 +21,13 @@ import { Hono } from 'hono';
 //import { jwt } from 'hono/jwt'
 // https://hono.dev/helpers/cookie
 
-import SQLDB from './database/node_sql_database.js';
-import auth from './auth.js';
-import blog from './blog.js';
-import forum from './forum.js';
-import pages, { scriptHtml02 } from './pages.js';
-import admin from './admin.js';
-import message from './message.js';
+// import SQLDB from './database/node_sql_database.js';
+import auth from './routes/auth.js';
+// import blog from './routes/blog.js';
+// import forum from './routes/forum.js';
+import pages, { scriptHtml02 } from './routes/pages.js';
+// import admin from './routes/admin.js';
+// import message from './routes/message.js';
 
 // middleware for db
 // note it reload for every request
@@ -48,11 +48,11 @@ export function useDB(options){
   }
 }
 // DATABASE
-const db = new SQLDB();
+// const db = new SQLDB();
 //const db = new ORMSQLITE();
 
 const PORT = process.env.PORT || 3000;
-const {head, body, style, script} = van.tags
+// const {head, body, style, script} = van.tags
 
 // Web Fetch Server
 const app = new Hono({ 
@@ -61,9 +61,9 @@ const app = new Hono({
 
 //middleware
 //note this will request every action if set to '*' to allow all url
-app.use('*',useDB({
-  db:db,
-}));
+// app.use('*',useDB({
+//   db:db,
+// }));
 
 //app.use(
   //'/auth/*',
@@ -79,34 +79,26 @@ app.use('*',useDB({
 //})
 
 app.route('/', auth);
-app.route('/', message);
-app.route('/', blog);
-app.route('/', forum);
-app.route('/', admin);
+// app.route('/', message);
+// app.route('/', blog);
+// app.route('/', forum);
+// app.route('/', admin);
 
 //<script type="module" src="/client.js"></script>
 
 app.get('/', (c) => {
-  // const db = c.get('db');
-  // console.log('db', db);
-  // return c.text('Hono!')
-  // background:gray;
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
 
 app.get('/test', (c) => {
-  // const db = c.get('db');
-  // console.log('db', db);
-  // return c.text('Hono!')
-  // background:gray;
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
 
 //set up static folder for public access
 app.use('/*', serveStatic({ root: './public' }));
-app.route('/', pages);
+// app.route('/', pages);
 
 //wild card url for router vanjs added last
 // app.use('/*',  (c) => {

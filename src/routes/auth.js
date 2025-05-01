@@ -8,15 +8,17 @@
 //https://hono.dev/guides/middleware
 
 //AUTH STUFF
+// const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 import { Hono } from 'hono';
-import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie'
+import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
 const app = new Hono({ 
   //strict: false 
 });
+import { checkUserExists, login, signup } from '../models/sqlite/sdlite_user.js';
 
 app.use("*", checkAccess);
 
-// https://hono.dev/getting-started/basic#request-and-response
 app.post('/api/auth/signup', async (c) => {
   //const data = c.req.query()
   const data = await c.req.json()
@@ -28,15 +30,22 @@ app.post('/api/auth/signup', async (c) => {
         return c.json({api:"EMPTY"});  
       }
       const db = c.get('db');
-      const user = db.user_exist(data.alias);
+      // const user = db.user_exist(data.alias);
+      const user = checkUserExists({
+        username: data.alias, 
+        email:data.email
+      });
       console.log("user DB");
       console.log(user);
       if(user){
+        console.log('EXIST');
         return c.json({api:'EXIST'});
       }else{
         console.log("CREATE USER SQL...")
-        const result = db.user_create(data.alias,data.username,data.passphrase, data.email);
-        return c.json(result);
+        // const result = db.user_create(data.alias,data.username,data.passphrase, data.email);
+        const result = signup(data.alias, data.email ,data.passphrase);
+        // return c.json(result);
+        return c.json({api:'CREATE'});
       }
     }
   }
@@ -53,26 +62,49 @@ app.post('/api/auth/signin', async (c) => {
         return c.json({api:"EMPTY"});  
       }
       const db = c.get('db');
-      const result = db.user_signin(data.alias, data.passphrase);
-      console.log("user DB");
-      console.log(result);
-      if(result){
-        if(result?.api=='PASS'){
-          let token = {alias: data.alias};
-          token=JSON.stringify(token)
+      // const result = db.user_signin(data.alias, data.passphrase);
+      try {
+        const result = await login(data.alias, data.passphrase); 
+        if(result){
+          console.log("PASS", result);
+          let token = { id: data.id, alias: data.alias, role: data.role };
+          token = jwt.sign(token, process.env.JWT_SECRET || 'SECRET', {
+            expiresIn: '1d',
+          });
+          // token=JSON.stringify(token);
           setCookie(c, 'token', token,{
             httpOnly:true,
             path:"/"
           });
-          return c.json(result);
-        }else if(result?.api=='NONEXIST'){
-          return c.json({api:'NONEXIST'}); 
+          return c.json({api:'PASS',alias:data.alias});
+          // return c.json(result);
         }else{
+          console.log("NOT CORRECT PASS!")
           return c.json({api:'DENIED'});  
         }
-      }else{
-        return c.json({api:'ACCESSNULL'});
+        
+      } catch (error) {
+        return c.json({api:'DENIED'});
       }
+      // console.log("user DB");
+      // console.log(result);
+      // if(result){
+      //   if(result?.api=='PASS'){
+      //     let token = {alias: data.alias};
+      //     token=JSON.stringify(token)
+      //     setCookie(c, 'token', token,{
+      //       httpOnly:true,
+      //       path:"/"
+      //     });
+      //     return c.json(result);
+      //   }else if(result?.api=='NONEXIST'){
+      //     return c.json({api:'NONEXIST'}); 
+      //   }else{
+      //     return c.json({api:'DENIED'});  
+      //   }
+      // }else{
+      //   return c.json({api:'ACCESSNULL'});
+      // }
     }else{
       return c.json({api:'ACCESSNULL'});
     }

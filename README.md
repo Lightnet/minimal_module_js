@@ -2,6 +2,10 @@
 
 # License: MIT
 
+# Status:
+- unstable
+- reworking server side forum and auth.
+
 # Information:
   Work in progress. Using minimal packages in style vanilla js.
 
@@ -83,24 +87,24 @@
 - [x] Board
     - [x] nav menu
     - [x] create board
-    - [ ] update Board
-    - [ ] delete Board
+    - [x] update Board
+    - [x] delete Board
     - [ ] report
     - [ ] permission forum
     - [x] get forum id by boards
 - [x] Topic
     - [x] nav menu
     - [x] create Topic
-    - [ ] update Topic
-    - [ ] delete Topic
+    - [x] update Topic
+    - [x] delete Topic
     - [ ] report
     - [ ] permission forum
     - [x] get board id by topics
 - [x] Comment
     - [x] nav menu
     - [x] create comment
-    - [ ] update Comment
-    - [ ] delete Comment
+    - [x] update Comment
+    - [x] delete Comment
     - [ ] report
     - [ ] permission forum
     - [x] get topic id by comments

@@ -13,7 +13,7 @@ const {button, div, span, i} = van.tags;
 
 // render notify alert html
 function NotifyContainer(props){
-  console.log(props);
+  // console.log(props);
   const fade = van.state(true);
   const nColor = van.state(props.color || 'info');
   const ID = van.state(props.id);
@@ -39,7 +39,7 @@ function NotifyContainer(props){
   }
   // user close
   function clickClose() {
-    console.log("CLOSE");
+    // console.log("CLOSE");
     clearTimeout(timeoutId);
     clearTimeout(fadeId);
     onClose();
@@ -53,7 +53,7 @@ function NotifyContainer(props){
   //for css check for change in nColor and fade animation
   const cssRender = van.derive(() => {
     let slide = fade.val ? "slideIn" : "slideOut";
-    console.log(`slide > ${slide}`);
+    // console.log(`slide > ${slide}`);
     return `notification ${nColor.val} ${slide}`
   });
 

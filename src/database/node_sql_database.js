@@ -22,6 +22,10 @@ class SQLDB{
   constructor(){
     this.initDB();
     this.create_table_user()
+    this.create_table_groups()
+    this.create_table_group_memberships()
+    this.create_table_permissions()
+    //this.create_table_preset_permissions()
 
     this.create_table_blog();
     this.create_table_forum();
@@ -62,11 +66,82 @@ class SQLDB{
       passphrase varchar(255),
       salt varchar(255) NOT NULL,
       hash varchar(255) NOT NULL,
+      password_hash VARCHAR(255) NOT NULL,
       email varchar(255) NOT NULL,
-      role varchar(16) DEFAULT member,
+      role VARCHAR(20) NOT NULL DEFAULT 'user', -- Roles: user, moderator, admin
+      status VARCHAR(20) NOT NULL DEFAULT 'active', -- Status: active, muted, banned
       create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );`);
+  }
+
+  // async create_table_groups(){
+  //   await this.db.exec(`CREATE TABLE IF NOT EXISTS users`);
+  // }
+  async create_table_groups(){
+    await this.db.exec(`CREATE TABLE IF NOT EXISTS groups (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(100) UNIQUE NOT NULL,
+      description TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`);
+  }
+
+  async create_table_group_memberships(){
+    await this.db.exec(`CREATE TABLE IF NOT EXISTS group_memberships (
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
+      joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (user_id, group_id)
+    );`);
+  }
+
+  async create_table_permissions(){
+    await this.db.exec(`CREATE TABLE IF NOT EXISTS permissions (
+      id SERIAL PRIMARY KEY,
+      entity_type VARCHAR(20) NOT NULL, -- 'role' or 'group'
+      entity_id VARCHAR(100) NOT NULL, -- Role name (e.g., 'admin') or group ID
+      resource_type VARCHAR(50) NOT NULL, -- e.g., 'board', 'topic', 'comment'
+      resource_id INTEGER, -- Optional: specific resource ID (e.g., board ID)
+      action VARCHAR(50) NOT NULL, -- e.g., create, read, update, delete
+      allowed BOOLEAN NOT NULL DEFAULT TRUE,
+      UNIQUE(entity_type, entity_id, resource_type, resource_id, action)
+    );`);
+  }
+
+  async create_table_preset_permissions(){
+    await this.db.exec(`-- Role-based permissions
+INSERT INTO permissions (entity_type, entity_id, resource_type, resource_id, action, allowed) VALUES
+  -- User role
+  ('role', 'user', 'board', NULL, 'read', TRUE),
+  ('role', 'user', 'topic', NULL, 'create', TRUE),
+  ('role', 'user', 'topic', NULL, 'read', TRUE),
+  ('role', 'user', 'comment', NULL, 'create', TRUE),
+  ('role', 'user', 'comment', NULL, 'read', TRUE),
+  -- Moderator role
+  ('role', 'moderator', 'topic', NULL, 'update', TRUE),
+  ('role', 'moderator', 'topic', NULL, 'delete', TRUE),
+  ('role', 'moderator', 'comment', NULL, 'update', TRUE),
+  ('role', 'moderator', 'comment', NULL, 'delete', TRUE),
+  -- Admin role
+  ('role', 'admin', 'board', NULL, 'create', TRUE),
+  ('role', 'admin', 'board', NULL, 'update', TRUE),
+  ('role', 'admin', 'board', NULL, 'delete', TRUE),
+  ('role', 'admin', 'user', NULL, 'manage', TRUE);
+
+-- Example group-based permissions
+INSERT INTO groups (name, description) VALUES
+  ('board1_moderators', 'Moderators for Board 1'),
+  ('trusted_users', 'Users with extra privileges');
+
+INSERT INTO permissions (entity_type, entity_id, resource_type, resource_id, action, allowed) VALUES
+  -- Board 1 moderators can manage topics and comments in Board 1
+  ('group', '1', 'topic', 1, 'update', TRUE),
+  ('group', '1', 'topic', 1, 'delete', TRUE),
+  ('group', '1', 'comment', 1, 'update', TRUE),
+  ('group', '1', 'comment', 1, 'delete', TRUE),
+  -- Trusted users can create topics in any board
+  ('group', '2', 'topic', NULL, 'create', TRUE);`);
   }
 
   async create_table_blog(){
@@ -107,12 +182,14 @@ class SQLDB{
   }
 
   async create_table_board(){
-    await this.db.exec(`CREATE TABLE IF NOT EXISTS board (
+    await this.db.exec(`CREATE TABLE IF NOT EXISTS boards (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       parentid varchar(255), 
       aliasId varchar(255),
       title varchar(255) NOT NULL,
       content varchar(255) NOT NULL,
+      description TEXT,
+      moderator_group_id INTEGER REFERENCES groups(id) ON DELETE SET NULL, -- Group responsible for moderating this board
       create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );`);
@@ -535,129 +612,6 @@ delete_message(_id){
     }
   }
 
-
-//===================================
-// PROJECT
-//===================================
-// CREATE PROJECT
-create_project(_name,_content){
-  let uuid = nanoid();
-  const stmt = this.db.prepare('INSERT INTO project (id, name, content) VALUES (?, ?, ?)');
-  stmt.run(uuid, _name, _content);
-  return {api:"CREATED"};
-}
-// GET PROJECTS
-get_projects(){
-  let stmt = this.db.prepare(`SELECT * FROM project;`);
-  const result = stmt.all();
-  //console.log(result);
-  return result;
-}
-// DELETE PROJECT
-// need to query all entities as well
-delete_project(_id){
-  try{
-    const stmt = this.db.prepare('DELETE FROM project WHERE id=?')
-    stmt.run(_id);
-    return {api:'DELETE'};
-  }catch(e){
-    return {api:'DBERROR'};
-  }
-}
-
-//===================================
-// SCENE
-//===================================
-// CREATE SCENE
-create_scene(_name,_content){
-  let uuid = nanoid();
-  const stmt = this.db.prepare('INSERT INTO scene (id, name, content) VALUES (?, ?, ?)');
-  stmt.run(uuid, _name, _content);
-  return {api:"CREATED"};
-}
-// GET SCENES
-get_scenes(){
-  let stmt = this.db.prepare(`SELECT * FROM scene;`);
-  const result = stmt.all();
-  //console.log(result);
-  return result;
-}
-
-delete_scene(_id){
-  try{
-    const stmt = this.db.prepare('DELETE FROM scene WHERE id=?')
-    stmt.run(_id);
-    return {api:'DELETE'};
-  }catch(e){
-    return {api:'DBERROR'};
-  }
-}
-//===================================
-// SCRIPT
-//===================================
-// CREATE SCRIPT
-create_script(_name,_content){
-  let uuid = nanoid();
-  const stmt = this.db.prepare('INSERT INTO script (id, name, content) VALUES (?, ?, ?)');
-  stmt.run(uuid, _name, _content);
-  return {api:"CREATED"};
-}
-// GET SCRIPTS
-get_scripts(){
-  let stmt = this.db.prepare(`SELECT * FROM script;`);
-  const result = stmt.all();
-  //console.log(result);
-  return result;
-}
-// DELETE SCRIPT
-delete_script(_id){
-  try{
-    const stmt = this.db.prepare('DELETE FROM script WHERE id=?')
-    stmt.run(_id);
-    return {api:'DELETE'};
-  }catch(e){
-    return {api:'DBERROR'};
-  }
-}
-
-//===================================
-// ENTITY
-//===================================
-  // CREATE ENTITY
-  create_entity(_name,_content){
-    let uuid = nanoid();
-    const stmt = this.db.prepare('INSERT INTO entity (id, name, content) VALUES (?, ?, ?)');
-    stmt.run(uuid, _name, _content);
-    return {api:"CREATED"};
-  }
-  // GET ENTITIES
-  get_entities(){
-    let stmt = this.db.prepare(`SELECT * FROM entity;`);
-    const result = stmt.all();
-    //console.log(result);
-    return result;
-  }
-  // DELETE ENTITY
-  entity_delete(_id){
-    try{
-      const stmt = this.db.prepare('DELETE FROM entity WHERE id=?')
-      stmt.run(_id);
-      return {api:'DELETE'};
-    }catch(e){
-      return {api:'DBERROR'};
-    }
-  }
-  // UPDATE ENTITY
-  update_entity(_id,_title,_content){
-    try{
-      const stmt = this.db.prepare('UPDATE entity SET title=?, content=? WHERE id=?;')
-      stmt.run(_title, _content, _id);
-      return {api:'UPDATE'};
-    }catch(e){
-      console.log(e)
-      return {api:'DBERROR'};
-    }
-  }
 }
 //===============================================
 // EXPORT

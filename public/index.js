@@ -22,7 +22,7 @@ const {style, link} = van.tags;
 // }))
 
 //van.add(document.head, UIStyle);
-console.log("init style...");
+// console.log("init style...");
 van.add(document.head, link({
   id:"index_style",
   rel:"stylesheet",
@@ -46,4 +46,4 @@ van.add(document.head, link({
 
 van.add(document.body, App());
 van.add(document.body, NotifyManager());
-van.add(document.body, debugIds());
+// van.add(document.body, debugIds());

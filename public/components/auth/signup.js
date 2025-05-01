@@ -10,6 +10,8 @@ const {button, input, label, div, table, tbody, tr, td, center} = van.tags;
 
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { useFetch } from "/libs/useFetch.js";
+import { notify } from "../notify/notify.js";
+import { Color } from "../notify/notifycontext.js";
 
 const SignUpEL = () => {
 
@@ -24,17 +26,40 @@ const SignUpEL = () => {
     console.log("Login...")
     console.log(username.val)
     console.log(pass.val)
-
-    let data = await useFetch('/api/auth/signup',{
-      method:'POST',
-      body:JSON.stringify({
-        alias:displayuser.val,
-        username:username.val,
-        passphrase:pass.val,
-        email:email.val,
-      })
-    });
-    console.log(data);
+    try {
+      let data = await useFetch('/api/auth/signup',{
+        method:'POST',
+        body:JSON.stringify({
+          alias:displayuser.val,
+          username:username.val,
+          passphrase:pass.val,
+          email:email.val,
+        })
+      });
+      console.log(data);  
+      if(data){
+        if(data?.api){
+          if(data.api=='EXIST'){
+            notify({
+              color:Color.warn,
+              content:"Account Exist!"
+            });
+          }
+          if(data.api=='CREATE'){
+            notify({
+              color:Color.success,
+              content:"Account Created!"
+            });
+          }
+        }
+      }
+    } catch (error) {
+      notify({
+        color:Color.warn,
+        content:"Fail Sign Up!"
+      });
+    }
+    
   }
 
   async function c_cancel(){
@@ -52,10 +77,10 @@ const SignUpEL = () => {
             )
           ),
         ),
-        tr(
-          td(label('Display User:')),
-          td(input({type:"text",value:displayuser, oninput:e=>displayuser.val=e.target.value}))
-        ),
+        // tr(
+        //   td(label('Display User:')),
+        //   td(input({type:"text",value:displayuser, oninput:e=>displayuser.val=e.target.value}))
+        // ),
         tr(
           td(label('Login User:')),
           td(input({type:"text",value:username, oninput:e=>username.val=e.target.value}))
