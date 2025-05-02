@@ -74,6 +74,7 @@ route.post('/api/forum', authenticateToken, authorize('forum', null, 'create'), 
     // return c.json(forum, 201);
     return c.json({
       api:'CREATE',
+      id:forum.id,
       name:name,
       description:description,
     });

@@ -25,14 +25,14 @@ function displayButtonCreateBoard(){
   function btnCreateBoard(){
     isCreated.val = false;
     van.add(document.body, Modal({closed:isCreated},
-      createBoardForm({closed:isCreated})
+      createFormBoard({closed:isCreated})
     ));
   }
 
   return button({class:"nav-button",onclick:()=>btnCreateBoard()},"Create Board");
 }
 // CREATE BOARD
-function createBoardForm({closed}){
+function createFormBoard({closed}){
 
   const boardName = van.state('test');
   const boardDescription = van.state('test');
@@ -270,7 +270,7 @@ function pageBoard() {
   //   bbforumNav.removeChild(bbforumNav.lastElementChild);
   // }
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navForum()},"Forum"),
+    button({class:"nav-button",onclick:()=>navForum()},"Forums"),
   );
   van.add(bbforumNav,
     button({class:"nav-button",onclick:()=>navigate('/forum?id='+forumIDState.val)},"Boards"),
@@ -279,7 +279,7 @@ function pageBoard() {
     displayButtonCreateTopic()
   );
 
-  return div({id:"home",class:"forum-container" },
+  return div({class:"forum-container" },
     HomeNavMenu(),
     div({class:"main-content"},
       bbforumNav,
@@ -362,6 +362,5 @@ export async function getForumIDBoards(isClosed,boardEl, _id){
 
 export {
   displayButtonCreateBoard,
-  createBoardForm,
   pageBoard
 }

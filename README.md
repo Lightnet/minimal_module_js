@@ -4,7 +4,7 @@
 
 # Status:
 - unstable
-- reworking server side forum and auth.
+- work in progress auths, groups and permissions.
 
 # Information:
   Work in progress. Using minimal packages in style vanilla js.
@@ -19,9 +19,13 @@
 - hono 4.7.7
 - @hono/node-server 1.14.1
 - socket.io 4.8.1
+- dotenv 16.5.0
+- jsonwebtoken 9.0.2
 
 # Module:
 - [x] notify
+  - [x] css
+    - [x] animation slide
   - [x] context
     - [x] timeToDelete 600
     - [x] timeToClose 1000 * 10
@@ -37,11 +41,11 @@
   - [x] check theme
   - [ ] custom color
 - [ ] Message
-  - [ ] sent message
+  - [x] sent message
   - [ ] delete message
   - [ ] blacklist alias
 - [ ] Auth
-  - [ ] Account
+  - [x] Account (simple username)
   - [x] Sign in
   - [x] Sign up
   - [ ] Recovery
@@ -73,38 +77,38 @@
   - [ ] layout
 
 # Forum 
-- [ ] permission
+- [ ] permission (wip)
     - [ ] members
-- [ ] settings
+- [ ] settings (n/a)
     - [ ] cookies
     - [ ] theme
 - [ ] Forum
-    - [x] create forum
-    - [x] update forum
-    - [x] delete forum
+    - [x] create
+    - [x] update
+    - [x] delete
     - [ ] report
-    - [ ] permission forum
+    - [x] permission (wip)
 - [x] Board
     - [x] nav menu
-    - [x] create board
-    - [x] update Board
-    - [x] delete Board
+    - [x] create
+    - [x] update
+    - [x] delete
     - [ ] report
-    - [ ] permission forum
+    - [ ] permissions
     - [x] get forum id by boards
 - [x] Topic
     - [x] nav menu
-    - [x] create Topic
-    - [x] update Topic
-    - [x] delete Topic
+    - [x] create
+    - [x] update
+    - [x] delete
     - [ ] report
     - [ ] permission forum
     - [x] get board id by topics
 - [x] Comment
     - [x] nav menu
-    - [x] create comment
-    - [x] update Comment
-    - [x] delete Comment
+    - [x] create
+    - [x] update
+    - [x] delete
     - [ ] report
     - [ ] permission forum
     - [x] get topic id by comments
@@ -116,5 +120,9 @@
 ![Mobile](screenshots/basic_modulejs02.png)
 
 # Credits:
-
+ * Grok 3 AI model.
+    * auth
+    * permission
+ * https://vanjs.org
+ * 
 

@@ -34,10 +34,38 @@ function getQueryId(defaultValue = null) {
   return params.get('id') || defaultValue;
 }
 
+function editForum(id,name,description){
+  const isEditModal = van.state(false);
+  console.log("editForum:",id);
+  van.add(document.body, Modal({closed:isEditModal},editFormForum({
+    closed:isEditModal,
+    id:id,
+    name:name,
+    description:description
+  })));
+}
+
+function deleteForum(id,name,description){
+  const isDeleteModal = van.state(false);
+  console.log("deleteForum:",id);
+  van.add(document.body, Modal({closed:isDeleteModal},deleteFormForum({
+    closed:isDeleteModal,
+    id:id,
+    name:name,
+    description:description
+  })));
+}
+
+function enterForum(id){
+  console.log("Forum ID HERE?: ",id);
+  forumIDState.val = id;
+  navigate(`/forum?id=${id}`);
+}
+
 // get forums
 const getForums = (isClosed) => {
 
-  const forumList = div({class:"forum-container"});
+  const forumList = div({id:"forum-container",class:"forum-container"});
   const isEditModal = van.state(false);
   const isDeleteModal = van.state(false);
 
@@ -106,12 +134,11 @@ const getForums = (isClosed) => {
 
   getForumList();
 
-  // return div(forumList);
   return forumList;
  
 }
 //BUTTON MODAL
-function displayButtonCreateForum(){
+function btnCreateForumModal(){
   const isCreated = van.state(false);
   function btnCreateForum(){
     isCreated.val = false;
@@ -142,12 +169,35 @@ function createFormForum({closed}){
       console.log(data);
       if(data){
         // console.log(">>>");
-        if(data?.api == "CREATED"){
+        if(data?.api == "CREATE"){
           notify({
             color:Color.success,
             content:"Create Forum!"
           });
           closed.val = true;
+          let forumContainer = document.getElementById("forum-container");
+          console.log("test")
+
+          van.add(forumContainer,div({id:data.id, class:'forum-item'},
+            div({class:'forum-header'},
+              div({class:"forum-title"},
+                h2({onclick:()=>enterForum(data.id)},`[ Forum ] ${forumTitle.val}`),
+              ),
+              div({class:"action-buttons"},
+                button({class:"edit-btn",onclick:()=>editForum(data.id, forumTitle.val, forumContent.val)},
+                  i({class:"fa-solid fa-pen-to-square"}),
+                  label(' Edit'),
+                ),
+                button({class:"delete-btn",onclick:()=>deleteForum(data.id, forumTitle.val, forumContent.val)},
+                  i({class:"fa-solid fa-trash"}),
+                  label(' Delete')
+                ),
+              ),
+            ),
+            div({class:'forum-content',onclick:()=>enterForum(data.id)},
+              data.description
+            ),
+          ));
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -160,9 +210,6 @@ function createFormForum({closed}){
           content:"Null Forum!"
         });
       }
-      // if(closed){
-      //   closed.val = true;
-      // }
     }catch(e){
       console.log("ERROR",e);
       notify({
@@ -360,9 +407,8 @@ function pageForum() {
   }
   console.log("forum id:", id)
   if(id){
-    console.log("FOUND ID");
-    const boardEl = div({id:"BOARDS",class:""});
-    
+    // console.log("FOUND ID");
+    const boardEl = div({id:"BOARDS",class:""});    
     console.log("XXX FORUM ID:", id);
     
     getForumIDBoards(isClose,boardEl, id);
@@ -387,7 +433,7 @@ function pageForum() {
     console.log("NOT FOUND ID");
     const bbForumNav = div({id:'nav',class:"nav-container"});
     van.add(bbForumNav,
-      displayButtonCreateForum(),
+      btnCreateForumModal(),
     );
 
     return isClose.val ? null : div({id:"forum",class:"forum-container" },
@@ -405,6 +451,5 @@ function pageForum() {
 
 export {
   pageForum,
-  displayButtonCreateForum,
   createFormForum,
 }

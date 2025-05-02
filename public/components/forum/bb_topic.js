@@ -26,14 +26,14 @@ function displayButtonCreateTopic(){
   function btnCreateTopic(){
     isCreated.val = false;
     van.add(document.body, Modal({closed:isCreated},
-      createTopicForm({closed:isCreated})
+      createFormTopic({closed:isCreated})
     ));
   }
 
   return button({class:"nav-button",onclick:()=>btnCreateTopic()},"Create Topic");
 }
 // CREATE TOPIC
-function createTopicForm({closed}){
+function createFormTopic({closed}){
 
   const topicTitle = van.state('test');
   const topicContent = van.state('test');
@@ -181,7 +181,7 @@ function editFormTopic({closed,id,title,content}){
 
 }
 // DELETE FORUM
-function deleteForumTopic({closed,id,title,content}){
+function deleteFormTopic({closed,id,title,content}){
 
   console.log(id);
   const forumId = van.state(id);
@@ -298,7 +298,8 @@ function pageTopic() {
           ),
         )
       ),
-      div({class:"topic-content"},label(" [ Content ] "+ topicContentState.val))
+      // div({class:"topic-content"},label(" [ Content ] "+ topicContentState.val))
+      div({class:"topic-content"},div(topicContentState.val))
     )),
     getTopicIDComments(topicEl, id);
   }
@@ -332,7 +333,7 @@ function pageTopic() {
     displayButtonCreateComment(),
   );
 
-  return div({id:"home",class:"forum-container" },
+  return div({class:"forum-container" },
     HomeNavMenu(),
     div({class:"main-content"},
       // bbPostTypeEL,
@@ -373,7 +374,7 @@ export async function getBoardIDTopics(topicEl,_id){
   function deleteTopic(id,title,content){
     console.log("delete topic:",id);
     isDeleteModal.val = false;
-    van.add(document.body, Modal({closed:isDeleteModal},deleteForumTopic({
+    van.add(document.body, Modal({closed:isDeleteModal},deleteFormTopic({
       closed:isDeleteModal,
       id:id,
       title:title,
@@ -414,7 +415,10 @@ export async function getBoardIDTopics(topicEl,_id){
               ),
             )
           ),
-          div({class:"topic-content",onclick:()=>getTopicID(item.id, item.title, item.content)},label(" [ Content ] "+ item.content),)
+          // div({class:"topic-content",onclick:()=>getTopicID(item.id, item.title, item.content)},label(" [ Content ] "+ item.content),)
+          div({class:"topic-content",onclick:()=>getTopicID(item.id, item.title, item.content)},
+            div(item.content)
+          )
         ));
       }
     }
@@ -425,6 +429,5 @@ export async function getBoardIDTopics(topicEl,_id){
 
 export {
   displayButtonCreateTopic,
-  createTopicForm,
   pageTopic
 }

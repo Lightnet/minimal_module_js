@@ -8,57 +8,9 @@
 import van from "vanjs-core";
 import { Router, Link, getRouterParams,getRouterPathname, navigate } from "vanjs-routing";
 import { toggleTheme } from "../theme/theme.js";
-import { displayButtonCreateForum } from "./bb_forum.js";
-import { displayButtonCreateBoard } from "./bb_board.js";
-import { displayButtonCreateTopic } from "./bb_topic.js";
-import { displayButtonCreateComment } from "./bb_comment.js";
 import { boardIDState, commentIDState, forumIDState, topicIDState } from "../context.js";
 
 const { div, button, label, style, link } = van.tags;
-
-// BASE FORUM PAGE
-const baseLayout = ({ children }) => {
-  // console.log("getRouterParams() ",getRouterParams());
-  // console.log("getRouterPathname() ",getRouterPathname());
-
-  const bbPostTypeEL = van.derive(()=>{
-    let path = getRouterPathname();
-    if(path.startsWith("/topic/")){
-      // console.log("FOUND TOPIC...");
-      return displayButtonCreateComment();
-    }
-
-    if(path.startsWith("/board/")){
-      // console.log("FOUND board...");
-      return displayButtonCreateTopic();
-    }
-
-    if(path.startsWith("/forum/message")){
-      // console.log("FOUND forum...");
-      return;
-    }
-
-    if(path.startsWith("/forum/")){
-      // console.log("FOUND forum...");
-      return displayButtonCreateBoard();
-    }
-
-    if(path.startsWith("/forum")){
-      // console.log("FOUND forum...");
-      return displayButtonCreateForum();
-    }
-
-  })
-
-  return div({class:"forum-container"},
-    forumNavMenu(),
-    bbPostTypeEL,
-    div({class:"forum-main"},
-      children
-    )
-  );
-
-};
 
 function forumNavMenu(){
 
@@ -95,7 +47,6 @@ function getQueryId(defaultValue = null) {
 }
 
 export {
-  baseLayout,
   forumNavMenu,
   debugIds,
   getQueryId,

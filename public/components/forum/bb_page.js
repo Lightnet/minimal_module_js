@@ -6,7 +6,6 @@
 */
 
 // import van from "vanjs-core";
-// import { baseLayout } from "./base_layout.js";
 import { pageForum } from "./bb_forum.js";
 import { pageBoard } from "./bb_board.js";
 import { pageTopic} from "./bb_topic.js";

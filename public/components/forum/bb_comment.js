@@ -8,7 +8,6 @@
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import {useFetch} from "/libs/useFetch.js";
-import { baseLayout } from "./base_layout.js";
 // import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { aliasState, loginState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { notify } from "../notify/notify.js";
@@ -93,14 +92,12 @@ function createCommentForm({closed}){
 // PAGE COMMENT
 function pageComment() {
 
-  return baseLayout({children:
-    div({class:"comment-content"},
-      div({class:"comment-header"},
-        displayButtonCreateComment()
-      ),
-      div({class:"comment-list"}, topicEl)
-    )
-  });
+  return div({class:"comment-content"},
+    div({class:"comment-header"},
+      displayButtonCreateComment()
+    ),
+    div({class:"comment-list"}, topicEl)
+  );
 
 }
 // EDIT FORUM
