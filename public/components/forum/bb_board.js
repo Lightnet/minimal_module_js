@@ -34,8 +34,8 @@ function displayButtonCreateBoard(){
 // CREATE BOARD
 function createBoardForm({closed}){
 
-  const forumTitle = van.state('test');
-  const forumContent = van.state('test');
+  const forumName = van.state('test');
+  const forumDescription = van.state('test');
 
   async function btnCreateBoard(){
     // console.log("create board");
@@ -44,14 +44,15 @@ function createBoardForm({closed}){
         method:'POST',
         body:JSON.stringify({
           parentid:forumIDState.val,
-          title:forumTitle.val,
-          content:forumContent.val,
+          name:forumName.val,
+          description:forumDescription.val,
+          moderator_group_id:1
         })
       });
       console.log(data);
       if(data){
         console.log(">>>");
-        if(data?.api == "CREATED"){
+        if(data?.api == "CREATE"){
           notify({
             color:Color.success,
             content:"Create Board!"
@@ -85,12 +86,12 @@ function createBoardForm({closed}){
 
   return div({id:'boardForm',class:"ccontent"},
     div({class:"modal-form-group"},
-      label({class:"report-title"},"Board Title:"),
-      input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+      label({class:"report-title"},"Board Name:"),
+      input({type:"text",value:forumName, oninput:e=>forumName.val=e.target.value})
     ),
     div({class:"modal-form-group"},
-      label({class:"report-content"},'Content:'),
-      textarea({value:forumContent, oninput:e=>forumContent.val=e.target.value})
+      label({class:"report-content"},'Description:'),
+      textarea({value:forumDescription, oninput:e=>forumDescription.val=e.target.value})
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnCreateBoard},'Create'),
@@ -104,8 +105,8 @@ function editForumBoard({closed,id,title,content}){
 
   console.log(id);
   const forumId = van.state(id);
-  const forumTitle = van.state(title);
-  const forumContent = van.state(content);
+  const forumName = van.state(title);
+  const forumDescription = van.state(content);
 
   async function btnUpdateForum(){
     // console.log("create forum");
@@ -114,8 +115,8 @@ function editForumBoard({closed,id,title,content}){
         method:'PUT',
         body:JSON.stringify({
           id:forumId.val,
-          title:forumTitle.val,
-          content:forumContent.val,
+          name:forumName.val,
+          description:forumDescription.val,
         })
       });
       console.log(data);
@@ -128,13 +129,10 @@ function editForumBoard({closed,id,title,content}){
           });
 
           let content = document.getElementById(forumId.val);
-          // console.log(content);
-          // console.log(content.children[0].children[0].children[0]);
           let elTitle = content.children[0].children[0].children[0]
-          elTitle.textContent = `[Board] ${forumTitle.val}`;
+          elTitle.textContent = `[Board] ${forumName.val}`;
           let elContent = content.children[1]
-          // console.log(elContent);
-          elContent.textContent = forumContent.val
+          elContent.textContent = '[Description] '+forumDescription.val
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -166,11 +164,11 @@ function editForumBoard({closed,id,title,content}){
     ),
     div({class:"modal-form-group"},
       label({for:"forumTitle"},"Title:"),
-      input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+      input({placeholder:"Enter forum title", type:"text",value:forumName, oninput:e=>forumName.val=e.target.value})
     ),
     div({class:"modal-form-group"},
       label({class:""},'Description:'),
-      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
+      textarea({placeholder:"Enter forum description", value:forumDescription, oninput:e=>forumDescription.val=e.target.value})
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnUpdateForum},'Update'),
@@ -341,8 +339,8 @@ export async function getForumIDBoards(isClosed,boardEl, _id){
   }
 
   try{
-    const data = await useFetch('/api/forum/'+_id);
-    // console.log("get FORUM Boards:", data);
+    const data = await useFetch(`/api/boards/${_id}`);
+    console.log("get FORUM Boards:", data);
     if(data){
       for(let item of data){
         // console.log("item: ", item);
@@ -353,20 +351,20 @@ export async function getForumIDBoards(isClosed,boardEl, _id){
         van.add(boardEl, div({id:item.id,class:"board-container"},
           div({class:'board-header'},
             div({class:"board-title"},
-              h2({onclick:()=>getBoardID(item.id)},`[Board] ${item.title}`), 
+              h2({onclick:()=>getBoardID(item.id)},`[Board] ${item.name}`), 
             ),
             div({class:"action-buttons"},
-              button({class:"edit-btn",onclick:()=>editBoard(item.id,item.title,item.content)},
+              button({class:"edit-btn",onclick:()=>editBoard(item.id,item.name,item.description)},
                 i({class:"fa-solid fa-pen-to-square"}),
                 label(" Edit")
               ),
-              button({class:"delete-btn",onclick:()=>deleteBoard(item.id,item.title,item.content)},
+              button({class:"delete-btn",onclick:()=>deleteBoard(item.id,item.name,item.description)},
                 i({class:"fa-solid fa-trash"}),
                 label(" Delete")
               ),
             )
           ),
-          p({class:"board-description",onclick:()=>getBoardID(item.id)},label(" [ Content ] "+ item.content),)
+          p({class:"board-description",onclick:()=>getBoardID(item.id)},label(" [Description] "+ item.description),)
         ));
       }
     }

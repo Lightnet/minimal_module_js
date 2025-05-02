@@ -35,8 +35,8 @@ function displayButtonCreateTopic(){
 
 function createTopicForm({closed}){
 
-  const forumTitle = van.state('test');
-  const forumContent = van.state('test');
+  const topicTitle = van.state('test');
+  const topicContent = van.state('test');
 
   async function btnCreateTopic(){
     // console.log("create Topic");
@@ -45,14 +45,14 @@ function createTopicForm({closed}){
         method:'POST',
         body:JSON.stringify({
           parentid:boardIDState.val,
-          title:forumTitle.val,
-          content:forumContent.val,
+          title:topicTitle.val,
+          content:topicContent.val,
         })
       });
       console.log(data);
       if(data){
         console.log(">>>");
-        if(data?.api == "CREATED"){
+        if(data?.api == "CREATE"){
           notify({
             color:Color.success,
             content:"Create Topic!"
@@ -87,11 +87,11 @@ function createTopicForm({closed}){
   return div({id:'topicForm',class:"ccontent"},
     div({class:"modal-form-group"},
       label({class:"report-title"},"Topic Title:"),
-      input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+      input({type:"text",value:topicTitle, oninput:e=>topicTitle.val=e.target.value})
     ),
     div({class:"modal-form-group"},
       label({class:"report-content"},'Content:'),
-      textarea({value:forumContent, oninput:e=>forumContent.val=e.target.value})
+      textarea({value:topicContent, oninput:e=>topicContent.val=e.target.value})
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnCreateTopic},'Create'),
@@ -135,7 +135,7 @@ function editForumTopic({closed,id,title,content}){
           elTitle.textContent = `[Topic] ${forumTitle.val}`;
           let elContent = content.children[1]
           // console.log(elContent);
-          elContent.textContent = forumContent.val
+          elContent.textContent = '[Content] '+forumContent.val
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -170,8 +170,8 @@ function editForumTopic({closed,id,title,content}){
       input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
     ),
     div({class:"modal-form-group"},
-      label({class:""},'Description:'),
-      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
+      label({class:""},'Content:'),
+      textarea({placeholder:"Enter forum content", value:forumContent, oninput:e=>forumContent.val=e.target.value})
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnUpdateForum},'Update'),
@@ -261,11 +261,11 @@ function pageTopic() {
   // console.log("Page_Topic getRouterParams >> ",getRouterParams()); 
   // const { id } = getRouterQuery();
 
-  console.log("getRouterPathname: ",getRouterPathname())
+  // console.log("getRouterPathname: ",getRouterPathname())
   let q = getRouterQuery();
   console.log("q:", q)
-  console.log("getRouterQuery: ",getRouterQuery())
-  console.log("getRouterParams: ",getRouterParams())
+  // console.log("getRouterQuery: ",getRouterQuery())
+  // console.log("getRouterParams: ",getRouterParams())
 
   let id = getQueryId();
   if(!id){
@@ -388,8 +388,8 @@ export async function getBoardIDTopics(topicEl,_id){
   // - content
   try{
     console.log("BOARD ID: HERE?", _id);
-    const data = await useFetch(`/api/board/${_id}`);
-    // console.log(data);
+    const data = await useFetch(`/api/topics/${_id}`);
+    console.log(data);
     if(data){
       for(let item of data){
         // console.log("item: ", item);

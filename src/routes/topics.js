@@ -7,53 +7,86 @@
 
 import { Hono } from 'hono';
 import { scriptHtml02 } from './pages.js';
-
+import db from '../db/sqlite/sqlite_db.js';
+import { authenticateToken } from '../middleware/sqlite/sqlite_auth.js';
 const route = new Hono();
 
-//===============================================
-// TOPIC
-//===============================================
+// topic get list parent id
+route.get('/api/topics/:id',(c)=>{
+  try {
+    const id = c.req.param('id');
+    console.log("BOARDS: ", id);
+    const stmt = db.prepare('SELECT * FROM topics WHERE board_id = ?');
+    const results = stmt.all(id);
+    console.log("TOPICS:", results);
+    return c.json(results);  
+  } catch (error) {
+    return c.json({api:"ERROR"});
+  }
+})
 // TOPIC CREATE
-route.post('/api/topic', async(c)=>{
-  const data = await c.req.json();
-  const db = c.get('db');
-  //console.log(data);
-  const results = db.create_topic(data.parentid,data.title,data.content);
-  console.log("results");
-  console.log(results);
-  return c.json(results);
+route.post('/api/topic', authenticateToken, async(c)=>{
+  try {
+    const { title, content, parentid } = await c.req.json();
+    console.log("title:", title);
+    console.log("content:", content);
+    console.log("parentid:", parentid);
+    const user = c.get('user');
+    console.log("user:",user);
+    db.pragma('foreign_keys = 0');
+    const stmt = db.prepare(`INSERT INTO topics (board_id, user_id, title, content)
+      VALUES (?, ?, ?, ?)`);
+    const result = stmt.run(parentid, user.id, title, content);
+    return c.json({api:"CREATE"});
+  } catch (error) {
+    console.log("BOARD CREATE ERROR",error.message);
+    return c.json({api:"ERROR"});
+  }
+
 })
 // TOPIC UPDATE
 route.put('/api/topic/:id',async (c)=>{
-  const id = await c.req.param('id')
-  const data = await c.req.json();
-  if(data){
-    console.log("data update... id: ", id);
-    console.log(data);
-    const db = c.get('db');
-    const result = db.topic_update(id, data.title,data.content);
-    return c.json(result);
+  const { id } = c.req.param();
+  try {
+    console.log("BOARD UPDATE?");
+    const { title, content } = await c.req.json();
+    console.log("ID: ", id);
+    console.log("title: ", title);
+    console.log("content: ", content);
+    const user = c.get('user');
+    db.pragma('foreign_keys = 0');
+    const stmt = db.prepare(`UPDATE topics SET title=?, content=? WHERE id=?`);
+    const result = stmt.run(title, content, id);
+    console.log("result: ", result);
+
+    return c.json({api:"UPDATE"});
+  } catch (error) {
+    return c.json({api:"ERROR"});
   }
-  return c.json({api:'ERROR'});
 })
 // TOPIC DELETE
-route.delete('/api/topic/:id',(c)=>{
-  const id = c.req.param('id');
-  console.log('ID: ', id);
-  const db = c.get('db');
-  const result = db.topic_delete(id);
-  console.log("result: ",result)
-  //console.log(db);
-  return c.json(result);
+route.delete('/api/topic/:id', authenticateToken,(c)=>{
+  try {
+    const { id } = c.req.param();
+    const topicId = parseInt(id, 10);
+
+    const stmt = db.prepare('DELETE FROM topics WHERE id = ?');
+    stmt.run(topicId);
+    console.log("DELETE...");
+    return c.json({api:'DELETE'});
+  } catch (error) {
+    return c.json({api:'ERROR'});
+  }
 })
-//get comments?
+// GET TOPIC ID
 route.get('/api/topic/:id',(c)=>{
-  const db = c.get('db');
-  const id = c.req.param('id');
-  console.log("board ID: ", c.req.param());
-  const results = db.get_TopicID(id);
-  //console.log(results);
-  return c.json(results);
+  // const db = c.get('db');
+  // const id = c.req.param('id');
+  // console.log("board ID: ", c.req.param());
+  // const results = db.get_TopicID(id);
+  // //console.log(results);
+  // return c.json(results);
+  return c.json({api:"ERROR"});
 })
 
 export default route;

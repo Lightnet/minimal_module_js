@@ -33,8 +33,7 @@ function displayButtonCreateComment(){
 // CREATE FORM COMMENT
 function createCommentForm({closed}){
 
-  const forumTitle = van.state('test');
-  const forumContent = van.state('test');
+  const commentContent = van.state('test');
 
   async function btnCreateComment(){
     // console.log("create Topic");
@@ -43,14 +42,13 @@ function createCommentForm({closed}){
         method:'POST',
         body:JSON.stringify({
           parentid:topicIDState.val,
-          title:forumTitle.val,
-          content:forumContent.val,
+          content:commentContent.val,
         })
       });
-      // console.log(data);
+      console.log(data);
       if(data){
         console.log(">>>");
-        if(data?.api == "CREATED"){
+        if(data?.api == "CREATE"){
           notify({
             color:Color.success,
             content:"Create Comment!"
@@ -82,12 +80,8 @@ function createCommentForm({closed}){
 
   return div({id:'commentForm',class:"ccontent"},
     div({class:"modal-form-group"},
-      label({class:"report-title"},"Comment Title:"),
-      input({type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
-    ),
-    div({class:"modal-form-group"},
       label({class:"report-content"},'Content:'),
-      textarea({value:forumContent, oninput:e=>forumContent.val=e.target.value})
+      textarea({value:commentContent, oninput:e=>commentContent.val=e.target.value})
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnCreateComment},'Create'),
@@ -110,12 +104,12 @@ function pageComment() {
 
 }
 // EDIT FORUM
-function editFormComment({closed,id,title,content}){
+function editFormComment({closed,id,content}){
 
   console.log(id);
   const forumId = van.state(id);
-  const forumTitle = van.state(title);
-  const forumContent = van.state(content);
+  // const forumTitle = van.state(title);
+  const commentContent = van.state(content);
 
   async function btnUpdateForum(){
     // console.log("create forum");
@@ -124,8 +118,8 @@ function editFormComment({closed,id,title,content}){
         method:'PUT',
         body:JSON.stringify({
           id:forumId.val,
-          title:forumTitle.val,
-          content:forumContent.val,
+          // title:forumTitle.val,
+          content:commentContent.val,
         })
       });
       console.log(data);
@@ -134,52 +128,51 @@ function editFormComment({closed,id,title,content}){
         if(data?.api == "UPDATE"){
           notify({
             color:Color.success,
-            content:"Update Forum!"
+            content:"Update Comment!"
           });
 
           let content = document.getElementById(forumId.val);
           console.log(content);
 
-          console.log(content.children[1].children[0]);
+          // console.log(content.children[1].children[0]);
           let elContent = content.children[2].children[0];// content
-          elContent.textContent = '[Content] '+ forumContent.val;
+          console.log("elContent: ", elContent)
+          elContent.textContent = '[Content] '+ commentContent.val;
+
+          if(closed){
+            closed.val = true;
+          }
 
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
-            content:"Error Fetch Forum!"
+            content:"Error Fetch Comment!"
           });
         }
       }else{
         notify({
           color:Color.error,
-          content:"Null Forum!"
+          content:"Null Comment!"
         });
       }
-      if(closed){
-        closed.val = true;
-      }
+      
     }catch(e){
       console.log("ERROR",e);
       notify({
         color:Color.error,
-        content:"Create Forum Fail!"
+        content:"Update Comment Fail!"
       });
     }
   }
 
-  return div({id:'forumForm',style:"",class:"ccontent"},
+  return div({id:'formComment',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
       label({for:"forumID"},"ID:"),
       label({},forumId.val)
     ),
     div({class:"modal-form-group"},
-      label({for:"forumTitle"},"Title:"),
-      input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
-    ),
-    div({class:"modal-form-group"},
-      label({class:""},'Description:'),
-      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
+      label({class:""},'Comment:'),
+      textarea({placeholder:"Enter Comment", value:commentContent, oninput:e=>commentContent.val=e.target.value})
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnUpdateForum},'Update'),
@@ -189,12 +182,11 @@ function editFormComment({closed,id,title,content}){
 
 }
 // DELETE FORUM
-function deleteFormComment({closed,id,title,content}){
+function deleteFormComment({closed,id,content}){
 
-  console.log(id);
+  // console.log(id);
   const forumId = van.state(id);
-  const forumTitle = van.state(title);
-  const forumContent = van.state(content);
+  const commentContent = van.state(content);
 
   async function btnDeleteForum(){
     // console.log("create forum");
@@ -245,12 +237,8 @@ function deleteFormComment({closed,id,title,content}){
       p({},forumId.val)
     ),
     div({class:"modal-form-group"},
-      label({for:"forumTitle"},"Title:"),
-      p({},forumTitle.val)
-    ),
-    div({class:"modal-form-group"},
-      label({class:""},'Description:'),
-      p({},forumContent.val)
+      label({class:""},'Comment:'),
+      p({},commentContent.val)
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"warn",onclick:btnDeleteForum},'Delete'),
@@ -271,24 +259,22 @@ export async function getTopicIDComments(topicEl, _id){
     //navigate('/comment/'+_id);
   }
 
-  function editComment(id,title,content){
+  function editComment(id,content){
     console.log("edit topic:",id);
     isEditModal.val = false;
     van.add(document.body, Modal({closed:isEditModal},editFormComment({
       closed:isEditModal,
       id:id,
-      title:title,
       content:content
     })));
   }
   
-  function deleteComment(id,title,content){
+  function deleteComment(id,content){
     console.log("delete topic:",id);
     isDeleteModal.val = false;
     van.add(document.body, Modal({closed:isDeleteModal},deleteFormComment({
       closed:isDeleteModal,
       id:id,
-      title:title,
       content:content
     })));
   }
@@ -297,7 +283,7 @@ export async function getTopicIDComments(topicEl, _id){
   // <i class="fa-solid fa-pen-to-square"></i>
   // <i class="fa-solid fa-trash"></i>
   try{
-    const data = await useFetch('/api/topic/'+_id);
+    const data = await useFetch(`/api/comments/${_id}`);
     // console.log(data);
     if(data){
       for(let item of data){
@@ -320,11 +306,11 @@ export async function getTopicIDComments(topicEl, _id){
                 i({class:"fa-solid fa-reply"}),
                 label(" Reply")
               ),
-              button({class:"edit-btn",onclick:()=>editComment(item.id,item.title,item.content)},
+              button({class:"edit-btn",onclick:()=>editComment(item.id,item.content)},
                 i({class:"fa-solid fa-pen-to-square"}),
                 label(" Edit")
               ),
-              button({class:"delete-btn",onclick:()=>deleteComment(item.id,item.title,item.content)},
+              button({class:"delete-btn",onclick:()=>deleteComment(item.id,item.content)},
                 i({class:"fa-solid fa-trash"}),
                 label(" Delete")
               ),

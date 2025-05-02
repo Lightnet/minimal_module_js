@@ -10,7 +10,12 @@
 // description
 // forumName
 // forumDescription
+// Name
+// Description
 // 
+// topicTitle
+// topicContent
+
 
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
@@ -214,11 +219,9 @@ function editFormForum({closed,id,name,description}){
 
           let content = document.getElementById(forumId.val);
           // console.log(content);
-          // console.log(content.children[0].children[0].children[0]);
           let elName = content.children[0].children[0].children[0]
-          elName.textContent = `[ Forum ] ${forumName.val}`;
+          elName.textContent = `[Forum] ${forumName.val}`;
           let elDescription = content.children[1]
-          // console.log(elContent);
           elDescription.textContent = forumDescription.val
         }else if(data?.api == "ERROR"){
           notify({

@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS forums (
 CREATE TABLE IF NOT EXISTS boards (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   forum_id INTEGER NOT NULL,
+  creator_id INTEGER NOT NULL,
   name TEXT NOT NULL,
   description TEXT,
   moderator_group_id INTEGER,

@@ -362,7 +362,7 @@ option {
 .forum-item {
   background: var(--ccontent-color);
   border-radius: 8px;
-  padding: 20px;
+  padding: 10px;
   margin-bottom: 15px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: var(--transition);
@@ -542,8 +542,8 @@ option {
 /* Board Layout */
 .board-container {
   background: var(--ccontent-color);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 4px;
+  padding: 10px;
   margin-bottom: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   border: 1px solid var(--input-border);

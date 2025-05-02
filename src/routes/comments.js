@@ -7,43 +7,78 @@
 
 import { Hono } from 'hono';
 import { scriptHtml02 } from './pages.js';
+import db from '../db/sqlite/sqlite_db.js';
+import { authenticateToken } from '../middleware/sqlite/sqlite_auth.js';
 
 const route = new Hono();
 
 //===============================================
 // COMMENT
 //===============================================
-route.post('/api/comment', async(c)=>{
-  const data = await c.req.json();
-  const db = c.get('db');
-  //console.log(data);
-  const results = db.create_comment(data.parentid,data.title,data.content);
-  console.log("results");
-  console.log(results);
-  return c.json(results);
+
+// get comments from topic id parent
+route.get('/api/comments/:id',(c)=>{
+  try {
+    const id = c.req.param('id');
+    console.log("TOPICS: ", id);
+    const stmt = db.prepare('SELECT * FROM comments WHERE topic_id = ?');
+    const results = stmt.all(id);
+    console.log("COMMENTS:", results);
+    return c.json(results);  
+  } catch (error) {
+    return c.json({api:"ERROR"});
+  }
+})
+// CREATE COMMENT
+route.post('/api/comment', authenticateToken, async(c)=>{
+  try {
+    const { content, parentid } = await c.req.json();
+    console.log("content:", content);
+    console.log("parentid:", parentid);
+    const user = c.get('user');
+    console.log("user:",user);
+    db.pragma('foreign_keys = 0');
+    const stmt = db.prepare(`INSERT INTO comments (topic_id, user_id, content)
+      VALUES (?, ?, ?)`);
+    const result = stmt.run(parentid, user.id, content);
+    return c.json({api:"CREATE"});
+  } catch (error) {
+    console.log("TOPIC CREATE ERROR",error.message);
+    return c.json({api:"ERROR"});
+  }
 })
 // COMMENT UPDATE
-route.put('/api/comment/:id',async (c)=>{
-  const id = await c.req.param('id')
-  const data = await c.req.json();
-  if(data){
-    console.log("data update... id: ", id);
-    console.log(data);
-    const db = c.get('db');
-    const result = db.comment_update(id, data.title,data.content);
-    return c.json(result);
+route.put('/api/comment/:id', authenticateToken,async (c)=>{
+  const { id } = c.req.param();
+  try {
+    console.log("COMMENT UPDATE?");
+    const { content } = await c.req.json();
+    console.log("ID: ", id);
+    console.log("Comment: ", content);
+    const user = c.get('user');
+    db.pragma('foreign_keys = 0');
+    const stmt = db.prepare(`UPDATE comments SET content=? WHERE id=?`);
+    const result = stmt.run(content, id);
+    console.log("result: ", result);
+
+    return c.json({api:"UPDATE"});
+  } catch (error) {
+    console.log(error);
+    return c.json({api:"ERROR"});
   }
-  return c.json({api:'ERROR'});
 })
 // COMMENT DELETE
-route.delete('/api/comment/:id',(c)=>{
-  const id = c.req.param('id');
-  console.log('ID: ', id);
-  const db = c.get('db');
-  const result = db.comment_delete(id);
-  console.log("result: ",result)
-  //console.log(db);
-  return c.json(result);
+route.delete('/api/comment/:id', authenticateToken,(c)=>{
+  try {
+    const { id } = c.req.param();
+    const commentId = parseInt(id, 10);
+    const stmt = db.prepare('DELETE FROM comments WHERE id = ?');
+    stmt.run(commentId);
+    console.log("DELETE...");
+    return c.json({api:'DELETE'});
+  } catch (error) {
+    return c.json({api:'ERROR'});
+  }
 })
 
 export default route;
