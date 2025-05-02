@@ -8,21 +8,23 @@ import useFetch from "../../libs/useFetch.js";
 const {button, i, input, label,textarea, link, div, span, h2, h3, h4, p, form, select, option, table, tbody, thead, tr, th, td  } = van.tags;
 
 export function pageForumGroups() {
+  const groupName = van.state('');
+  const groupDescription = van.state('');
 
   function renderFormGroups(){
     return div({class:"form-container"},
       h3("Add Group"),
       div({class:"group-form-alert"}),
-      form({id:"group-form"},
+      div({id:"group-form"},
         div({class:"mb-3"},
           label("Group Name"),
-          input({id:"name"},)
+          input({id:"name",value:groupName,oninput:(e)=>groupName.val=e.target.value})
         ),
         div({class:"mb-3"},
           label("Description"),
-          textarea({id:"description"}),
+          textarea({id:"description",value:groupDescription,oninput:(e)=>groupDescription.val=e.target.value}),
         ),
-        button({type:"submit"},"Add Group")
+        button({type:"submit",onclick:btnAddGroup},"Add Group")
       ),
     );
   }
@@ -89,6 +91,9 @@ export function pageForumGroups() {
       const data = await useFetch('/api/groups');
       console.log(data);
       const _tbody = document.getElementById('groups-table');
+      const groupSelect = document.getElementById('group_id');
+      console.log(groupSelect);
+
       for(const item of data){
         van.add(_tbody,
           tr(
@@ -96,9 +101,13 @@ export function pageForumGroups() {
             td(item.name),
             td(item.description ),
             td(item.created_at),
-            td(button({},"View Members")),
+            td(button({onclick:()=>loadMemberships(item.id)},"View Members")),
           )
-        )
+        );
+        van.add(groupSelect,
+          option({value:item.id}, `${item.name} (ID:${item.id})`)
+        );
+        // console.log("test....");
       }
 
     } catch (error) {
@@ -107,10 +116,12 @@ export function pageForumGroups() {
   }
 
   async function loadMemberships(groupId) {
-    const url = groupId ? `/groups/memberships?groupId=${groupId}` : `/api/groups/memberships`;
+    const url = groupId ? `/api/groups/memberships/${groupId}` : `/api/groups/memberships`;
     try {
       const data = await useFetch(url);
       const _tbody = document.getElementById('memberships-table');
+      console.log("data:", data);
+      
       for(const item of data){
         van.add(_tbody,
           tr(
@@ -118,17 +129,32 @@ export function pageForumGroups() {
             td(item.group_id),
             td(item.joined_at),
           )
-        )
+        );
       }
-
     } catch (error) {
-      
+      console.log("loadMemberships");
     }
 
   }
 
+  async function btnAddGroup(){
+    try {
+      const data = await useFetch(`/api/groups`,{
+        method: 'POST',
+        body:JSON.stringify({
+          name:groupName.val,
+          description:groupDescription.val,
+        })
+      });
+      console.log(data);
+    } catch (error) {
+      console.log("Faill to add group");
+    }
+  }
+
   setTimeout(()=>{
     loadGroups();
+    // loadMemberships();
   },100);
 
   return div({id:"forum",class:"forum-container" },

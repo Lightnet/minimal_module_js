@@ -45,7 +45,7 @@ export function authorize(resourceType, resourceId, action) {
   
   return async (ctx, next) => {
     // console.log("[[ ctx ]]");
-    console.log(ctx);
+    // console.log(ctx);
     // console.log("next",next);
     const user = ctx.get('user');
     // console.log("[authorize]",user);

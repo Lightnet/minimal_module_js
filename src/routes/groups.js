@@ -18,9 +18,10 @@ groups.get('groups', async (c) => {
 });
 
 // Create a new group
-groups.post('groups', authenticate, authorize('group', null, 'manage'), async (c) => {
+groups.post('groups', authenticate,/* authorize('group', null, 'manage'),*/ async (c) => {
   const { name, description } = await c.req.json();
-
+  console.log("name: ", name);
+  console.log("description: ", description);
   if (!name) {
     return c.json({ error: 'Group name is required' }, 400);
   }
@@ -29,7 +30,7 @@ groups.post('groups', authenticate, authorize('group', null, 'manage'), async (c
     const stmt = db.prepare('INSERT INTO groups (name, description) VALUES (?, ?)');
     const result = stmt.run(name, description || null);
     const newGroup = db.prepare('SELECT * FROM groups WHERE id = ?').get(result.lastInsertRowid);
-    return c.json(newGroup, 201);
+    return c.json({api:'CREATE', newGroup});
   } catch (error) {
     if (error.message.includes('UNIQUE constraint failed')) {
       return c.json({ error: 'Group name already exists' }, 400);
@@ -39,7 +40,7 @@ groups.post('groups', authenticate, authorize('group', null, 'manage'), async (c
 });
 
 // Assign a user to a group
-groups.post('groups/membership', authenticate, authorize('group', null, 'manage'), async (c) => {
+groups.post('groups/membership', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
   const { userId, groupId } = await c.req.json();
 
   if (!userId || !groupId) {
@@ -110,8 +111,10 @@ groups.delete('groups/:id', authenticate, authorize('group', null, 'manage'), as
 });
 
 // List group memberships
-groups.get('groups/memberships', authenticate, authorize('group', null, 'manage'), async (c) => {
-  const { groupId } = c.req.query();
+groups.get('groups/memberships/:groupId', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
+  // const { groupId } = c.req.query();
+  const { groupId } = c.req.param();
+  console.log(groupId)
   let stmt;
   if (groupId) {
     stmt = db.prepare(`
@@ -126,10 +129,10 @@ groups.get('groups/memberships', authenticate, authorize('group', null, 'manage'
 });
 
 // Serve groups management HTML
-groups.get('groups/manage', authenticate, authorize('group', null, 'manage'), async (c) => {
-  const html = fs.readFileSync(path.join(__dirname, '../public/groups.html'), 'utf8');
-  return c.html(html);
-});
+// groups.get('groups/manage', authenticate, authorize('group', null, 'manage'), async (c) => {
+//   const html = fs.readFileSync(path.join(__dirname, '../public/groups.html'), 'utf8');
+//   return c.html(html);
+// });
 
 // module.exports = groups;
 
