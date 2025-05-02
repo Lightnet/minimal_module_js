@@ -6,17 +6,6 @@
   
 */
 
-// name
-// description
-// forumName
-// forumDescription
-// Name
-// Description
-// 
-// topicTitle
-// topicContent
-
-
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import { Router, Link, getRouterPathname,getRouterQuery , getRouterParams, navigate } from "vanjs-routing";
@@ -435,6 +424,9 @@ function pageForum() {
     const bbForumNav = div({id:'nav',class:"nav-container"});
     van.add(bbForumNav,
       btnCreateForumModal(),
+    );
+    van.add(bbForumNav,
+      button({class:"nav-button",onclick:()=>navigate('/groups')}, "Groups"),
     );
     van.add(bbForumNav,
       button({class:"nav-button",onclick:()=>navigate('/permissions')}, "Permissions"),

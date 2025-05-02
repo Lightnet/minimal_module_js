@@ -848,3 +848,9 @@ option {
     padding-bottom: 0;
   }
 }
+.table-container { margin-top: 20px; }
+/* .form-container { max-width: 600px; margin-bottom: 20px; } */
+.alert { display: none; }
+.membership-section { margin-top: 40px; }
+
+
