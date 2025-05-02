@@ -4,7 +4,6 @@ import db from '../../db/sqlite/sqlite_db.js';
 // import bcrypt from 'bcrypt';
 import { compareHashPassword, hashPassword } from '../../helpers.js';
 
-
 async function signup(username, email, password, role = 'user') {
   // const saltRounds = 10;
   // const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -167,8 +166,6 @@ function addPermission({ entity_type, entity_id, resource_type, resource_id, act
   if (!['role', 'group'].includes(entity_type)) {
     throw new Error('Invalid entity_type');
   }
-
-  // Validate entity exists
   if (entity_type === 'group') {
     const group = db.prepare('SELECT id FROM groups WHERE id = ?').get(entity_id);
     if (!group) {
@@ -177,7 +174,6 @@ function addPermission({ entity_type, entity_id, resource_type, resource_id, act
   } else if (entity_type === 'role' && !['user', 'moderator', 'admin'].includes(entity_id)) {
     throw new Error('Invalid role');
   }
-
   const stmt = db.prepare(`
     INSERT OR REPLACE INTO permissions (entity_type, entity_id, resource_type, resource_id, action, allowed)
     VALUES (?, ?, ?, ?, ?, ?)

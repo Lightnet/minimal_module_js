@@ -11,6 +11,19 @@
 
   Current Forum test build.
 
+# Design:
+  To build simple forum test to see how far smallest.
+
+  Still need to have secure security and flood spam protection is no easy task.
+
+# Gaols:
+  To everything very simple for testing builds. As for plugin or mod is just idea. Which required time to work on.
+
+## File Size:
+- node_modules 18.2 MB
+- public 232 KB
+- src 160 KB
+
 # Packages:
 - vanjs 1.5.5
 - uuid 11.1.0

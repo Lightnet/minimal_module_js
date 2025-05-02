@@ -419,6 +419,7 @@ function pageForum() {
     van.add(bbForumNav,
       displayButtonCreateBoard()
     );
+    
 
     return isClose.val ? null : div({id:"forum",class:"forum-container" },
       HomeNavMenu(),
@@ -434,6 +435,9 @@ function pageForum() {
     const bbForumNav = div({id:'nav',class:"nav-container"});
     van.add(bbForumNav,
       btnCreateForumModal(),
+    );
+    van.add(bbForumNav,
+      button({class:"nav-button",onclick:()=>navigate('/permissions')}, "Permissions"),
     );
 
     return isClose.val ? null : div({id:"forum",class:"forum-container" },

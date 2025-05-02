@@ -8,7 +8,7 @@
 import { Hono } from 'hono';
 import { scriptHtml02 } from './pages.js';
 import db from '../db/sqlite/sqlite_db.js';
-import { authenticateToken } from '../middleware/sqlite/sqlite_auth.js';
+import { authenticate } from '../middleware/sqlite/sqlite_auth.js';
 
 const route = new Hono();
 
@@ -47,7 +47,7 @@ route.get('/api/board/:id',(c)=>{
 })
 
 // BOARD CREATE
-route.post('/api/board', authenticateToken, async(c)=>{
+route.post('/api/board', authenticate, async(c)=>{
   try {
     const { name, description, moderator_group_id, parentid } = await c.req.json();
     // console.log("name:", name);
@@ -90,7 +90,7 @@ route.put('/api/board/:id',async (c)=>{
   }
 })
 // BOARD DELETE
-route.delete('/api/board/:id', authenticateToken, (c)=>{
+route.delete('/api/board/:id', authenticate, (c)=>{
   try {
     const { id } = c.req.param();
     const boardId = parseInt(id, 10);

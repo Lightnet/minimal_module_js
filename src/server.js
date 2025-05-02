@@ -33,6 +33,8 @@ import forum from './routes/forums.js';
 import board from './routes/boards.js';
 import topic from './routes/topics.js';
 import comment from './routes/comments.js';
+import groups from './routes/groups.js';
+import permissions from './routes/permissions.js';
 
 // middleware for db
 // note it reload for every request
@@ -90,6 +92,8 @@ app.route('/', forum);
 app.route('/', board);
 app.route('/', topic);
 app.route('/', comment);
+app.route('/api/', groups);
+app.route('/api/', permissions);
 // app.route('/', admin);
 
 //<script type="module" src="/client.js"></script>

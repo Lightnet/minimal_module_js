@@ -9,45 +9,37 @@ import jwt from 'jsonwebtoken';
 import { checkPermission } from '../../models/sqlite/sqlite_user.js';
 import { getCookie } from 'hono/cookie';
 
-export async function authenticateToken(ctx, next) {
+//check for cookie and Bearer
+export async function authenticate(c, next) {
+  // Check Authorization header (Bearer token)
+  const authHeader = c.req.header('Authorization');
+  let token = null;
 
-  const tokenCookie = getCookie(ctx, 'token');
-  // console.log("tokenCookie: ",tokenCookie);
-  if(tokenCookie){
-    try {
-      // var decoded = jwt.verify(tokenCookie, 'wrong-secret');
-      var userToken = jwt.verify(tokenCookie, process.env.JWT_SECRET || 'SECRET');
-      console.log("userToken]]>>>",userToken);
-      ctx.set('user', userToken); // Store user in context
-      return await next();
-    } catch(err) {
-      // err
-      // await next();
-      return c.json({ error: 'Unauthorized' }, 401);
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
+  } else {
+    // Fallback to cookie
+    const tokenCookie = getCookie(c, 'token');
+    if (tokenCookie) {
+      token = tokenCookie;
     }
-  }else{
-    // await next();
+  }
+
+  // If no token found, return 401
+  if (!token) {
+    return c.json({ error: 'Unauthorized: No token provided' }, 401);
+  }
+
+  try {
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'SECRET');
+    c.set('user', decoded); // Store user in context
+    return await next(); // Proceed to next middleware/route
+  } catch (error) {
     return c.json({ error: 'Invalid token' }, 401);
   }
-  // return await next();
 }
 
-export function authenticate(ctx, next) {
-  console.log(ctx);
-  const authHeader = ctx.headers.authorization;
-  console.log("authHeader: ", authHeader);
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return ctx.json({ error: 'Unauthorized' }, 401);
-  }
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    ctx.set('user', decoded); // Store user in context
-    return null;
-  } catch (error) {
-    return ctx.json({ error: 'Invalid token' }, 401);
-  }
-}
 
 export function authorize(resourceType, resourceId, action) {
   

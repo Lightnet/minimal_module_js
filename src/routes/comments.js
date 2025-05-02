@@ -8,7 +8,7 @@
 import { Hono } from 'hono';
 import { scriptHtml02 } from './pages.js';
 import db from '../db/sqlite/sqlite_db.js';
-import { authenticateToken } from '../middleware/sqlite/sqlite_auth.js';
+import { authenticate } from '../middleware/sqlite/sqlite_auth.js';
 
 const route = new Hono();
 
@@ -30,7 +30,7 @@ route.get('/api/comments/:id',(c)=>{
   }
 })
 // CREATE COMMENT
-route.post('/api/comment', authenticateToken, async(c)=>{
+route.post('/api/comment', authenticate, async(c)=>{
   try {
     const { content, parentid } = await c.req.json();
     console.log("content:", content);
@@ -48,7 +48,7 @@ route.post('/api/comment', authenticateToken, async(c)=>{
   }
 })
 // COMMENT UPDATE
-route.put('/api/comment/:id', authenticateToken,async (c)=>{
+route.put('/api/comment/:id', authenticate,async (c)=>{
   const { id } = c.req.param();
   try {
     console.log("COMMENT UPDATE?");
@@ -68,7 +68,7 @@ route.put('/api/comment/:id', authenticateToken,async (c)=>{
   }
 })
 // COMMENT DELETE
-route.delete('/api/comment/:id', authenticateToken,(c)=>{
+route.delete('/api/comment/:id', authenticate,(c)=>{
   try {
     const { id } = c.req.param();
     const commentId = parseInt(id, 10);

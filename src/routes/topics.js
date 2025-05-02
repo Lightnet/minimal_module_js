@@ -8,7 +8,7 @@
 import { Hono } from 'hono';
 import { scriptHtml02 } from './pages.js';
 import db from '../db/sqlite/sqlite_db.js';
-import { authenticateToken } from '../middleware/sqlite/sqlite_auth.js';
+import { authenticate } from '../middleware/sqlite/sqlite_auth.js';
 const route = new Hono();
 
 // topic get list parent id
@@ -25,7 +25,7 @@ route.get('/api/topics/:id',(c)=>{
   }
 })
 // TOPIC CREATE
-route.post('/api/topic', authenticateToken, async(c)=>{
+route.post('/api/topic', authenticate, async(c)=>{
   try {
     const { title, content, parentid } = await c.req.json();
     console.log("title:", title);
@@ -65,7 +65,7 @@ route.put('/api/topic/:id',async (c)=>{
   }
 })
 // TOPIC DELETE
-route.delete('/api/topic/:id', authenticateToken,(c)=>{
+route.delete('/api/topic/:id', authenticate,(c)=>{
   try {
     const { id } = c.req.param();
     const topicId = parseInt(id, 10);

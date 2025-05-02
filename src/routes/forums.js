@@ -9,7 +9,7 @@ import { Hono } from 'hono';
 import { scriptHtml02 } from './pages.js';
 import db from '../db/sqlite/sqlite_db.js';
 import { getForumById, createForum } from '../models/sqlite/sqlite_user.js';
-import { authenticate, authenticateToken, authorize } from '../middleware/sqlite/sqlite_auth.js';
+import { authenticate, authorize } from '../middleware/sqlite/sqlite_auth.js';
 
 const route = new Hono();
 
@@ -59,9 +59,7 @@ route.get('/api/forum/:id',(c)=>{
 });
 
 // FORUM CREATE
-route.post('/api/forum', authenticateToken, authorize('forum', null, 'create'), async(c)=>{
-// route.post('/api/forum', authenticateToken, authorize({resourceType:'forum', resourceId: null, action:'create'}), async(c)=>{
-// route.post('/api/forum', authenticateToken, async(c)=>{
+route.post('/api/forum', authenticate, authorize('forum', null, 'create'), async(c)=>{
   const { name, description, moderator_group_id } = await c.req.json();
   console.log("name:", name);
   console.log("description:", description);
@@ -86,7 +84,7 @@ route.post('/api/forum', authenticateToken, authorize('forum', null, 'create'), 
   return c.json({ error: "error" }, 400);
 })
 // FORUM UPDATE
-route.put('/api/forum/:id', authenticateToken, async (c)=>{
+route.put('/api/forum/:id', authenticate, async (c)=>{
   const { id } = c.req.param();
   const forumId = parseInt(id, 10);
   const authResult = await authorize('forum', forumId, 'update')(c, c);
@@ -113,7 +111,7 @@ route.put('/api/forum/:id', authenticateToken, async (c)=>{
   
 })
 // FORUM DELETE
-route.delete('/api/forum/:id', authenticateToken, async (c)=>{
+route.delete('/api/forum/:id', authenticate, async (c)=>{
   const { id } = c.req.param();
   const forumId = parseInt(id, 10);
   const authResult = await authorize('forum', forumId, 'delete')(c, c);
