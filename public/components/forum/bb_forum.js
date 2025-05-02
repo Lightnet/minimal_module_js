@@ -70,7 +70,7 @@ const getForums = (isClosed) => {
     navigate(`/forum?id=${id}`);
   }
 
-  async function getForums(){
+  async function getForumList(){
     try{
       const data = await useFetch('/api/forum');
       //console.log(data);
@@ -104,7 +104,7 @@ const getForums = (isClosed) => {
     }
   }
 
-  getForums();
+  getForumList();
 
   // return div(forumList);
   return forumList;
@@ -249,7 +249,7 @@ function editFormForum({closed,id,name,description}){
 
   return div({id:'forumForm',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
-      label({for:"forumID"},"ID:"),
+      label({for:"forumID"},"Forum ID:"),
       label({},forumId.val)
     ),
     div({class:"modal-form-group"},
@@ -320,7 +320,7 @@ function deleteFormForum({closed,id,name,description}){
 
   return div({id:'forumForm',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
-      label({for:"forumTitle"},"ID:"),
+      label({for:"forumTitle"},"Forum ID:"),
       p({},forumId.val)
     ),
     div({class:"modal-form-group"},
@@ -349,9 +349,9 @@ function pageForum() {
   const isClose = van.state(false);
 
   const bbForumNav = div({id:'nav',class:"nav-container"});
-  console.log("getRouterPathname()",getRouterPathname())
-  console.log("getRouterParams()",getRouterParams())
-  console.log("getRouterQuery()",getRouterQuery())
+  // console.log("getRouterPathname()",getRouterPathname())
+  // console.log("getRouterParams()",getRouterParams())
+  // console.log("getRouterQuery()",getRouterQuery())
   
   let id = getQueryId();
   //const { id } = getRouterQuery();
@@ -368,7 +368,7 @@ function pageForum() {
     getForumIDBoards(isClose,boardEl, id);
 
     van.add(bbForumNav,
-      button({class:"nav-button",onclick:()=>navForum()}, "Forums[x]"),
+      button({class:"nav-button",onclick:()=>navForum()}, "Forums"),
     );
     van.add(bbForumNav,
       displayButtonCreateBoard()

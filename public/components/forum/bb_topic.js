@@ -18,7 +18,7 @@ import { notify } from "../notify/notify.js";
 import { getQueryId } from "./base_layout.js";
 
 const {button, input, textarea, i, p, link, label, h2, div} = van.tags;
-
+// BUTTON CREATE TOPIC
 function displayButtonCreateTopic(){
 
   const isCreated = van.state(false);
@@ -32,7 +32,7 @@ function displayButtonCreateTopic(){
 
   return button({class:"nav-button",onclick:()=>btnCreateTopic()},"Create Topic");
 }
-
+// CREATE TOPIC
 function createTopicForm({closed}){
 
   const topicTitle = van.state('test');
@@ -101,9 +101,9 @@ function createTopicForm({closed}){
 
 }
 // EDIT FORUM
-function editForumTopic({closed,id,title,content}){
+function editFormTopic({closed,id,title,content}){
 
-  console.log(id);
+  // console.log(id);
   const forumId = van.state(id);
   const forumTitle = van.state(title);
   const forumContent = van.state(content);
@@ -162,7 +162,7 @@ function editForumTopic({closed,id,title,content}){
 
   return div({id:'formTopic',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
-      label({for:"forumID"},"ID:"),
+      label({for:"forumID"},"Topic ID:"),
       label({},forumId.val)
     ),
     div({class:"modal-form-group"},
@@ -233,7 +233,7 @@ function deleteForumTopic({closed,id,title,content}){
 
   return div({id:'forumForm',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
-      label({for:"forumTitle"},"ID:"),
+      label({for:"forumTitle"},"Topic ID:"),
       p({},forumId.val)
     ),
     div({class:"modal-form-group"},
@@ -241,7 +241,7 @@ function deleteForumTopic({closed,id,title,content}){
       p({},forumTitle.val)
     ),
     div({class:"modal-form-group"},
-      label({class:""},'Description:'),
+      label({class:""},'Content:'),
       p({},forumContent.val)
     ),
     div({class:"modal-actions"},
@@ -320,13 +320,13 @@ function pageTopic() {
   //   bbforumNav.removeChild(bbforumNav.lastElementChild);
   // }
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navForum()},"[x]Forums"),
+    button({class:"nav-button",onclick:()=>navForum()},"Forums"),
   );
   van.add(bbforumNav,
     button({class:"nav-button",onclick:()=>NavFormTopic('/forum?id='+forumIDState.val)},"Boards"),
   );
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>NavFormTopic('/board?id='+boardIDState.val)},"[x] Topics"),
+    button({class:"nav-button",onclick:()=>NavFormTopic('/board?id='+boardIDState.val)},"Topics"),
   );
   van.add(bbforumNav,
     displayButtonCreateComment(),
@@ -362,7 +362,7 @@ export async function getBoardIDTopics(topicEl,_id){
   function editTopic(id,title,content){
     console.log("edit topic:",id);
     isEditModal.val = false;
-    van.add(document.body, Modal({closed:isEditModal},editForumTopic({
+    van.add(document.body, Modal({closed:isEditModal},editFormTopic({
       closed:isEditModal,
       id:id,
       title:title,

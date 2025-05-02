@@ -45,15 +45,17 @@ function createCommentForm({closed}){
           content:commentContent.val,
         })
       });
-      console.log(data);
+      // console.log(data);
       if(data){
-        console.log(">>>");
+        // console.log(">>>");
         if(data?.api == "CREATE"){
           notify({
             color:Color.success,
             content:"Create Comment!"
           });
-          closed.val = true;
+          // if(closed){
+            closed.val = true;
+          // }
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -66,9 +68,7 @@ function createCommentForm({closed}){
           content:"Null Comment!"
         });
       }
-      // if(closed){
-      //   closed.val = true;
-      // }
+      
     }catch(e){
       console.log("ERROR",e);
       notify({
@@ -106,43 +106,37 @@ function pageComment() {
 // EDIT FORUM
 function editFormComment({closed,id,content}){
 
-  console.log(id);
-  const forumId = van.state(id);
-  // const forumTitle = van.state(title);
+  // console.log(id);
+  const commentId = van.state(id);
   const commentContent = van.state(content);
 
   async function btnUpdateForum(){
     // console.log("create forum");
     try{
-      const data = await useFetch(`/api/comment/${forumId.val}`,{
+      const data = await useFetch(`/api/comment/${commentId.val}`,{
         method:'PUT',
         body:JSON.stringify({
-          id:forumId.val,
-          // title:forumTitle.val,
+          id:commentId.val,
           content:commentContent.val,
         })
       });
-      console.log(data);
+      // console.log(data);
       if(data){
-        console.log(">>>");
+        // console.log(">>>");
         if(data?.api == "UPDATE"){
           notify({
             color:Color.success,
             content:"Update Comment!"
           });
 
-          let content = document.getElementById(forumId.val);
-          console.log(content);
-
-          // console.log(content.children[1].children[0]);
+          let content = document.getElementById(commentId.val);
+          // console.log(content);
           let elContent = content.children[2].children[0];// content
-          console.log("elContent: ", elContent)
+          // console.log("elContent: ", elContent)
           elContent.textContent = '[Content] '+ commentContent.val;
-
-          if(closed){
+          // if(closed){
             closed.val = true;
-          }
-
+          // }
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -167,11 +161,11 @@ function editFormComment({closed,id,content}){
 
   return div({id:'formComment',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
-      label({for:"forumID"},"ID:"),
-      label({},forumId.val)
+      label({for:"commentId"},"Comment ID:"),
+      label({},commentId.val)
     ),
     div({class:"modal-form-group"},
-      label({class:""},'Comment:'),
+      label({class:""},'Content:'),
       textarea({placeholder:"Enter Comment", value:commentContent, oninput:e=>commentContent.val=e.target.value})
     ),
     div({class:"modal-actions"},
@@ -185,25 +179,25 @@ function editFormComment({closed,id,content}){
 function deleteFormComment({closed,id,content}){
 
   // console.log(id);
-  const forumId = van.state(id);
+  const commentId = van.state(id);
   const commentContent = van.state(content);
 
   async function btnDeleteForum(){
     // console.log("create forum");
     try{
-      const data = await useFetch(`/api/comment/${forumId.val}`,{
+      const data = await useFetch(`/api/comment/${commentId.val}`,{
         method:'DELETE'
       });
-      console.log(data);
+      // console.log(data);
       if(data){
-        console.log(">>>");
+        // console.log(">>>");
         if(data?.api == "DELETE"){
           notify({
             color:Color.success,
             content:"Delete Comment!"
           });
           // closed.val = true;
-          let ccontent = document.getElementById(forumId.val);
+          let ccontent = document.getElementById(commentId.val);
           if(ccontent.parentNode){
             ccontent.parentNode.removeChild(ccontent);
           }
@@ -219,9 +213,9 @@ function deleteFormComment({closed,id,content}){
           content:"Null Comment!"
         });
       }
-      if(closed){
+      // if(closed){
         closed.val = true;
-      }
+      // }
     }catch(e){
       console.log("ERROR",e);
       notify({
@@ -233,11 +227,11 @@ function deleteFormComment({closed,id,content}){
 
   return div({id:'formComment',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
-      label({for:"forumTitle"},"ID:"),
-      p({},forumId.val)
+      label({for:"commentTitle"},"Comment ID:"),
+      p({},commentId.val)
     ),
     div({class:"modal-form-group"},
-      label({class:""},'Comment:'),
+      label({class:""},'Content:'),
       p({},commentContent.val)
     ),
     div({class:"modal-actions"},

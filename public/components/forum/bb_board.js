@@ -17,7 +17,7 @@ import { notify } from "../notify/notify.js";
 import { getQueryId } from "./base_layout.js";
 
 const {button, i, textarea, link, input, label, p, div, h2} = van.tags;
-
+// BUTTON CREATE BOARD
 function displayButtonCreateBoard(){
 
   const isCreated = van.state(false);
@@ -34,8 +34,8 @@ function displayButtonCreateBoard(){
 // CREATE BOARD
 function createBoardForm({closed}){
 
-  const forumName = van.state('test');
-  const forumDescription = van.state('test');
+  const boardName = van.state('test');
+  const boardDescription = van.state('test');
 
   async function btnCreateBoard(){
     // console.log("create board");
@@ -44,21 +44,20 @@ function createBoardForm({closed}){
         method:'POST',
         body:JSON.stringify({
           parentid:forumIDState.val,
-          name:forumName.val,
-          description:forumDescription.val,
+          name:boardName.val,
+          description:boardDescription.val,
           moderator_group_id:1
         })
       });
-      console.log(data);
+      // console.log(data);
       if(data){
-        console.log(">>>");
+        // console.log(">>>");
         if(data?.api == "CREATE"){
           notify({
             color:Color.success,
             content:"Create Board!"
           });
           closed.val = true;
-
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -71,10 +70,6 @@ function createBoardForm({closed}){
           content:"Null Board!"
         });
       }
-
-      // if(closed){
-      //   closed.val = true;
-      // }
     }catch(e){
       console.log("ERROR",e);
       notify({
@@ -87,11 +82,11 @@ function createBoardForm({closed}){
   return div({id:'boardForm',class:"ccontent"},
     div({class:"modal-form-group"},
       label({class:"report-title"},"Board Name:"),
-      input({type:"text",value:forumName, oninput:e=>forumName.val=e.target.value})
+      input({type:"text",value:boardName, oninput:e=>boardName.val=e.target.value})
     ),
     div({class:"modal-form-group"},
       label({class:"report-content"},'Description:'),
-      textarea({value:forumDescription, oninput:e=>forumDescription.val=e.target.value})
+      textarea({value:boardDescription, oninput:e=>boardDescription.val=e.target.value})
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnCreateBoard},'Create'),
@@ -101,12 +96,12 @@ function createBoardForm({closed}){
 
 }
 // EDIT FORUM
-function editForumBoard({closed,id,title,content}){
+function editFormBoard({closed,id,title,content}){
 
-  console.log(id);
+  // console.log(id);
   const forumId = van.state(id);
-  const forumName = van.state(title);
-  const forumDescription = van.state(content);
+  const boardName = van.state(title);
+  const boardDescription = van.state(content);
 
   async function btnUpdateForum(){
     // console.log("create forum");
@@ -115,13 +110,13 @@ function editForumBoard({closed,id,title,content}){
         method:'PUT',
         body:JSON.stringify({
           id:forumId.val,
-          name:forumName.val,
-          description:forumDescription.val,
+          name:boardName.val,
+          description:boardDescription.val,
         })
       });
-      console.log(data);
+      // console.log(data);
       if(data){
-        console.log(">>>");
+        // console.log(">>>");
         if(data?.api == "UPDATE"){
           notify({
             color:Color.success,
@@ -130,9 +125,9 @@ function editForumBoard({closed,id,title,content}){
 
           let content = document.getElementById(forumId.val);
           let elTitle = content.children[0].children[0].children[0]
-          elTitle.textContent = `[Board] ${forumName.val}`;
+          elTitle.textContent = `[Board] ${boardName.val}`;
           let elContent = content.children[1]
-          elContent.textContent = '[Description] '+forumDescription.val
+          elContent.textContent = '[Description] '+boardDescription.val
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -145,9 +140,9 @@ function editForumBoard({closed,id,title,content}){
           content:"Null Board!"
         });
       }
-      if(closed){
+      // if(closed){
         closed.val = true;
-      }
+      // }
     }catch(e){
       console.log("ERROR",e);
       notify({
@@ -159,16 +154,16 @@ function editForumBoard({closed,id,title,content}){
 
   return div({id:'forumForm',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
-      label({for:"forumID"},"ID:"),
+      label({for:"forumID"},"Board ID:"),
       label({},forumId.val)
     ),
     div({class:"modal-form-group"},
-      label({for:"forumTitle"},"Title:"),
-      input({placeholder:"Enter forum title", type:"text",value:forumName, oninput:e=>forumName.val=e.target.value})
+      label({for:"forumTitle"},"Name:"),
+      input({placeholder:"Enter Board Name", type:"text",value:boardName, oninput:e=>boardName.val=e.target.value})
     ),
     div({class:"modal-form-group"},
       label({class:""},'Description:'),
-      textarea({placeholder:"Enter forum description", value:forumDescription, oninput:e=>forumDescription.val=e.target.value})
+      textarea({placeholder:"Enter Board description", value:boardDescription, oninput:e=>boardDescription.val=e.target.value})
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnUpdateForum},'Update'),
@@ -230,11 +225,11 @@ function deleteForumBoard({closed,id,title,content}){
 
   return div({id:'forumForm',style:"",class:"ccontent"},
     div({class:"modal-form-group"},
-      label({for:"forumTitle"},"ID:"),
+      label({for:"forumTitle"},"Board ID:"),
       p({},forumId.val)
     ),
     div({class:"modal-form-group"},
-      label({for:"forumTitle"},"Title:"),
+      label({for:"forumTitle"},"Name:"),
       p({},forumTitle.val)
     ),
     div({class:"modal-form-group"},
@@ -253,18 +248,10 @@ function pageBoard() {
 
   const topicEl = div({id:'topics'});
   const bbforumNav = div({class:"nav-container"});
-  while (topicEl.lastElementChild) {// clear children
-    topicEl.removeChild(topicEl.lastElementChild);
-  }
+  // while (topicEl.lastElementChild) {// clear children
+  //   topicEl.removeChild(topicEl.lastElementChild);
+  // }
 
-  // get topics and create nav menu.
-  // van.derive(() => {
-  //   const { id } = getRouterQuery();
-  //   if(id){
-  //     console.log("BOARD ID:", id);
-  //     getBoardIDTopics(topicEl, id);
-  //   }
-  // });
   let id = getQueryId();
   if(!id){
     id = boardIDState.val;
@@ -279,14 +266,14 @@ function pageBoard() {
     navigate('/forum');
   }
 
-  while (bbforumNav.lastElementChild) {// clear children
-    bbforumNav.removeChild(bbforumNav.lastElementChild);
-  }
+  // while (bbforumNav.lastElementChild) {// clear children
+  //   bbforumNav.removeChild(bbforumNav.lastElementChild);
+  // }
   van.add(bbforumNav,
     button({class:"nav-button",onclick:()=>navForum()},"Forum"),
   );
   van.add(bbforumNav,
-    button({class:"nav-button",onclick:()=>navigate('/forum?id='+forumIDState.val)},"[xx]Boards"),
+    button({class:"nav-button",onclick:()=>navigate('/forum?id='+forumIDState.val)},"Boards"),
   );
   van.add(bbforumNav,
     displayButtonCreateTopic()
@@ -303,7 +290,7 @@ function pageBoard() {
   );
 
 }
-
+// GET FORUM FOR BOARDS
 export async function getForumIDBoards(isClosed,boardEl, _id){
 
   const isEditModal = van.state(false);
@@ -319,7 +306,7 @@ export async function getForumIDBoards(isClosed,boardEl, _id){
   function editBoard(id,title,content){
     console.log("editForum:",id);
     isEditModal.val = false;
-    van.add(document.body, Modal({closed:isEditModal},editForumBoard({
+    van.add(document.body, Modal({closed:isEditModal},editFormBoard({
       closed:isEditModal,
       id:id,
       title:title,
