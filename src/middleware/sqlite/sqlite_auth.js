@@ -52,18 +52,22 @@ export function authenticate(ctx, next) {
 export function authorize(resourceType, resourceId, action) {
   
   return async (ctx, next) => {
-    // console.log("ctx",ctx);
+    // console.log("[[ ctx ]]");
+    console.log(ctx);
     // console.log("next",next);
     const user = ctx.get('user');
-    console.log("[authorize]",user);
-    if (!user) return c.json({ error: 'Unauthorized' }, 401);
+    // console.log("[authorize]",user);
+    if (!user) return ctx.json({ error: 'Unauthorized' }, 401);
     const hasPermission = await checkPermission(user, resourceType, resourceId, action);
     if (!hasPermission) {
       console.log("Forbidden");
       // await next();
       return ctx.json({ error: 'Forbidden' }, 403);
     }
-    return await next();
+    // return await next();
+    if(typeof next === 'function'){
+      return await next();
+    }
   };
 }
 

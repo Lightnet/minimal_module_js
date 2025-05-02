@@ -6,6 +6,12 @@
   
 */
 
+// name
+// description
+// forumName
+// forumDescription
+// 
+
 import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import { Router, Link, getRouterPathname,getRouterQuery , getRouterParams, navigate } from "vanjs-routing";
@@ -30,25 +36,25 @@ const getForums = (isClosed) => {
   const isEditModal = van.state(false);
   const isDeleteModal = van.state(false);
 
-  function editForum(id,title,content){
+  function editForum(id,name,description){
     console.log("editForum:",id);
     isEditModal.val = false;
-    van.add(document.body, Modal({closed:isEditModal},editForumForm({
+    van.add(document.body, Modal({closed:isEditModal},editFormForum({
       closed:isEditModal,
       id:id,
-      title:title,
-      content:content
+      name:name,
+      description:description
     })));
   }
 
-  function deleteForum(id,title,content){
+  function deleteForum(id,name,description){
     console.log("deleteForum:",id);
     isDeleteModal.val = false;
-    van.add(document.body, Modal({closed:isDeleteModal},deleteForumForm({
+    van.add(document.body, Modal({closed:isDeleteModal},deleteFormForum({
       closed:isDeleteModal,
       id:id,
-      title:title,
-      content:content
+      name:name,
+      description:description
     })));
   }
 
@@ -64,25 +70,25 @@ const getForums = (isClosed) => {
       const data = await useFetch('/api/forum');
       //console.log(data);
       if(data){
-        for(let ii=0; ii < data.length;ii++){
-          van.add(forumList, div({id:data[ii].id, class:'forum-item'},
+        for(let item of data){
+          van.add(forumList, div({id:item.id, class:'forum-item'},
               div({class:'forum-header'},
                 div({class:"forum-title"},
-                  h2({onclick:()=>enterForum(data[ii].id)},`[ Forum ] ${data[ii].title}`),
+                  h2({onclick:()=>enterForum(item.id)},`[ Forum ] ${item.name}`),
                 ),
                 div({class:"action-buttons"},
-                  button({class:"edit-btn",onclick:()=>editForum(data[ii].id, data[ii].title, data[ii].content)},
+                  button({class:"edit-btn",onclick:()=>editForum(item.id, item.name, item.description)},
                     i({class:"fa-solid fa-pen-to-square"}),
                     label(' Edit'),
                   ),
-                  button({class:"delete-btn",onclick:()=>deleteForum(data[ii].id, data[ii].title, data[ii].content)},
+                  button({class:"delete-btn",onclick:()=>deleteForum(item.id, item.name, item.description)},
                     i({class:"fa-solid fa-trash"}),
                     label(' Delete')
                   ),
                 ),
               ),
-              div({class:'forum-content',onclick:()=>enterForum(data[ii].id)},
-                data[ii].content
+              div({class:'forum-content',onclick:()=>enterForum(item.id)},
+                item.description
               ),
             ),
           );
@@ -178,12 +184,12 @@ function createFormForum({closed}){
 
 }
 // EDIT FORUM
-function editForumForm({closed,id,title,content}){
+function editFormForum({closed,id,name,description}){
 
   console.log(id);
   const forumId = van.state(id);
-  const forumTitle = van.state(title);
-  const forumContent = van.state(content);
+  const forumName = van.state(name);
+  const forumDescription = van.state(description);
 
   async function btnUpdateForum(){
     // console.log("create forum");
@@ -192,8 +198,9 @@ function editForumForm({closed,id,title,content}){
         method:'PUT',
         body:JSON.stringify({
           id:forumId.val,
-          title:forumTitle.val,
-          content:forumContent.val,
+          name:forumName.val,
+          description:forumDescription.val,
+          moderator_group_id:1,
         })
       });
       console.log(data);
@@ -208,11 +215,11 @@ function editForumForm({closed,id,title,content}){
           let content = document.getElementById(forumId.val);
           // console.log(content);
           // console.log(content.children[0].children[0].children[0]);
-          let elTitle = content.children[0].children[0].children[0]
-          elTitle.textContent = `[ Forum ] ${forumTitle.val}`;
-          let elContent = content.children[1]
+          let elName = content.children[0].children[0].children[0]
+          elName.textContent = `[ Forum ] ${forumName.val}`;
+          let elDescription = content.children[1]
           // console.log(elContent);
-          elContent.textContent = forumContent.val
+          elDescription.textContent = forumDescription.val
         }else if(data?.api == "ERROR"){
           notify({
             color:Color.error,
@@ -244,11 +251,11 @@ function editForumForm({closed,id,title,content}){
     ),
     div({class:"modal-form-group"},
       label({for:"forumTitle"},"Title:"),
-      input({placeholder:"Enter forum title", type:"text",value:forumTitle, oninput:e=>forumTitle.val=e.target.value})
+      input({placeholder:"Enter forum title", type:"text",value:forumName, oninput:e=>forumName.val=e.target.value})
     ),
     div({class:"modal-form-group"},
       label({class:""},'Description:'),
-      textarea({placeholder:"Enter forum description", value:forumContent, oninput:e=>forumContent.val=e.target.value})
+      textarea({placeholder:"Enter forum description", value:forumDescription, oninput:e=>forumDescription.val=e.target.value})
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"submit-btn",onclick:btnUpdateForum},'Update'),
@@ -258,12 +265,12 @@ function editForumForm({closed,id,title,content}){
 
 }
 // DELETE FORUM
-function deleteForumForm({closed,id,title,content}){
+function deleteFormForum({closed,id,name,description}){
 
-  console.log(id);
+  // console.log(id);
   const forumId = van.state(id);
-  const forumTitle = van.state(title);
-  const forumContent = van.state(content);
+  const forumName = van.state(name);
+  const forumDescription = van.state(description);
 
   async function btnDeleteForum(){
     // console.log("create forum");
@@ -271,9 +278,9 @@ function deleteForumForm({closed,id,title,content}){
       const data = await useFetch(`/api/forum/${forumId.val}`,{
         method:'DELETE'
       });
-      console.log(data);
+      // console.log(data);
       if(data){
-        console.log(">>>");
+        // console.log(">>>");
         if(data?.api == "DELETE"){
           notify({
             color:Color.success,
@@ -315,11 +322,11 @@ function deleteForumForm({closed,id,title,content}){
     ),
     div({class:"modal-form-group"},
       label({for:"forumTitle"},"Title:"),
-      p({},forumTitle.val)
+      p({},forumName.val)
     ),
     div({class:"modal-form-group"},
       label({class:""},'Description:'),
-      p({},forumContent.val)
+      p({},forumDescription.val)
     ),
     div({class:"modal-actions"},
       button({type:"button",class:"warn",onclick:btnDeleteForum},'Delete'),

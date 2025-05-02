@@ -85,32 +85,44 @@ route.post('/api/forum', authenticateToken, authorize('forum', null, 'create'), 
   return c.json({ error: "error" }, 400);
 })
 // FORUM UPDATE
-route.put('/api/forum/:id' ,async (c)=>{
+route.put('/api/forum/:id', authenticateToken, async (c)=>{
   const { id } = c.req.param();
   const forumId = parseInt(id, 10);
-  const authResult = await authorize('forum', forumId, 'update')(c.req, c);
+  const authResult = await authorize('forum', forumId, 'update')(c, c);
   if (authResult) return authResult;
 
   const { name, description, moderator_group_id } = await c.req.json();
-  const stmt = db.prepare(`
-    UPDATE forums
-    SET name = ?, description = ?, moderator_group_id = ?
-    WHERE id = ?
-  `);
-  stmt.run(name, description, moderator_group_id, id);
-  const updatedForum = getForumById(id);
-  return c.json(updatedForum);
+  console.log("name: ", name);
+  console.log("description: ", description);
+  console.log("moderator_group_id: ", moderator_group_id);
+  try {
+    db.pragma('foreign_keys = O');
+    const stmt = db.prepare(`
+      UPDATE forums
+      SET name = ?, description = ?, moderator_group_id = ?
+      WHERE id = ?
+    `);
+    stmt.run(name, description, moderator_group_id, id);
+    // const updatedForum = getForumById(id);
+    // return c.json(updatedForum);
+    return c.json({api:"UPDATE"});  
+  } catch (error) {
+    return c.json({api:"ERROR"});
+  }
+  
 })
 // FORUM DELETE
-route.delete('/api/forum/:id', async (c)=>{
+route.delete('/api/forum/:id', authenticateToken, async (c)=>{
   const { id } = c.req.param();
   const forumId = parseInt(id, 10);
-  const authResult = await authorize('forum', forumId, 'delete')(c.req, c);
+  const authResult = await authorize('forum', forumId, 'delete')(c, c);
   if (authResult) return authResult;
 
   const stmt = db.prepare('DELETE FROM forums WHERE id = ?');
   stmt.run(id);
-  return c.json({ message: 'Forum deleted' });
+  console.log("DELETE...");
+  // return c.json({ message: 'Forum deleted' });
+  return c.json({api:'DELETE'});
 })
 
 
