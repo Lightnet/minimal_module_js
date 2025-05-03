@@ -156,7 +156,12 @@ export function pageForumGroups() {
         notify({
           color:Color.success,
           content:data.message
-        })
+        });
+        let item_group  = document.getElementById(`groupid-${id}`);
+        console.log("item_group:", item_group)
+        let parentNode = item_group.parentNode;
+        parentNode.removeChild(item_group);
+
       }
     }
 
@@ -168,7 +173,7 @@ export function pageForumGroups() {
     isDeleteGroupModal.val=false;
     van.add(document.body, Modal({closed:isDeleteGroupModal},div(
       label(`Delete Group: ${name} (ID:${id})`),
-      button({onclick:()=>{fetch_delete_groupid(id)}},"Delete"),
+      button({onclick:()=>{fetch_delete_groupid(id);isDeleteGroupModal.val=true}},"Delete"),
       button({onclick:()=>{isDeleteGroupModal.val=true}},"Cancel"),
     )));
   }
@@ -193,8 +198,6 @@ export function pageForumGroups() {
 
   async function loadGroups() {
 
-    
-
     try {
       const data = await useFetch('/api/groups');
       console.log(data);
@@ -204,7 +207,7 @@ export function pageForumGroups() {
 
       for(const item of data){
         van.add(_tbody,
-          tr(
+          tr({id:`groupid-${item.id}`},
             td(item.id),
             td(item.name),
             td(item.description ),
