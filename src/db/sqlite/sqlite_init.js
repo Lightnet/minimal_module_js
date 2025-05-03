@@ -15,6 +15,15 @@ function initializeDatabase(dbPath) {
   const schema = fs.readFileSync(path.join(__dirname, 'sqlite_schema.sql'), 'utf8');
   db.exec(schema);
 
+  // const insertUser = db.prepare(`
+  //   INSERT OR IGNORE INTO users (username, email, password_hash, role) 
+  //   VALUES (?, ?, ?, ?)
+  // `);
+  // insertUser.run('admin', 'admin@example.com', 'hashed_password', 'admin');
+  // insertUser.run('moderator', 'mod@example.com', 'hashed_password', 'moderator');
+  // insertUser.run('user', 'user@example.com', 'hashed_password', 'user');
+
+
   const insertPermission = db.prepare(`
     INSERT OR IGNORE INTO permissions (entity_type, entity_id, resource_type, resource_id, action, allowed)
     VALUES (?, ?, ?, ?, ?, ?)
@@ -45,6 +54,7 @@ function initializeDatabase(dbPath) {
     ['role', 'admin', 'group', null, 'manage', 1], // Group management
     ['role', 'admin', 'permissions', null, 'manage', 1], // Permission management
     ['role', 'admin', 'group_memberships', null, 'manage', 1], // Group membership management
+    ['role', 'admin', 'audit_logs', null, 'manage', 1],
   ];
 
   const groupPermissions = [
@@ -65,6 +75,7 @@ function initializeDatabase(dbPath) {
   // `);
   // insertGroup.run('board1_moderators', 'Moderators for Board 1');
   // insertGroup.run('trusted_users', 'Users with extra privileges');
+  console.log("CREATE PERMISSIONS...")
 
   return db;
 }

@@ -10,25 +10,6 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TEXT DEFAULT (datetime('now'))
 );
 
--- Groups table
-CREATE TABLE IF NOT EXISTS groups (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
-  description TEXT,
-  created_at TEXT DEFAULT (datetime('now'))
-);
-
--- Group memberships
-CREATE TABLE IF NOT EXISTS group_memberships (
-  user_id INTEGER NOT NULL,
-  group_id INTEGER NOT NULL,
-  joined_at TEXT DEFAULT (datetime('now')),
-  PRIMARY KEY (user_id, group_id),
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (group_id) REFERENCES groups(id)
-);
-
-
 -- Forums table
 CREATE TABLE IF NOT EXISTS forums (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -79,6 +60,24 @@ CREATE TABLE IF NOT EXISTS comments (
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- Groups table
+CREATE TABLE IF NOT EXISTS groups (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  description TEXT,
+  created_at TEXT DEFAULT (datetime('now'))
+);
+
+-- Group memberships
+CREATE TABLE IF NOT EXISTS group_memberships (
+  user_id INTEGER NOT NULL,
+  group_id INTEGER NOT NULL,
+  joined_at TEXT DEFAULT (datetime('now')),
+  PRIMARY KEY (user_id, group_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
+);
+
 -- Permissions table
 CREATE TABLE IF NOT EXISTS permissions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -89,4 +88,13 @@ CREATE TABLE IF NOT EXISTS permissions (
   action TEXT NOT NULL, -- e.g., create, read, update, delete
   allowed INTEGER NOT NULL DEFAULT 1, -- 1 for true, 0 for false
   UNIQUE(entity_type, entity_id, resource_type, resource_id, action)
+);
+
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  action TEXT NOT NULL,
+  details TEXT,
+  created_at TEXT DEFAULT (datetime('now')),
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );

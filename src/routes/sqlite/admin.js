@@ -7,7 +7,7 @@
 
 import { Hono } from 'hono';
 import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
-import { scriptHtml02 } from './pages.js';
+import { scriptHtml02 } from '../pages.js';
 
 const route = new Hono({ 
   //strict: false 

@@ -6,10 +6,10 @@
 */
 
 import { Hono } from 'hono';
-import { scriptHtml02 } from './pages.js';
-import db from '../db/sqlite/sqlite_db.js';
-import { getForumById, createForum } from '../models/sqlite/sqlite_user.js';
-import { authenticate, authorize } from '../middleware/sqlite/sqlite_auth.js';
+import { scriptHtml02 } from '../pages.js';
+import db from '../../db/sqlite/sqlite_db.js';
+import { getForumById, createForum } from '../../models/sqlite/sqlite_user.js';
+import { authenticate, authorize } from '../../middleware/sqlite/sqlite_auth.js';
 
 const route = new Hono();
 

@@ -15,7 +15,7 @@ import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } 
 const app = new Hono({ 
   //strict: false
 });
-import { adminCreateUser, checkUserExists, login, signup } from '../models/sqlite/sqlite_user.js';
+import { adminCreateUser, checkUserExists, login, signup } from '../../models/sqlite/sqlite_user.js';
 
 app.use("*", checkAccess);
 
