@@ -24,14 +24,14 @@ async function login(email, password) {
   const db = await getDB();
   const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
   const user = stmt.get(email);
-  console.log("[login] "+user);
-  console.log(user);
-  console.log(user.id);
+  // console.log("[login] "+user);
+  // console.log(user);
+  // console.log(user.id);
   if (!user) throw new Error('User not found');
   // const isValid = await bcrypt.compare(password, user.password_hash);
   const isValid = compareHashPassword(password, user.password_hash,user.salt);
   // if (!isValid) throw new Error('Invalid password');
-  console.log("isValid: ",isValid);
+  // console.log("isValid: ",isValid);
   if (!isValid){
     return false;
   };
@@ -47,8 +47,8 @@ async function getUserGroups(userId) {
 async function checkPermission(user, resourceType, resourceId, action) {
   const db = await getDB();
   const groupIds = await getUserGroups(user.id);
-  console.log("groupIds:", groupIds);
-  console.log("user.role:", user.role);
+  // console.log("groupIds:", groupIds);
+  // console.log("role:", user.role);
   // user.role = "admin";
   const entities = [
     { type: 'role', id: user.role },
@@ -74,7 +74,7 @@ async function checkPermission(user, resourceType, resourceId, action) {
       resourceId ?? null,
       action
     );
-    console.log("result: ", result);
+    // console.log("result: ", result);
     if (result && result.allowed) {
       return true;
     }

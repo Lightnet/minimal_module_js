@@ -84,7 +84,7 @@ const app = new Hono({
   //console.log(`[${c.req.method}] ${c.req.url}`)
   //await next()
 //})
-console.log("AUTH...")
+// console.log("AUTH...");
 app.route('/', auth);
 // app.route('/', message);
 // app.route('/', blog);
@@ -136,29 +136,31 @@ if(typeof Bun == 'object'){
 
 // https://github.com/orgs/honojs/discussions/1781
 // server base on bun api by fetch
-if(typeServer=='node'){
-  const server = serve({
-    fetch: app.fetch,
-    port:PORT
-  });
-  const io = new Server(server);
-
-  io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
+if (process.env.NODE_ENV !== 'test') {
+  if(typeServer=='node'){
+    const server = serve({
+      fetch: app.fetch,
+      port:PORT
     });
-  });
+    const io = new Server(server);
 
-  //console.log(io);
-  console.log('Process Type:',typeServer)
-  console.log(`hono server  http://localhost:${PORT}`)
-  let urlList = [
-    `http://localhost:${PORT}/admin`,
-  ];
+    io.on('connection', (socket) => {
+      console.log('a user connected');
+      socket.on('disconnect', () => {
+        console.log('user disconnected');
+      });
+    });
 
-  for(var myurl in urlList){
-    console.log(urlList[myurl]);
+    //console.log(io);
+    // console.log('Process Type:',typeServer)
+    // console.log(`hono server  http://localhost:${PORT}`)
+    // let urlList = [
+    //   `http://localhost:${PORT}/admin`,
+    // ];
+
+    // for(var myurl in urlList){
+    //   console.log(urlList[myurl]);
+    // }
   }
 }
 

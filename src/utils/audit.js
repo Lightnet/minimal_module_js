@@ -5,13 +5,16 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-import db from '../db/sqlite/sqlite_db.js';
+// import db from '../db/sqlite/sqlite_db.js';
 import { Hono } from 'hono';
 import { authenticate, authorize } from '../middleware/sqlite/sqlite_auth.js';
+import { getDB } from '../db/sqlite/sqlite_db.js';
 
 // for logging access for groups, permssions. 
-export function logAudit(userId, action, details) {
+export async function logAudit(userId, action, details) {
   try {
+    console.log("[logAudit] TEST");
+    const db = await getDB();
     const stmt = db.prepare(`
       INSERT INTO audit_logs (user_id, action, details)
       VALUES (?, ?, ?)
@@ -22,9 +25,11 @@ export function logAudit(userId, action, details) {
       details ? JSON.stringify(details) : null
     );
   } catch (error) {
+    console.log("[logAudit] Audit log error!");
     console.error('Audit log error:', error.message);
     // Don't throw; logging failures shouldn't block the main operation
   }
+  console.log("[logAudit] FINISHED...")
 }
 
 const route_audit_logs = new Hono();

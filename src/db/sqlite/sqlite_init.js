@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function initializeDatabase(dbPathArg) {
-  console.log("dbPathArg: ",dbPathArg);
+  // console.log("dbPathArg: ",dbPathArg);
   const db = new Database(dbPathArg);
   // const Database = await import('better-sqlite3'); // Dynamic import
   // const db = new Database.default(dbPathArg, { verbose: console.log }); // Use .default for CommonJS
@@ -78,7 +78,7 @@ async function initializeDatabase(dbPathArg) {
   // `);
   // insertGroup.run('board1_moderators', 'Moderators for Board 1');
   // insertGroup.run('trusted_users', 'Users with extra privileges');
-  console.log("CREATE PERMISSIONS...")
+  // console.log("CREATE PERMISSIONS!")
 
   return db;
 }

@@ -15,7 +15,7 @@ import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } 
 
 import { adminCreateUser, checkUserExists, login, signup } from '../../models/sqlite/sqlite_user.js';
 import { authenticate } from '../../middleware/sqlite/sqlite_auth.js';
-console.log("auth.js")
+// console.log("auth.js")
 const route_auth = new Hono({ 
   //strict: false
 });
@@ -25,7 +25,7 @@ const route_auth = new Hono({
 route_auth.post('/api/auth/signup', async (c) => {
   //const data = c.req.query()
   const data = await c.req.json()
-  console.log(data);
+  // console.log(data);
   //return c.text('Hono!')
   if(data){
     if((data.alias !=null)&&(data.username !=null)&&(data.passphrase !=null)&&(data.email !=null)){
@@ -38,13 +38,13 @@ route_auth.post('/api/auth/signup', async (c) => {
         username: data.username, 
         email:data.email
       });
-      console.log("user DB");
-      console.log(user);
+      // console.log("user DB");
+      // console.log(user);
       if(user){
         console.log('EXIST');
         return c.json({api:'EXIST'});
       }else{
-        console.log("CREATE USER SQL...")
+        console.log("CREATE USER SQL!")
         // const result = db.user_create(data.alias,data.username,data.passphrase, data.email);
         const result = signup(data.username, data.email ,data.passphrase);
         // return c.json(result);
@@ -69,13 +69,13 @@ route_auth.post('/api/auth/signin', async (c) => {
       try {
         const result = await login(data.alias, data.passphrase); 
         if(result){
-          console.log("PASS", result);
+          // console.log("PASS", result);
           let token = {
             id: result.id, 
             alias: data.alias, 
             role: result.role
           };
-          console.log("token: ",token);
+          // console.log("token: ",token);
           token = jwt.sign(token, process.env.JWT_SECRET || 'SECRET', {
             expiresIn: '1d',
           });
@@ -211,13 +211,13 @@ route_auth.post('/auth/refresh', authenticate, async (c) => {
 //need to fix this later.
 route_auth.post('/auth/login', async (c) => {
   const { email, password } = await c.req.json();
-  console.log("===============================");
-  console.log("email:", email);
-  console.log("password:", password);
+  // console.log("===============================");
+  // console.log("email:", email);
+  // console.log("password:", password);
   try {
     const user = await login(email, password);
-    console.log("user:=======================");
-    console.log("user: ", user);
+    // console.log("user:=======================");
+    // console.log("user: ", user);
     const token = jwt.sign({ id: user.id,alias:user.username, role: user.role }, process.env.JWT_SECRET, {
       expiresIn: '1d',
     });
@@ -230,7 +230,7 @@ route_auth.post('/auth/login', async (c) => {
       sameSite: 'Strict',
       maxAge: 24 * 60 * 60,
     });
-    console.log("token: ", token);
+    // console.log("token: ", token);
     return c.json({api:"PASS", token });
   } catch (error) {
     console.log("error: ==============================");

@@ -24,21 +24,24 @@ groups.get('groups', async (c) => {
 groups.post('groups', authenticate, authorize('group', null, 'manage'), async (c) => {
   const user = c.get('user');
   const { name, description } = await c.req.json();
-  console.log("name: ", name);
-  console.log("description: ", description);
+  // console.log("[post] name: ", name);
+  // console.log("description: ", description);
   if (!name) {
     return c.json({ error: 'Group name is required' }, 400);
   }
-  console.log("user.id: ", user.id);
+  // console.log("user: ", user);
+  // console.log("user.id: ", user.id);
+  
   try {
     const db = await getDB();
     const stmt = db.prepare('INSERT INTO groups (name, description) VALUES (?, ?)');
     const result = stmt.run(name, description || null);
     const newGroup = db.prepare('SELECT * FROM groups WHERE id = ?').get(result.lastInsertRowid);
 
-    logAudit(user.id, 'create_group', { group_id: newGroup.id, name, description });
+    await logAudit(user.id, 'create_group', { group_id: newGroup.id, name, description });
     return c.json({api:'CREATE', newGroup});
   } catch (error) {
+    // console.log("[GROUP] ERROR!", error.message);
     if (error.message.includes('UNIQUE constraint failed')) {
       return c.json({ error: 'Group name already exists' }, 400);
     }
@@ -66,7 +69,7 @@ groups.put('group/:id', authenticate, authorize('group', null, 'manage'), async 
     stmt.run(name, description || null, id);
     const updatedGroup = db.prepare('SELECT * FROM groups WHERE id = ?').get(id);
 
-    logAudit(user.id, 'update_group', { group_id: id, name, description });
+    await logAudit(user.id, 'update_group', { group_id: id, name, description });
     return c.json(updatedGroup);
   } catch (error) {
     if (error.message.includes('UNIQUE constraint failed')) {
@@ -99,7 +102,7 @@ groups.post('groups/membership', authenticate, authorize('group', null, 'manage'
     const stmt = db.prepare('INSERT INTO group_memberships (user_id, group_id) VALUES (?, ?)');
     stmt.run(userId, groupId);
     
-    logAudit(user.id, 'add_group_membership', { user_id: userId, group_id: groupId, group_name: group.name });
+    await logAudit(user.id, 'add_group_membership', { user_id: userId, group_id: groupId, group_name: group.name });
     return c.json({ userId, groupId, joined_at: new Date().toISOString() }, 201);
   } catch (error) {
     if (error.message.includes('UNIQUE constraint failed')) {
@@ -128,7 +131,7 @@ groups.delete('groups/membership', authenticate, authorize('group', null, 'manag
   const stmt = db.prepare('DELETE FROM group_memberships WHERE user_id = ? AND group_id = ?');
   stmt.run(userId, groupId);
 
-  logAudit(user.id, 'remove_group_membership', { user_id: userId, group_id: groupId, group_name: group.name });
+  await logAudit(user.id, 'remove_group_membership', { user_id: userId, group_id: groupId, group_name: group.name });
   return c.json({ message: 'User removed from group' });
 });
 
@@ -153,7 +156,7 @@ groups.delete('groups/:id', authenticate, authorize('group', null, 'manage'), as
   db.prepare('DELETE FROM permissions WHERE entity_type = ? AND entity_id = ?').run('group', id);
   db.prepare('DELETE FROM groups WHERE id = ?').run(id);
 
-  logAudit(user.id, 'delete_group', { group_id: id, name: group.name });
+  await logAudit(user.id, 'delete_group', { group_id: id, name: group.name });
   return c.json({ message: 'Group deleted' });
 });
 

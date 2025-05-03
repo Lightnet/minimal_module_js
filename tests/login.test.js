@@ -11,8 +11,8 @@ import { getDB } from '../src/db/sqlite/sqlite_db.js';
 // console.log(g);
 
 // Function to create a server for testing
-function createTestServer() {
-  const server = serve({
+async function createTestServer() {
+  const server = await serve({
     fetch: app.fetch,
     port: 0, // Use 0 to let the OS assign an available port
   });
@@ -24,7 +24,7 @@ describe('Login Test Access', () => {
   let db;
 
   beforeAll(async () => {
-    server = createTestServer();
+    server = await createTestServer();
     // db = getDB();
   });
 
@@ -63,7 +63,7 @@ describe('Login Test Access', () => {
   //   // expect(response.body.name).toBe('someName'); // Uncomment and adjust as needed
   // });
 
-  it('POST /api/auth/login should return response', async () => {
+  it('POST /auth/login should return response', async () => {
     const response = await request(server)
       .post('/auth/login') // Corrected endpoint
       .send({
@@ -71,25 +71,33 @@ describe('Login Test Access', () => {
         password: 'guest1',
       })
       .expect(function(res) {
-        console.log("res.body===========================");
-        console.log("res.body");
-        console.log(res.body);
-        console.log("res.text");
-        console.log('Raw JSON (res.text):', res.text);
+        console.log("res.status: ", res.status)
+        expect(res.status, 200);
+        // console.log("res.body===========================");
+        // console.log("res.body");
+        // console.log(res.body);
+        // console.log("res.text");
+        // console.log('Raw JSON (res.text):', res.text);
+        // console.log('Raw JSON (res.text):', res.text);
+        
+        expect(res.body).toHaveProperty('token');
       })
       // .expect(200); // Adjust status code as needed (201 if expecting creation)
 
     // Log raw JSON string (unparsed)
-    console.log('Raw JSON (res.text):', response.text);
+    // console.log('Raw JSON (res.text):', response.text);
 
     // Log parsed JSON object
-    console.log('Parsed JSON (res.body):', response.body);
-    console.log('res.body.name:', response.body.name);
-    console.log('res.body.token:', response.body.token);
+    // console.log('Parsed JSON (res.body):', response.body);
+    // console.log('res.body.name:', response.body.name);
+    // console.log('res.body.token:', response.body.token);
 
     // Example assertions for parsed JSON
     // expect(response.body).toBeInstanceOf(Object); // Ensure it's an object
     // expect(response.body).toHaveProperty('token'); // Check for token property
     // expect(response.body.name).toBe('someName'); // Uncomment and adjust as needed
   });
+
+  // it('POST /auth/login should return response', async () => {
+  // });
 });
