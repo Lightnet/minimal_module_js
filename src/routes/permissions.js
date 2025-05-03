@@ -9,8 +9,8 @@ import db from '../db/sqlite/sqlite_db.js';
 
 const permissions = new Hono();
 
-// List all permissions
-permissions.get('permissions', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
+// List all permissions (admin-only)
+permissions.get('permissions', authenticate, authorize('group', null, 'manage'), async (c) => {
   const stmt = db.prepare(`
     SELECT id, entity_type, entity_id, resource_type, resource_id, action, allowed
     FROM permissions
@@ -23,6 +23,12 @@ permissions.get('permissions', authenticate, /*authorize('group', null, 'manage'
 // Add or update a permission
 permissions.post('permissions', authenticate, authorize('group', null, 'manage'), async (c) => {
   const { entity_type, entity_id, resource_type, resource_id, action, allowed } = await c.req.json();
+  console.log("entity_type: ", entity_type);
+  console.log("entity_id: ", entity_id);
+  console.log("resource_type: ", resource_type);
+  console.log("resource_id: ", resource_id);
+  console.log("action: ", action);
+  console.log("allowed: ", allowed);
 
   try {
     const permission = addPermission({
@@ -40,10 +46,14 @@ permissions.post('permissions', authenticate, authorize('group', null, 'manage')
 });
 
 // Serve permission management HTML
-permissions.get('permissions/manage', authenticate, authorize('group', null, 'manage'), async (c) => {
-  const html = fs.readFileSync(path.join(__dirname, '../public/permissions.html'), 'utf8');
-  return c.html(html);
-});
+// permissions.get('/manage', authenticate, async (c) => {
+//   const user = c.get('user');
+//   if (!user || user.role !== 'admin') {
+//     return c.redirect('/auth/login');
+//   }
+//   const html = fs.readFileSync(path.join(__dirname, '../public/permissions.html'), 'utf8');
+//   return c.html(html);
+// });
 
 // module.exports = permissions;
 export default permissions;

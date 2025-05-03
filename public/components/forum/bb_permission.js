@@ -30,7 +30,7 @@ export function pageForumPermissions() {
         // const groups = await response.json();
         for(const item of data){
           van.add(entityIdSelect,
-            option({vaule:item.id},item.name)
+            option({value:item.id}, `${item.name} (ID:${item.id})`)
           )
         }
         console.log(data);
@@ -44,9 +44,15 @@ export function pageForumPermissions() {
 
   async function loadPermissions() {
     try {
+      console.log("update table permissions.")
       const data = await useFetch('/api/permissions');
       console.log("data: ", data);
       const _tbody = document.getElementById('permissions-table');
+
+      while (_tbody.firstChild) {
+        _tbody.removeChild(_tbody.lastChild);
+      }
+
       for(let item of data){
         van.add(_tbody,
           tr(
@@ -67,40 +73,101 @@ export function pageForumPermissions() {
     }
   }
 
+  const entity_type = van.state('role');
+  const entity_id = van.state('');
+  const resource_type = van.state('forum');
+  const resource_id = van.state('');
+  const action = van.state('create');
+  const isAllowed = van.state(true);
+
+  async function btnAddPermission(){
+    console.log("Add Permission")
+    console.log("entity_type: ", entity_type.val);
+    console.log("entity_id: ", entity_id.val);
+    console.log("resource_type: ", resource_type.val);
+    console.log("resource_id: ", resource_id.val);
+    console.log("action: ", action.val);
+    console.log("isAllowed: ", isAllowed.val);
+
+    try {
+      let allow;
+      console.log("isAllowed.val: ",isAllowed.val);
+      if(isAllowed.val){
+        allow = 'true';
+        console.log("allow: ",allow);
+      }else{
+        allow = 'false';
+      }
+      let data = {
+        entity_type:entity_type.val,
+        entity_id:entity_id.val,
+        resource_type:resource_type.val,
+        resource_id:resource_id.val || null,
+        action:action.val,
+        allowed:allow
+      };
+      console.log(data);
+
+      const fetch_data = await useFetch(`/api/permissions`,{
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+
+      console.log("fetch_data: ", fetch_data);
+      if(fetch_data?.error){
+        notify({
+          color:Color.error,
+          content:data.error
+        })
+        return;
+      }
+      loadPermissions();
+      notify({
+        color:Color.success,
+        content:`Add Permission entity_type:${entity_type.val}, entity_id:${entity_id.val}`
+      })
+
+    } catch (error) {
+      
+    }
+  }
+
   function renderForm(){
     return div({class:"form-container"},
       h3("Add Permission"),
       div({id:"form-alert",class:"alert",role:"alert"}),
-      form({id:"permission-form"},
+      div({id:"permission-form"},
         div({class:"mb-3"},
           label("Entity Type: "),
-          select({id:"entity_type"},
+          select({id:"entity_type",value:entity_type,onchange:(e)=>entity_type.val=e.target.value},
             option({value:"role"}, "Role"),
             option({value:"group"}, "Group"),
           )
         ),
         div({class:"mb-3"},
           label("Entity ID: "),
-          select({id:"entity_id"})
+          select({id:"entity_id",value:entity_id,onchange:(e)=>entity_id.val=e.target.value})
         ),
         div({class:"mb-3"},
           label("Resource Type: "),
-          select({id:"resource_type"},
+          select({id:"resource_type",value:resource_type,onchange:(e)=>resource_type.val=e.target.value},
             option({value:"forum"}, "Forum"),
             option({value:"board"}, "Board"),
             option({value:"topic"}, "Topic"),
             option({value:"comment"}, "Comment"),
             option({value:"user"}, "User"),
             option({value:"group"}, "Group"),
+            option({value:"permissions"}, "Permissions"),
+            option({value:"group_memberships"}, "Group Memberships"),
           )
         ),
         div({class:"mb-3"},
           label("Resource ID (Optional): "),
-          input({id:"resource_id"}),
+          input({type:"number",id:"resource_id",value:resource_id,oninput:(e)=>resource_id.val=e.target.value}),
         ),
         div({class:"mb-3"},
           label("Action: "),
-          select({id:"action"},
+          select({id:"action",value:action,onchange:(e)=>action.val=e.target.value},
             option({value:"create"}, "Create"),
             option({value:"read"}, "Read"),
             option({value:"update"}, "Update"),
@@ -108,11 +175,11 @@ export function pageForumPermissions() {
             option({value:"manage"}, "Manage"),
           )
         ),
-        div({class:"mb-3 form-check"},
-          input({type:"checkbox",checked:true}),
-          label("Allowed")
+        div({class:"mb-3"},
+          label("Allowed: "),
+          input({type:"checkbox", checked:isAllowed, onclick:(e)=>isAllowed.val=e.target.checked}),
         ),
-        button({},"Add Permission")
+        button({onclick:btnAddPermission},"Add Permission")
       )
     )
   }

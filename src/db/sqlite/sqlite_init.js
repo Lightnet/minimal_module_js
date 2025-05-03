@@ -29,11 +29,11 @@ function initializeDatabase(dbPath) {
     ['role', 'user', 'comment', null, 'create', 1],
     ['role', 'user', 'comment', null, 'read', 1],
     // Moderator role
+    ['role', 'moderator', 'forum', null, 'create', 1],
     ['role', 'moderator', 'topic', null, 'update', 1],
     ['role', 'moderator', 'topic', null, 'delete', 1],
     ['role', 'moderator', 'comment', null, 'update', 1],
     ['role', 'moderator', 'comment', null, 'delete', 1],
-    ['role', 'moderator', 'forum', null, 'create', 1],
     // Admin role
     ['role', 'admin', 'forum', null, 'create', 1],
     ['role', 'admin', 'forum', null, 'update', 1],
@@ -41,9 +41,10 @@ function initializeDatabase(dbPath) {
     ['role', 'admin', 'board', null, 'create', 1],
     ['role', 'admin', 'board', null, 'update', 1],
     ['role', 'admin', 'board', null, 'delete', 1],
-    ['role', 'admin', 'user', null, 'manage', 1],
-    ['role', 'admin', 'user', null, 'manage', 1], // Allows account creation and management
-    ['role', 'admin', 'group', null, 'manage', 1], // Allows group and permission management
+    ['role', 'admin', 'user', null, 'manage', 1], // Account creation and management
+    ['role', 'admin', 'group', null, 'manage', 1], // Group management
+    ['role', 'admin', 'permissions', null, 'manage', 1], // Permission management
+    ['role', 'admin', 'group_memberships', null, 'manage', 1], // Group membership management
   ];
 
   const groupPermissions = [

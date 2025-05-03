@@ -18,7 +18,7 @@ groups.get('groups', async (c) => {
 });
 
 // Create a new group
-groups.post('groups', authenticate,/* authorize('group', null, 'manage'),*/ async (c) => {
+groups.post('groups', authenticate, authorize('group', null, 'manage'), async (c) => {
   const { name, description } = await c.req.json();
   console.log("name: ", name);
   console.log("description: ", description);
@@ -39,8 +39,35 @@ groups.post('groups', authenticate,/* authorize('group', null, 'manage'),*/ asyn
   }
 });
 
+// Update a group
+groups.put('group/:id', authenticate, authorize('group', null, 'manage'), async (c) => {
+  const { id } = c.req.param();
+  const { name, description } = await c.req.json();
+
+  if (!name) {
+    return c.json({ error: 'Group name is required' }, 400);
+  }
+
+  const group = db.prepare('SELECT id FROM groups WHERE id = ?').get(id);
+  if (!group) {
+    return c.json({ error: 'Group not found' }, 404);
+  }
+
+  try {
+    const stmt = db.prepare('UPDATE groups SET name = ?, description = ? WHERE id = ?');
+    stmt.run(name, description || null, id);
+    const updatedGroup = db.prepare('SELECT * FROM groups WHERE id = ?').get(id);
+    return c.json(updatedGroup);
+  } catch (error) {
+    if (error.message.includes('UNIQUE constraint failed')) {
+      return c.json({ error: 'Group name already exists' }, 400);
+    }
+    return c.json({ error: 'Failed to update group' }, 500);
+  }
+});
+
 // Assign a user to a group
-groups.post('groups/membership', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
+groups.post('groups/membership', authenticate, authorize('group', null, 'manage'), async (c) => {
   const { userId, groupId } = await c.req.json();
 
   if (!userId || !groupId) {
@@ -70,7 +97,7 @@ groups.post('groups/membership', authenticate, /*authorize('group', null, 'manag
 });
 
 // Remove a user from a group
-groups.delete('groups/membership', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
+groups.delete('groups/membership', authenticate, authorize('group', null, 'manage'), async (c) => {
   const { userId, groupId } = await c.req.json();
 
   if (!userId || !groupId) {
@@ -90,7 +117,7 @@ groups.delete('groups/membership', authenticate, /*authorize('group', null, 'man
 });
 
 // Delete a group
-groups.delete('groups/:id', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
+groups.delete('groups/:id', authenticate, authorize('group', null, 'manage'), async (c) => {
   const { id } = c.req.param();
   console.log("id:", id);
 
@@ -112,7 +139,7 @@ groups.delete('groups/:id', authenticate, /*authorize('group', null, 'manage'),*
 });
 
 // List group memberships
-groups.get('groups/memberships/:groupId', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
+groups.get('groups/memberships/:groupId', authenticate, authorize('group', null, 'manage'), async (c) => {
   // const { groupId } = c.req.query();
   const { groupId } = c.req.param();
   console.log(groupId)

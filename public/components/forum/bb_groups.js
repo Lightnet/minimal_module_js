@@ -161,9 +161,11 @@ export function pageForumGroups() {
         console.log("item_group:", item_group)
         let parentNode = item_group.parentNode;
         parentNode.removeChild(item_group);
-
       }
     }
+  }
+
+  function btnEditGroupId(id, name){
 
   }
 
@@ -214,6 +216,7 @@ export function pageForumGroups() {
             td(item.created_at),
             td(
               button({onclick:()=>loadMemberships(item.id)},"View Members"),
+              button({onclick:()=>btnEditGroupId(item.id,item.name)},"Edit"),
               button({onclick:()=>btnRemoveGroupId(item.id,item.name)},"Delete")
             ),
           )
@@ -236,8 +239,11 @@ export function pageForumGroups() {
     try {
       const data = await useFetch(url);
       const _tbody = document.getElementById('memberships-table');
-      console.log("data:", data);
-      
+      const myNode = _tbody;
+      while (myNode.firstChild) {
+        myNode.removeChild(myNode.lastChild);
+      }
+      // console.log("data:", data);
       for(const item of data){
         van.add(_tbody,
           tr(
@@ -250,7 +256,6 @@ export function pageForumGroups() {
     } catch (error) {
       console.log("loadMemberships");
     }
-
   }
 
   async function btnAddGroup(){
