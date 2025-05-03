@@ -12,14 +12,17 @@
 import jwt from 'jsonwebtoken';
 import { Hono } from 'hono';
 import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
-const app = new Hono({ 
+
+import { adminCreateUser, checkUserExists, login, signup } from '../../models/sqlite/sqlite_user.js';
+import { authenticate } from '../../middleware/sqlite/sqlite_auth.js';
+console.log("auth.js")
+const route_auth = new Hono({ 
   //strict: false
 });
-import { adminCreateUser, checkUserExists, login, signup } from '../../models/sqlite/sqlite_user.js';
 
-app.use("*", checkAccess);
+// route_auth.use("*", checkAccess);
 
-app.post('/api/auth/signup', async (c) => {
+route_auth.post('/api/auth/signup', async (c) => {
   //const data = c.req.query()
   const data = await c.req.json()
   console.log(data);
@@ -31,8 +34,8 @@ app.post('/api/auth/signup', async (c) => {
       }
       const db = c.get('db');
       // const user = db.user_exist(data.alias);
-      const user = checkUserExists({
-        username: data.alias, 
+      const user = await checkUserExists({
+        username: data.username, 
         email:data.email
       });
       console.log("user DB");
@@ -43,7 +46,7 @@ app.post('/api/auth/signup', async (c) => {
       }else{
         console.log("CREATE USER SQL...")
         // const result = db.user_create(data.alias,data.username,data.passphrase, data.email);
-        const result = signup(data.alias, data.email ,data.passphrase);
+        const result = signup(data.username, data.email ,data.passphrase);
         // return c.json(result);
         return c.json({api:'CREATE'});
       }
@@ -52,7 +55,7 @@ app.post('/api/auth/signup', async (c) => {
   return c.json({api:"ERROR"});
 })
 
-app.post('/api/auth/signin', async (c) => {
+route_auth.post('/api/auth/signin', async (c) => {
   //const data = c.req.query()
   const data = await c.req.json()
   console.log(data);
@@ -101,7 +104,7 @@ app.post('/api/auth/signin', async (c) => {
 });
 
 // https://hono.dev/helpers/cookie
-app.post('/api/auth/signout', async (c) => {
+route_auth.post('/api/auth/signout', async (c) => {
   const tokenCookie = getCookie(c, 'token');
   if(tokenCookie){
     console.log("tokenCookie: ", tokenCookie)
@@ -120,7 +123,7 @@ export async function checkAccess(c, next){
 }
 
 //get user data that is secure
-app.get('/api/auth/user', async (c) => {
+route_auth.get('/api/auth/user', async (c) => {
   const tokenCookie = getCookie(c, 'token');
   if(tokenCookie){
     //deleteCookie(c, 'token');
@@ -153,7 +156,7 @@ app.get('/api/auth/user', async (c) => {
   return c.json({api:"ERROR"});
 });
 
-app.get('/api/user', async (c) => {
+route_auth.get('/api/user', async (c) => {
   const tokenCookie = getCookie(c, 'token');
   if(tokenCookie){
     console.log("tokenCookie: ", tokenCookie);
@@ -174,8 +177,7 @@ app.get('/api/user', async (c) => {
   return c.json({api:"ERROR"});
 });
 
-
-app.get('/api/admin', async (c) => {
+route_auth.get('/api/admin', async (c) => {
   let username = "admin";
   let email = "admin";
   let password = "admin";
@@ -197,5 +199,49 @@ app.get('/api/admin', async (c) => {
   }
 });
 
+//need to fix this later.
+route_auth.post('/auth/refresh', authenticate, async (c) => {
+  const user = c.get('user');
+  const newToken = jwt.sign({ id: user.id,alias:user.username, role: user.role }, process.env.JWT_SECRET, {
+    expiresIn: '1d',
+  });
+  setCookie(c, 'token', newToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
+  return c.json({ token: newToken });
+});
+//need to fix this later.
+route_auth.post('/auth/login', async (c) => {
+  const { email, password } = await c.req.json();
+  console.log("===============================");
+  console.log("email:", email);
+  console.log("password:", password);
+  try {
+    const user = await login(email, password);
+    console.log("user:=======================");
+    console.log("user: ", user);
+    const token = jwt.sign({ id: user.id,alias:user.username, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: '1d',
+    });
+    // let token = {
+    //   test:"test"
+    // }
+    setCookie(c, 'token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+      maxAge: 24 * 60 * 60,
+    });
+    console.log("token: ", token);
+    return c.json({api:"PASS", token });
+  } catch (error) {
+    console.log("error: ==============================");
+    console.log("error: ",error.message);
+    return c.json({ error: error.message }, 401);
+  }
+});
 
-export default app;
+route_auth.post('/login', async (c) => {
+  return c.json({ api:"test" });
+});
+
+
+export default route_auth;

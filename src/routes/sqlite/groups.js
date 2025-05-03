@@ -3,7 +3,8 @@
 // const pool = require('../db');
 import { Hono } from 'hono';
 import { authenticate, authorize } from '../../middleware/sqlite/sqlite_auth.js';
-import db from '../../db/sqlite/sqlite_db.js';
+// import db from '../../db/sqlite/sqlite_db.js';
+import { getDB } from '../../db/sqlite/sqlite_db.js';
 import { logAudit } from '../../utils/audit.js';
 const groups = new Hono();
 
@@ -13,6 +14,7 @@ const groups = new Hono();
 // });
 // Get all groups
 groups.get('groups', async (c) => {
+  const db = await getDB();
   const stmt = db.prepare('SELECT id, name, description, created_at FROM groups');
   const groups = stmt.all();
   return c.json(groups);
@@ -27,8 +29,9 @@ groups.post('groups', authenticate, authorize('group', null, 'manage'), async (c
   if (!name) {
     return c.json({ error: 'Group name is required' }, 400);
   }
-  console.log("user.id: ",user.id)
+  console.log("user.id: ", user.id);
   try {
+    const db = await getDB();
     const stmt = db.prepare('INSERT INTO groups (name, description) VALUES (?, ?)');
     const result = stmt.run(name, description || null);
     const newGroup = db.prepare('SELECT * FROM groups WHERE id = ?').get(result.lastInsertRowid);
@@ -52,7 +55,7 @@ groups.put('group/:id', authenticate, authorize('group', null, 'manage'), async 
   if (!name) {
     return c.json({ error: 'Group name is required' }, 400);
   }
-
+  const db = await getDB();
   const group = db.prepare('SELECT id FROM groups WHERE id = ?').get(id);
   if (!group) {
     return c.json({ error: 'Group not found' }, 404);
@@ -81,7 +84,7 @@ groups.post('groups/membership', authenticate, authorize('group', null, 'manage'
   if (!userId || !groupId) {
     return c.json({ error: 'userId and groupId are required' }, 400);
   }
-
+  const db = await getDB();
   const targetUser = db.prepare('SELECT id FROM users WHERE id = ?').get(userId);
   if (!targetUser) {
     return c.json({ error: 'User does not exist' }, 400);
@@ -114,7 +117,7 @@ groups.delete('groups/membership', authenticate, authorize('group', null, 'manag
   if (!userId || !groupId) {
     return c.json({ error: 'userId and groupId are required' }, 400);
   }
-
+  const db = await getDB();
   const membership = db.prepare(
     'SELECT user_id, group_id FROM group_memberships WHERE user_id = ? AND group_id = ?'
   ).get(userId, groupId);
@@ -139,7 +142,7 @@ groups.delete('groups/:id', authenticate, authorize('group', null, 'manage'), as
   if (!group) {
     return c.json({ error: 'Group not found' }, 404);
   }
-
+  const db = await getDB();
   const forumCount = db.prepare('SELECT COUNT(*) as count FROM forums WHERE moderator_group_id = ?').get(id).count;
   const boardCount = db.prepare('SELECT COUNT(*) as count FROM boards WHERE moderator_group_id = ?').get(id).count;
   if (forumCount > 0 || boardCount > 0) {
@@ -158,8 +161,9 @@ groups.delete('groups/:id', authenticate, authorize('group', null, 'manage'), as
 groups.get('groups/memberships/:groupId', authenticate, authorize('group', null, 'manage'), async (c) => {
   // const { groupId } = c.req.query();
   const { groupId } = c.req.param();
-  console.log(groupId)
+  console.log(groupId);
   let stmt;
+  const db = await getDB();
   if (groupId) {
     stmt = db.prepare(`
       SELECT user_id, group_id, joined_at

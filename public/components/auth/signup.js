@@ -16,7 +16,7 @@ import { Color } from "../notify/notifycontext.js";
 const SignUpEL = () => {
 
   const displayuser = van.state('guest');
-  const username = van.state('guest1');
+  const username = van.state('guest');
   const pass = van.state('guest');
   const pass2 = van.state('guest');
   const email = van.state('guest');
@@ -82,7 +82,7 @@ const SignUpEL = () => {
         //   td(input({type:"text",value:displayuser, oninput:e=>displayuser.val=e.target.value}))
         // ),
         tr(
-          td(label('Login User:')),
+          td(label('User Name:')),
           td(input({type:"text",value:username, oninput:e=>username.val=e.target.value}))
         ),
         tr(

@@ -7,23 +7,24 @@
 
 import { Hono } from 'hono';
 import { scriptHtml02 } from '../pages.js';
-import db from '../../db/sqlite/sqlite_db.js';
+import { getDB } from '../../db/sqlite/sqlite_db.js';
 import { authenticate } from '../../middleware/sqlite/sqlite_auth.js';
 
 const route = new Hono();
 
 // BOARD GET test
-route.get('/api/board',(c)=>{
-  const db = c.get('db');
-  const results = db.get_boards();
-  return c.json(results);
-})
+// route.get('/api/board',(c)=>{
+//   const db = c.get('db');
+//   const results = db.get_boards();
+//   return c.json(results);
+// })
 
 // https://hono.dev/docs/api/routing
 // BOARD GET
-route.get('/api/boards/:id',(c)=>{
+route.get('/api/boards/:id', async (c)=>{
   
   try {
+    const db = await getDB();
     const id = c.req.param('id');
     console.log("BOARDS: ", id);
     const stmt = db.prepare('SELECT * FROM boards WHERE forum_id = ?');
@@ -36,8 +37,9 @@ route.get('/api/boards/:id',(c)=>{
 })
 
 // Boards get parent id
-route.get('/api/board/:id',(c)=>{
+route.get('/api/board/:id', async (c)=>{
   try {
+    const db = await getDB();
     const stmt = db.prepare('SELECT * FROM boards WHERE id = ?');
     const results = stmt.get(forumId);
     return c.json(results);
@@ -49,6 +51,7 @@ route.get('/api/board/:id',(c)=>{
 // BOARD CREATE
 route.post('/api/board', authenticate, async(c)=>{
   try {
+    const db = await getDB();
     const { name, description, moderator_group_id, parentid } = await c.req.json();
     // console.log("name:", name);
     // console.log("description:", description);
@@ -70,9 +73,10 @@ route.post('/api/board', authenticate, async(c)=>{
   }
 })
 // BOARD UPDATE
-route.put('/api/board/:id',async (c)=>{
+route.put('/api/board/:id', async (c)=>{
   const { id } = c.req.param();
   try {
+    const db = await getDB();
     console.log("BOARD UPDATE?");
     const { name, description } = await c.req.json();
     console.log("ID: ", id);
@@ -90,8 +94,9 @@ route.put('/api/board/:id',async (c)=>{
   }
 })
 // BOARD DELETE
-route.delete('/api/board/:id', authenticate, (c)=>{
+route.delete('/api/board/:id', authenticate, async (c)=>{
   try {
+    const db = await getDB();
     const { id } = c.req.param();
     const boardId = parseInt(id, 10);
 

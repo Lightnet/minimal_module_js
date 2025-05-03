@@ -7,7 +7,8 @@
 
 import { Hono } from 'hono';
 import { scriptHtml02 } from '../pages.js';
-import db from '../../db/sqlite/sqlite_db.js';
+// import db from '../../db/sqlite/sqlite_db.js';
+import { getDB } from '../../db/sqlite/sqlite_db.js';
 import { getForumById, createForum } from '../../models/sqlite/sqlite_user.js';
 import { authenticate, authorize } from '../../middleware/sqlite/sqlite_auth.js';
 
@@ -42,14 +43,15 @@ route.get('/comment/*', (c) => {
 // FORUM
 //===============================================
 // FORUM GET
-route.get('/api/forum',(c)=>{
+route.get('/api/forum', async (c)=>{
+  const db = await getDB();
   const stmt = db.prepare('SELECT * FROM forums');
   const forums = stmt.all();
   return c.json(forums);
   // return c.json({});
 });
 
-route.get('/api/forum/:id',(c)=>{
+route.get('/api/forum/:id', (c)=>{
   const { id } = c.req.param();
   const forum = getForumById(id);
   if (!forum) {
@@ -59,7 +61,8 @@ route.get('/api/forum/:id',(c)=>{
 });
 
 // FORUM CREATE
-route.post('/api/forum', authenticate, authorize('forum', null, 'create'), async(c)=>{
+route.post('/api/forum', authenticate, authorize('forum', null, 'create'), async (c)=>{
+
   const { name, description, moderator_group_id } = await c.req.json();
   console.log("name:", name);
   console.log("description:", description);
@@ -78,10 +81,9 @@ route.post('/api/forum', authenticate, authorize('forum', null, 'create'), async
     });
   } catch (error) {
 
-
     return c.json({ error: error.message }, 400);
   }
-  return c.json({ error: "error" }, 400);
+  // return c.json({ error: "error" }, 400);
 })
 // FORUM UPDATE
 route.put('/api/forum/:id', authenticate, async (c)=>{
@@ -95,6 +97,7 @@ route.put('/api/forum/:id', authenticate, async (c)=>{
   console.log("description: ", description);
   console.log("moderator_group_id: ", moderator_group_id);
   try {
+    const db = await getDB();
     db.pragma('foreign_keys = O');
     const stmt = db.prepare(`
       UPDATE forums
@@ -106,7 +109,7 @@ route.put('/api/forum/:id', authenticate, async (c)=>{
     // return c.json(updatedForum);
     return c.json({api:"UPDATE"});  
   } catch (error) {
-    return c.json({api:"ERROR"});
+    return c.json({api:"ERROR",error:error.message});
   }
   
 })
@@ -116,12 +119,17 @@ route.delete('/api/forum/:id', authenticate, async (c)=>{
   const forumId = parseInt(id, 10);
   const authResult = await authorize('forum', forumId, 'delete')(c, c);
   if (authResult) return authResult;
-
-  const stmt = db.prepare('DELETE FROM forums WHERE id = ?');
-  stmt.run(id);
-  console.log("DELETE...");
-  // return c.json({ message: 'Forum deleted' });
-  return c.json({api:'DELETE'});
+  try {
+    const db = await getDB();
+    const stmt = db.prepare('DELETE FROM forums WHERE id = ?');
+    stmt.run(id);
+    console.log("DELETE...");
+    // return c.json({ message: 'Forum deleted' });
+    return c.json({api:'DELETE'});  
+  } catch (error) {
+    return c.json({error:'Delete Fail'});
+  }
+  
 })
 
 //===============================================

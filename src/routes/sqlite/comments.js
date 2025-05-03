@@ -7,7 +7,8 @@
 
 import { Hono } from 'hono';
 // import { scriptHtml02 } from '../pages.js';
-import db from '../../db/sqlite/sqlite_db.js';
+// import db from '../../db/sqlite/sqlite_db.js';
+import { getDB } from '../../db/sqlite/sqlite_db.js';
 import { authenticate } from '../../middleware/sqlite/sqlite_auth.js';
 
 const route = new Hono();
@@ -17,8 +18,9 @@ const route = new Hono();
 //===============================================
 
 // get comments from topic id parent
-route.get('/api/comments/:id',(c)=>{
+route.get('/api/comments/:id', async (c)=>{
   try {
+    const db = await getDB();
     const id = c.req.param('id');
     console.log("TOPICS: ", id);
     const stmt = db.prepare('SELECT * FROM comments WHERE topic_id = ?');
@@ -32,6 +34,7 @@ route.get('/api/comments/:id',(c)=>{
 // CREATE COMMENT
 route.post('/api/comment', authenticate, async(c)=>{
   try {
+    const db = await getDB();
     const { content, parentid } = await c.req.json();
     console.log("content:", content);
     console.log("parentid:", parentid);
@@ -48,9 +51,10 @@ route.post('/api/comment', authenticate, async(c)=>{
   }
 })
 // COMMENT UPDATE
-route.put('/api/comment/:id', authenticate,async (c)=>{
+route.put('/api/comment/:id', authenticate, async (c)=>{
   const { id } = c.req.param();
   try {
+    const db = await getDB();
     console.log("COMMENT UPDATE?");
     const { content } = await c.req.json();
     console.log("ID: ", id);
@@ -68,8 +72,9 @@ route.put('/api/comment/:id', authenticate,async (c)=>{
   }
 })
 // COMMENT DELETE
-route.delete('/api/comment/:id', authenticate,(c)=>{
+route.delete('/api/comment/:id', authenticate, async (c)=>{
   try {
+    const db = await getDB();
     const { id } = c.req.param();
     const commentId = parseInt(id, 10);
     const stmt = db.prepare('DELETE FROM comments WHERE id = ?');

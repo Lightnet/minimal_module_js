@@ -6,16 +6,18 @@
 */
 
 import { Hono } from 'hono';
-import { scriptHtml02 } from '../pages.js';
-import db from '../../db/sqlite/sqlite_db.js';
+// import { scriptHtml02 } from '../pages.js';
+// import db from '../../db/sqlite/sqlite_db.js';
+import { getDB } from '../../db/sqlite/sqlite_db.js';
 import { authenticate } from '../../middleware/sqlite/sqlite_auth.js';
 const route = new Hono();
 
 // topic get list parent id
-route.get('/api/topics/:id',(c)=>{
+route.get('/api/topics/:id', async (c)=>{
   try {
     const id = c.req.param('id');
     console.log("BOARDS: ", id);
+    const db = await getDB();
     const stmt = db.prepare('SELECT * FROM topics WHERE board_id = ?');
     const results = stmt.all(id);
     console.log("TOPICS:", results);
@@ -25,8 +27,9 @@ route.get('/api/topics/:id',(c)=>{
   }
 })
 // TOPIC CREATE
-route.post('/api/topic', authenticate, async(c)=>{
+route.post('/api/topic', authenticate, async (c)=>{
   try {
+    const db = await getDB();
     const { title, content, parentid } = await c.req.json();
     console.log("title:", title);
     console.log("content:", content);
@@ -45,9 +48,10 @@ route.post('/api/topic', authenticate, async(c)=>{
 
 })
 // TOPIC UPDATE
-route.put('/api/topic/:id',async (c)=>{
+route.put('/api/topic/:id', async (c)=>{
   const { id } = c.req.param();
   try {
+    const db = await getDB();
     console.log("BOARD UPDATE?");
     const { title, content } = await c.req.json();
     console.log("ID: ", id);
@@ -65,8 +69,9 @@ route.put('/api/topic/:id',async (c)=>{
   }
 })
 // TOPIC DELETE
-route.delete('/api/topic/:id', authenticate,(c)=>{
+route.delete('/api/topic/:id', authenticate, async (c)=>{
   try {
+    const db = await getDB();
     const { id } = c.req.param();
     const topicId = parseInt(id, 10);
 

@@ -2,8 +2,9 @@
 import { Hono } from 'hono';
 import { authenticate, authorize } from '../../middleware/sqlite/sqlite_auth.js';
 import { addPermission } from '../../models/sqlite/sqlite_user.js';
-import db from '../../db/sqlite/sqlite_db.js';
+// import db from '../../db/sqlite/sqlite_db.js';
 import { logAudit } from '../../utils/audit.js';
+import { getDB } from '../../db/sqlite/sqlite_db.js';
 // import db from '../db/sqlite/sqlite_db.js';
 // const { rateLimiter } = require('@hono/rate-limiter');
 // permissions.use('/permissions', rateLimiter({ windowMs: 15 * 60 * 1000, limit: 100 }));
@@ -12,6 +13,8 @@ const permissions = new Hono();
 
 // List all permissions (admin-only)
 permissions.get('permissions', authenticate, authorize('group', null, 'manage'), async (c) => {
+
+  const db = await getDB();
   const stmt = db.prepare(`
     SELECT id, entity_type, entity_id, resource_type, resource_id, action, allowed
     FROM permissions

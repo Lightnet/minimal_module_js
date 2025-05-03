@@ -1,15 +1,17 @@
 // const db = require('../db');
 // const bcrypt = require('bcrypt');
-import db from '../../db/sqlite/sqlite_db.js';
+import { getDB } from '../../db/sqlite/sqlite_db.js';
 // import bcrypt from 'bcrypt';
 import { compareHashPassword, hashPassword } from '../../helpers.js';
 
 async function signup(username, email, password, role = 'user') {
+  const db = await getDB();
   // const saltRounds = 10;
   // const passwordHash = await bcrypt.hash(password, saltRounds);
 
   let {salt, hash} = hashPassword(password);
   let passwordHash = hash;
+  
   const stmt = db.prepare(`
     INSERT INTO users (username, email, password_hash, role, salt)
     VALUES (?, ?, ?, ?, ?)
@@ -19,6 +21,7 @@ async function signup(username, email, password, role = 'user') {
 }
 
 async function login(email, password) {
+  const db = await getDB();
   const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
   const user = stmt.get(email);
   console.log("[login] "+user);
@@ -35,13 +38,16 @@ async function login(email, password) {
   return user;
 }
 
-function getUserGroups(userId) {
+async function getUserGroups(userId) {
+  const db = await getDB();
   const stmt = db.prepare('SELECT group_id FROM group_memberships WHERE user_id = ?');
   return stmt.all(userId).map((row) => row.group_id);
 }
 
-function checkPermission(user, resourceType, resourceId, action) {
-  const groupIds = getUserGroups(user.id);
+async function checkPermission(user, resourceType, resourceId, action) {
+  const db = await getDB();
+  const groupIds = await getUserGroups(user.id);
+  console.log("groupIds:", groupIds);
   console.log("user.role:", user.role);
   // user.role = "admin";
   const entities = [
@@ -77,7 +83,11 @@ function checkPermission(user, resourceType, resourceId, action) {
 }
 
 // New function to check if a user exists
-function checkUserExists({ email, username }) {
+async function checkUserExists({ email, username }) {
+  const db = await getDB();
+  console.log(db);
+  console.log("username: ", username);
+  console.log("email: ", email);
   if (!email && !username) {
     throw new Error('At least one of email or username must be provided');
   }
@@ -102,7 +112,8 @@ function checkUserExists({ email, username }) {
   return !!user; // Returns true if user exists, false otherwise
 }
 
-function createForum(name, description, creatorId, moderatorGroupId) {
+async function createForum(name, description, creatorId, moderatorGroupId) {
+  const db = await getDB();
   db.pragma('foreign_keys = 0');
   console.log("name: ", name);
   console.log("description: ", description);
@@ -123,13 +134,15 @@ function createForum(name, description, creatorId, moderatorGroupId) {
   
 }
 
-function getForumById(forumId) {
+async function getForumById(forumId) {
+  const db = await getDB();
   const stmt = db.prepare('SELECT * FROM forums WHERE id = ?');
   return stmt.get(forumId);
 }
 
 // New function for admin to create a user account
 async function adminCreateUser({ username, email, password, role = 'user', groupIds = [] }) {
+  const db = await getDB();
   if (!['user', 'moderator', 'admin'].includes(role)) {
     throw new Error('Invalid role');
   }
@@ -162,7 +175,8 @@ async function adminCreateUser({ username, email, password, role = 'user', group
 }
 
 // New function to add permissions
-function addPermission({ entity_type, entity_id, resource_type, resource_id, action, allowed }) {
+async function addPermission({ entity_type, entity_id, resource_type, resource_id, action, allowed }) {
+  const db = await getDB();
   if (!['role', 'group'].includes(entity_type)) {
     throw new Error('Invalid entity_type');
   }

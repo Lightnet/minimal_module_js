@@ -84,7 +84,7 @@ const app = new Hono({
   //console.log(`[${c.req.method}] ${c.req.url}`)
   //await next()
 //})
-
+console.log("AUTH...")
 app.route('/', auth);
 // app.route('/', message);
 // app.route('/', blog);
@@ -106,6 +106,10 @@ app.get('/', (c) => {
 app.get('/test', (c) => {
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
+});
+
+app.post('/login', async (c) => {
+  return c.json({ api:"test" });
 });
 
 //set up static folder for public access
