@@ -70,7 +70,7 @@ groups.post('groups/membership', authenticate, /*authorize('group', null, 'manag
 });
 
 // Remove a user from a group
-groups.delete('groups/membership', authenticate, authorize('group', null, 'manage'), async (c) => {
+groups.delete('groups/membership', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
   const { userId, groupId } = await c.req.json();
 
   if (!userId || !groupId) {
@@ -90,8 +90,9 @@ groups.delete('groups/membership', authenticate, authorize('group', null, 'manag
 });
 
 // Delete a group
-groups.delete('groups/:id', authenticate, authorize('group', null, 'manage'), async (c) => {
+groups.delete('groups/:id', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
   const { id } = c.req.param();
+  console.log("id:", id);
 
   const group = db.prepare('SELECT id FROM groups WHERE id = ?').get(id);
   if (!group) {

@@ -12,21 +12,90 @@ export function pageForumGroups() {
   const groupDescription = van.state('');
 
   function renderFormGroups(){
-    return div({class:"form-container"},
+    return div({class:"ccontent"},
       h3("Add Group"),
-      div({class:"group-form-alert"}),
-      div({id:"group-form"},
-        div({class:"mb-3"},
-          label("Group Name"),
-          input({id:"name",value:groupName,oninput:(e)=>groupName.val=e.target.value})
-        ),
-        div({class:"mb-3"},
-          label("Description"),
-          textarea({id:"description",value:groupDescription,oninput:(e)=>groupDescription.val=e.target.value}),
-        ),
-        button({type:"submit",onclick:btnAddGroup},"Add Group")
+      div({class:"modal-form-group"}),
+      div({id:"modal-form-group"},
+        label("Group Name: "),
+        input({id:"name",type:"text",value:groupName,oninput:(e)=>groupName.val=e.target.value})
       ),
+      div({id:"modal-form-group"},
+        label("Description: "),
+        textarea({id:"description",value:groupDescription,oninput:(e)=>groupDescription.val=e.target.value}),
+      ),
+      div({id:"modal-actions"},
+        button({type:"submit",onclick:btnAddGroup},"Add Group")
+      )
     );
+  }
+
+  const userId = van.state('');
+  const groupId = van.state('');
+
+  async function btnAddGroupMembership(){
+    console.log("userId:", userId.val);
+    console.log("groupId:", groupId.val);
+    const jsonData = {
+      userId:parseInt(userId.val, 10),
+      groupId:parseInt(groupId.val, 10),
+    }
+
+    try {
+      const data = await useFetch(`/api/groups/membership`,{
+        method: 'POST',
+        body: JSON.stringify(jsonData),
+      });
+      console.log(data);
+      loadMemberships(groupId.val);
+      if(data?.error){
+        notify({
+          color:Color.error,
+          content:data.error
+        });
+        return;
+      }
+      notify({
+        color:Color.success,
+        content:"Assign Group Member Ship Pass!"
+      });
+    } catch (error) {
+      notify({
+        color:Color.error,
+        content:"Assign Group Member Ship Fail!"
+      });
+    }
+  }
+
+  async function btnRemoveMGroupMembership(){
+    console.log("userId:", userId.val);
+    console.log("groupId:", groupId.val);
+    const jsonData = {
+      userId:parseInt(userId.val, 10),
+      groupId:parseInt(groupId.val, 10),
+    }
+    console.log(jsonData);
+
+    try {
+      const data = await useFetch(`/api/groups/membership`,{
+        method: 'DELETE',
+        body:JSON.stringify(jsonData)
+      });
+      console.log(data);
+      if(data?.error){
+        notify({
+          color:Color.error,
+          content:data.error
+        });
+        return;
+      }
+      notify({
+        color:Color.success,
+        content:"Remove Group Membership Delete!"
+      });
+      
+    } catch (error) {
+      console.log("ERROR");
+    }
   }
 
   function renderFormGroupMembership(){
@@ -34,20 +103,20 @@ export function pageForumGroups() {
       h3("Manage Group Membership"),
       div({class:"form-container"},
         div({id:"membership-form-alert", class:"alert"}),
-        form({id:"group-form"},
-          div({class:"mb-3"},
+          div({class:"modal-form-group"},
             label("Group"),
-            select({id:"group_id"},
+            select({id:"group_id",value:groupId,onchange:(e)=>groupId.val=e.target.value},
               option("Select Group")
             ),
           ),
-          div({class:"mb-3"},
+          div({class:"modal-form-group"},
             label("User ID"),
-            input({id:"user_id"}),
+            input({id:"user_id",value:userId,oninput:(e)=>userId.val=e.target.value}),
           ),
-          button({type:"submit"},"Add Membership"),
-          button({type:"submit"},"Remove Membership"),
-        ),
+          div({class:"modal-actions"},
+            button({onclick:btnAddGroupMembership},"Add Membership"),
+            button({onclick:btnRemoveMGroupMembership},"Remove Membership"),
+          ),
       ),
     );
   }
@@ -66,6 +135,42 @@ export function pageForumGroups() {
         tbody({id:"memberships-table"}),
       ),
     )
+  }
+
+  async function fetch_delete_groupid(id){
+    const data = await useFetch(`/api/groups/${id}`,{
+      method:'DELETE'
+    });
+
+    console.log("data: ", data);
+    if(data){
+      if(data?.error == 'Group not found'){
+        notify({
+          color:Color.error,
+          content:data.error
+        })
+        return;
+      }
+
+      if(data?.message == 'Group deleted'){
+        notify({
+          color:Color.success,
+          content:data.message
+        })
+      }
+    }
+
+  }
+
+
+  const isDeleteGroupModal = van.state(false);
+  function btnRemoveGroupId(id, name){
+    isDeleteGroupModal.val=false;
+    van.add(document.body, Modal({closed:isDeleteGroupModal},div(
+      label(`Delete Group: ${name} (ID:${id})`),
+      button({onclick:()=>{fetch_delete_groupid(id)}},"Delete"),
+      button({onclick:()=>{isDeleteGroupModal.val=true}},"Cancel"),
+    )));
   }
 
   function renderGroupsTable(){
@@ -87,6 +192,9 @@ export function pageForumGroups() {
   }
 
   async function loadGroups() {
+
+    
+
     try {
       const data = await useFetch('/api/groups');
       console.log(data);
@@ -101,9 +209,14 @@ export function pageForumGroups() {
             td(item.name),
             td(item.description ),
             td(item.created_at),
-            td(button({onclick:()=>loadMemberships(item.id)},"View Members")),
+            td(
+              button({onclick:()=>loadMemberships(item.id)},"View Members"),
+              button({onclick:()=>btnRemoveGroupId(item.id,item.name)},"Delete")
+            ),
           )
         );
+
+        //SELECT for options
         van.add(groupSelect,
           option({value:item.id}, `${item.name} (ID:${item.id})`)
         );
