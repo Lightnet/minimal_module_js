@@ -58,6 +58,7 @@ export function pageForumGroups() {
         color:Color.success,
         content:"Assign Group Member Ship Pass!"
       });
+      
     } catch (error) {
       notify({
         color:Color.error,
@@ -114,8 +115,8 @@ export function pageForumGroups() {
             input({id:"user_id",value:userId,oninput:(e)=>userId.val=e.target.value}),
           ),
           div({class:"modal-actions"},
-            button({onclick:btnAddGroupMembership},"Add Membership"),
-            button({onclick:btnRemoveMGroupMembership},"Remove Membership"),
+            button({class:"normal",onclick:btnAddGroupMembership},"Add Membership"),
+            button({class:"warn",onclick:btnRemoveMGroupMembership},"Remove Membership"),
           ),
       ),
     );
@@ -161,6 +162,13 @@ export function pageForumGroups() {
         console.log("item_group:", item_group)
         let parentNode = item_group.parentNode;
         parentNode.removeChild(item_group);
+
+        let option_group  = document.getElementById(`ogroupid-${id}`);
+        parentNode = option_group.parentNode;
+        parentNode.removeChild(option_group);
+
+
+
       }
     }
   }
@@ -169,14 +177,13 @@ export function pageForumGroups() {
 
   }
 
-
   const isDeleteGroupModal = van.state(false);
   function btnRemoveGroupId(id, name){
     isDeleteGroupModal.val=false;
     van.add(document.body, Modal({closed:isDeleteGroupModal},div(
       label(`Delete Group: ${name} (ID:${id})`),
-      button({onclick:()=>{fetch_delete_groupid(id);isDeleteGroupModal.val=true}},"Delete"),
-      button({onclick:()=>{isDeleteGroupModal.val=true}},"Cancel"),
+      button({class:"warn",onclick:()=>{fetch_delete_groupid(id);isDeleteGroupModal.val=true}},"Delete"),
+      button({class:"normal",onclick:()=>{isDeleteGroupModal.val=true}},"Cancel"),
     )));
   }
 
@@ -215,16 +222,16 @@ export function pageForumGroups() {
             td(item.description ),
             td(item.created_at),
             td(
-              button({onclick:()=>loadMemberships(item.id)},"View Members"),
-              button({onclick:()=>btnEditGroupId(item.id,item.name)},"Edit"),
-              button({onclick:()=>btnRemoveGroupId(item.id,item.name)},"Delete")
+              button({class:"normal",onclick:()=>loadMemberships(item.id)},"View Members"),
+              button({class:"normal",onclick:()=>btnEditGroupId(item.id,item.name)},"Edit"),
+              button({class:"warn",onclick:()=>btnRemoveGroupId(item.id,item.name)},"Delete")
             ),
           )
         );
 
         //SELECT for options
         van.add(groupSelect,
-          option({value:item.id}, `${item.name} (ID:${item.id})`)
+          option({id:`ogroupid-${item.id}`,value:item.id}, `${item.name} (ID:${item.id})`)
         );
         // console.log("test....");
       }
@@ -268,6 +275,31 @@ export function pageForumGroups() {
         })
       });
       console.log(data);
+
+      //
+      if(data?.newGroup){
+        console.log(data.newGroup);
+        const _tbody = document.getElementById('groups-table');
+        const groupSelect = document.getElementById('group_id');
+
+        van.add(_tbody,
+          tr({id:`groupid-${data.newGroup.id}`},
+            td(data.newGroup.id),
+            td(data.newGroup.name),
+            td(data.newGroup.description ),
+            td(data.newGroup.created_at),
+            td(
+              button({class:"normal",onclick:()=>loadMemberships(data.newGroup.id)},"View Members"),
+              button({class:"normal",onclick:()=>btnEditGroupId(data.newGroup.id,data.newGroup.name)},"Edit"),
+              button({class:"warn",onclick:()=>btnRemoveGroupId(data.newGroup.id,data.newGroup.name)},"Delete")
+            ),
+          )
+        );
+
+        van.add(groupSelect,
+          option({id:`ogroupid-${data.newGroup.id}`,value:data.newGroup.id}, `${data.newGroup.name} (ID:${data.newGroup.id})`)
+        );
+      }
     } catch (error) {
       console.log("Faill to add group");
     }

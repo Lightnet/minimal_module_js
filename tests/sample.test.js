@@ -15,7 +15,7 @@ function createTestServer() {
   return server;
 }
 
-describe('Test', () => {
+describe('Sample Test', () => {
   let server;
   let db;
 
@@ -29,13 +29,13 @@ describe('Test', () => {
     // if (db) db.close();
   });
 
-  it('POST /api/auth/login should return response', async () => {
+  it('POST /auth/login should return response', async () => {
     // const response = request(server)
     await request(server)
-      .post('/api/auth/login')
+      .post('/auth/login')
       .send({
         email: 'guest',
-        password: 'guest1',
+        password: 'guest',
       })
       // .expect(201)
       .expect(function(res) {
@@ -43,8 +43,25 @@ describe('Test', () => {
         console.log("statusCode: ",res.statusCode);
         console.log("res.body");
         console.log(res.body);
-        console.log(res.body.name);
         console.log(res.body.token);
       })
   });
+
+  it('POST /login should return response {api, token}', async () => {
+    // const response = request(server)
+    await request(server)
+      .post('/auth/login')
+      .send({
+        email: 'guest',
+        password: 'guest',
+      })
+      // .expect(201)
+      .expect(function(res) {
+        console.log("statusCode: ",res.statusCode);
+        console.log("res.body");
+        console.log(res.body);
+        console.log(res.body.token);
+      })
+  });
+
 });

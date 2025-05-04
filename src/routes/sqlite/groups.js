@@ -140,12 +140,13 @@ groups.delete('groups/:id', authenticate, authorize('group', null, 'manage'), as
   const user = c.get('user');
   const { id } = c.req.param();
   console.log("id:", id);
-
+  const db = await getDB();
+  
   const group = db.prepare('SELECT id FROM groups WHERE id = ?').get(id);
   if (!group) {
     return c.json({ error: 'Group not found' }, 404);
   }
-  const db = await getDB();
+  
   const forumCount = db.prepare('SELECT COUNT(*) as count FROM forums WHERE moderator_group_id = ?').get(id).count;
   const boardCount = db.prepare('SELECT COUNT(*) as count FROM boards WHERE moderator_group_id = ?').get(id).count;
   if (forumCount > 0 || boardCount > 0) {

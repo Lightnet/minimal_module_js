@@ -20,8 +20,6 @@ const route_auth = new Hono({
   //strict: false
 });
 
-// route_auth.use("*", checkAccess);
-
 route_auth.post('/api/auth/signup', async (c) => {
   //const data = c.req.query()
   const data = await c.req.json()
@@ -107,7 +105,7 @@ route_auth.post('/api/auth/signin', async (c) => {
 route_auth.post('/api/auth/signout', async (c) => {
   const tokenCookie = getCookie(c, 'token');
   if(tokenCookie){
-    console.log("tokenCookie: ", tokenCookie)
+    // console.log("tokenCookie: ", tokenCookie);
     deleteCookie(c, 'token');
     return c.json({api:"PASS"});
   }
@@ -115,19 +113,12 @@ route_auth.post('/api/auth/signout', async (c) => {
   return c.json({api:"ERROR"});
 });
 
-export async function checkAccess(c, next){
-  //console.log("access...");
-  //console.log(c);
-  await next();
-  //console.log("access end...");
-}
-
 //get user data that is secure
 route_auth.get('/api/auth/user', async (c) => {
   const tokenCookie = getCookie(c, 'token');
   if(tokenCookie){
     //deleteCookie(c, 'token');
-    console.log('tokenCookie:', tokenCookie);
+    // console.log('tokenCookie:', tokenCookie);
     //console.log('tokenCookie type:', typeof tokenCookie);
     // let jsonCookie = JSON.parse(tokenCookie);
     //console.log('tokenCookie:', jsonCookie);
@@ -159,18 +150,15 @@ route_auth.get('/api/auth/user', async (c) => {
 route_auth.get('/api/user', async (c) => {
   const tokenCookie = getCookie(c, 'token');
   if(tokenCookie){
-    console.log("tokenCookie: ", tokenCookie);
-    console.log("tokenCookie Type: ", typeof tokenCookie);
+    // console.log("tokenCookie: ", tokenCookie);
+    // console.log("tokenCookie Type: ", typeof tokenCookie);
     let userToken = JSON.parse(tokenCookie);
-    console.log("userToken Type: ", typeof userToken);
-    console.log("userToken.alias: ",  userToken.alias);
-    
+    // console.log("userToken Type: ", typeof userToken);
+    // console.log("userToken.alias: ",  userToken.alias);
     const db = c.get('db');
-
     let userData = db.get_user_info(userToken.alias);
-    console.log(userData);
+    // console.log(userData);
     return c.json({api:"PASS",alias:userData.alias, role:userData.role,join: userData.create_at });
-
     //return c.json({api:"PASS"});
   }
 
@@ -205,7 +193,11 @@ route_auth.post('/auth/refresh', authenticate, async (c) => {
   const newToken = jwt.sign({ id: user.id,alias:user.username, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: '1d',
   });
-  setCookie(c, 'token', newToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
+  setCookie(c, 'token', newToken, {
+    httpOnly: true, 
+    secure: true, 
+    sameSite: 'Strict' 
+  });
   return c.json({ token: newToken });
 });
 //need to fix this later.
@@ -242,6 +234,5 @@ route_auth.post('/auth/login', async (c) => {
 route_auth.post('/login', async (c) => {
   return c.json({ api:"test" });
 });
-
 
 export default route_auth;

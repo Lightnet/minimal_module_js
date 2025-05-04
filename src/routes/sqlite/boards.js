@@ -30,7 +30,7 @@ route.get('/api/boards/:id', async (c)=>{
     const stmt = db.prepare('SELECT * FROM boards WHERE forum_id = ?');
     const results = stmt.all(id);
     console.log("BOARDS:", results);
-    return c.json(results);  
+    return c.json(results);
   } catch (error) {
     return c.json({api:"ERROR"});
   }

@@ -152,8 +152,8 @@ if (process.env.NODE_ENV !== 'test') {
     });
 
     //console.log(io);
-    // console.log('Process Type:',typeServer)
-    // console.log(`hono server  http://localhost:${PORT}`)
+    console.log('Process Type:',typeServer)
+    console.log(`hono server  http://localhost:${PORT}`)
     // let urlList = [
     //   `http://localhost:${PORT}/admin`,
     // ];

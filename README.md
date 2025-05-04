@@ -5,6 +5,7 @@
 # Status:
 - unstable
 - work in progress auths, groups and permissions.
+- testing framework script to test forum for rest api.
 
 # Information:
   Work in progress. Using minimal packages in style vanilla js.
@@ -18,6 +19,9 @@
 
 # Gaols:
   To everything very simple for testing builds. As for plugin or mod is just idea. Which required time to work on.
+
+# testing framework:
+ Needed to run sample test build to make sure the forum, board, topic and comment for create, update, delete. As well other features.
 
 ## File Size:
 - node_modules 18.2 MB
