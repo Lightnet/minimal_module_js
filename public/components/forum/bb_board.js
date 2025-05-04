@@ -63,6 +63,7 @@ function createFormBoard({closed}){
             color:Color.error,
             content:"Error Fetch Board!"
           });
+          return;
         }
       }else{
         notify({

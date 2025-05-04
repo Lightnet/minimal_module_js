@@ -54,7 +54,20 @@ permissions.post('permissions', authenticate, authorize('group', null, 'manage')
 });
 
 permissions.delete('permissions/:id', authenticate, authorize('group', null, 'manage'), async (c) => {
-  return c.json({ error: error.message }, 400);
+  const { id } = c.req.param();
+
+  try {
+    const db = await getDB();
+    console.log("delete id:", id);
+    const permissionId = parseInt(id, 10);
+    const stmt = db.prepare('DELETE FROM permissions WHERE id = ?');
+    stmt.run(permissionId);
+    console.log("DELETE...");
+  return c.json({api:'DELETE'});  
+  } catch (error) {
+    return c.json({ error: "ERROR PERMISSION DELETE FAILED!" }, 400);  
+  }
+
 });
 
 // Serve permission management HTML

@@ -39,9 +39,10 @@ route.get('/api/boards/:id', async (c)=>{
 // Boards get parent id
 route.get('/api/board/:id', async (c)=>{
   try {
+    const { id } = c.req.param();
     const db = await getDB();
     const stmt = db.prepare('SELECT * FROM boards WHERE id = ?');
-    const results = stmt.get(forumId);
+    const results = stmt.get(id);
     return c.json(results);
   } catch (error) {
     return c.json({api:"ERROR"});

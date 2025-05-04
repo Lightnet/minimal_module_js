@@ -42,6 +42,55 @@ export function pageForumPermissions() {
     }
   }
 
+  async function cConfirmDeleteFetch(item){
+    try {
+      let data = await useFetch(`/api/permissions/${item.id}`,{
+        method:'DELETE'
+      });
+      console.log(data)
+      if(data){
+        if(data?.error){
+          notify({
+            color:Color.error,
+            content:data.error
+          });
+          return;
+        }
+        notify({
+          color:Color.success,
+          content:`Delete Permission! ID:${item.id} Type:${item.entity_type} Entity ID:${item.entity_id} Resource:${item.resource_type} Action:${item.action}`
+        });
+
+        let permissionNode = document.getElementById(item.id);
+        console.log("permissionNode: ", permissionNode);
+        console.log("parentNode: ", permissionNode.parentNode);
+        if( permissionNode.parentNode){
+          permissionNode.parentNode.removeChild(permissionNode);
+        }
+
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async function btnDeletePermission(item){
+    //
+    const isDeleteModal = van.state(false);
+    van.add(document.body, Modal({closed:isDeleteModal},
+      div(
+        div(
+          label(`Confirm Delete? ID: ${item.id} Type:${item.entity_type} Entity:${item.entity_id}`),
+        ),
+        div(
+          button({class:"warn",onclick:()=>{cConfirmDeleteFetch(item);isDeleteModal.val=true}},"Delete"),
+          button({class:"normal",onclick:()=>isDeleteModal.val=true},"Cancel")
+        )
+      )
+    ))
+
+  }
+
   async function loadPermissions() {
     try {
       console.log("update table permissions.")
@@ -55,7 +104,7 @@ export function pageForumPermissions() {
 
       for(let item of data){
         van.add(_tbody,
-          tr(
+          tr({id:item.id},
             td(item.id),
             td(item.entity_type),
             td(item.entity_id),
@@ -63,6 +112,9 @@ export function pageForumPermissions() {
             td(item.resource_id || '-'),
             td(item.action),
             td(item.allowed ? 'Yes' : 'No'),
+            td(
+              button({class:"warn",onclick:()=>btnDeletePermission(item)}, "DELETE")
+            ),
           )
         )
       }
@@ -197,6 +249,7 @@ export function pageForumPermissions() {
             th("Resource ID"),
             th("Action"),
             th("Allowed"),
+            th("Actions"),
           ),
         ),
         tbody({id:"permissions-table"})

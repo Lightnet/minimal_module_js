@@ -2,32 +2,6 @@
 
 # License: MIT
 
-# Status:
-- unstable
-- work in progress auths, groups and permissions.
-- testing framework script to test forum for rest api.
-
-# Information:
-  Work in progress. Using minimal packages in style vanilla js.
-
-  Current Forum test build.
-
-# Design:
-  To build simple forum test to see how far smallest.
-
-  Still need to have secure security and flood spam protection is no easy task.
-
-# Gaols:
-  To everything very simple for testing builds. As for plugin or mod is just idea. Which required time to work on.
-
-# testing framework:
- Needed to run sample test build to make sure the forum, board, topic and comment for create, update, delete. As well other features.
-
-## File Size:
-- node_modules 18.2 MB
-- public 232 KB
-- src 160 KB
-
 # Packages:
 - vanjs 1.5.5
 - uuid 11.1.0
@@ -38,6 +12,46 @@
 - socket.io 4.8.1
 - dotenv 16.5.0
 - jsonwebtoken 9.0.2
+
+# Status:
+- unstable
+- work in progress auths, groups and permissions.
+- testing framework script to test forum for rest api.
+
+# Information:
+  Work in progress. Using minimal packages in vanilla javascript, type module and import.
+
+  Current Forum test build.
+
+# Design:
+  To build simple forum test to see how far smallest.
+
+  Still need to have secure security and flood spam protection is no easy task.
+
+# Gaols:
+  To have simple forum and message system to handle basic access to posts.
+
+  To keep everythings simple for testing builds. As for plugin or mod is just idea. Which required time to work on.
+
+# Testing Framework:
+ Needed to run sample test build to make sure the forum, board, topic and comment for create, update, delete. As well other features.
+
+## File Size:
+- node_modules 18.2 MB
+- public 232 KB
+- src 160 KB
+
+# Audit Logs:
+  Simple logging. Base on the Grok 3.0 A.I model reference. 
+```js
+import { logAudit } from '../../utils/audit.js';
+//...
+logAudit(user.id, 'create_group', {
+  group_id: newGroup.id, 
+  name,
+  description
+});
+```
 
 # Module:
 - [x] notify
@@ -50,7 +64,10 @@
   - [x] NotifyContainer (notice message html)
   - [x] NotifyManager (handle messages element ancher)
   - [x] notify (set variable args to push message notice)
-
+- [ ] audit logs
+  - [x] logAudit
+  - [ ] layout
+  - [ ] backup
 - [ ] theme
   - [x] light
   - [x] dark
@@ -78,6 +95,10 @@
     - [ ] Edit book
     - [ ] Books
     - [ ] Pages
+- [ ] backup
+  - [ ] layout
+  - [ ] save
+  - [ ] load / restore
 
 # Page Admin
 - [ ] Server status
@@ -94,8 +115,16 @@
   - [ ] layout
 
 # Forum 
+- [ ] groups (wip)
+    - [ ] members
+    - [x] add 
+    - [x] delete
+    - [ ] update
 - [ ] permission (wip)
     - [ ] members
+    - [x] add 
+    - [x] delete
+    - [ ] update
 - [ ] settings (n/a)
     - [ ] cookies
     - [ ] theme
@@ -140,6 +169,7 @@
  * Grok 3 AI model.
     * auth
     * permission
+    * group
  * https://vanjs.org
  * 
 
