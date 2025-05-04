@@ -1,0 +1,31 @@
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
+import { Hono } from 'hono';
+import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
+import { scriptHtml02 } from '../../pages.js';
+import { getDB } from '../../../db/sqlite/sqlite_db.js';
+import { authenticate, authorize } from '../../../middleware/sqlite/sqlite_auth.js';
+
+const route = new Hono({ 
+  //strict: false 
+});
+
+route.get('/logs', authenticate, authorize('audit_logs', null, 'manage'), async (c) => {    
+  try {
+    const db = await getDB();
+    const stmt = db.prepare('SELECT * FROM audit_logs');
+    const groups = stmt.all();
+    return c.json(groups);
+  } catch (error) {
+    return c.json({error:"error logs"})
+  }
+
+  // return c.html(pageHtml);
+});
+
+export default route;

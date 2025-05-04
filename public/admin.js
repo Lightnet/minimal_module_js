@@ -5,9 +5,18 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 import van from "vanjs-core";
-import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-import { Page_Admin, Page_Logs, Page_Accounts, Page_Tickets, Page_Reports, Page_Database, Page_Settings } from "/components/admin/admin_access.js";
-import { Page_Backup } from "./components/admin/admin_access.js";
+import { Router } from "vanjs-routing";
+
+import {
+  pageAccounts,
+  pageBackup,
+  pageDatabase,
+  pageIndex,
+  pageLogs,
+  pageReports,
+  pageSettings,
+  pageTickets,
+} from '/components/admin/index.js'
 
 //import useFetch from "../libs/useFetch.js";
 // import { UIStyle } from "/components/theme/theme.js";
@@ -34,7 +43,6 @@ van.add(document.head, link({
   href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 }))
 
-
 const PageAdmin = () => {
   
   console.log("ADMIN");
@@ -50,14 +58,14 @@ const PageAdmin = () => {
 
   return Router({
     routes: [
-      { path: "/admin", component:  Page_Admin},
-      { path: "/admin/logs", component:  Page_Logs},
-      { path: "/admin/accounts", component:  Page_Accounts},
-      { path: "/admin/tickets", component:  Page_Tickets},
-      { path: "/admin/reports", component:  Page_Reports},
-      { path: "/admin/database", component:  Page_Database},
-      { path: "/admin/settings", component:  Page_Settings},
-      { path: "/admin/backup", component:  Page_Backup},
+      { path: "/admin", component:  pageIndex},
+      { path: "/admin/logs", component:  pageLogs},
+      { path: "/admin/accounts", component:  pageAccounts},
+      { path: "/admin/tickets", component:  pageTickets},
+      { path: "/admin/reports", component:  pageReports},
+      { path: "/admin/database", component:  pageDatabase},
+      { path: "/admin/settings", component:  pageSettings},
+      { path: "/admin/backup", component:  pageBackup},
     ]
   })
 }

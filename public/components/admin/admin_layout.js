@@ -9,7 +9,6 @@ import van from "vanjs-core";
 import { toggleTheme } from "../theme/theme.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import useFetch from '/libs/useFetch.js';
-import { El_CreateReportForm } from "../report/report.js";
 
 const {button, div, span, label} = van.tags;
 

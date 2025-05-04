@@ -8,17 +8,19 @@
 import van from "vanjs-core";
 // import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { HomeNavMenu } from "../navmenu.js";
-import {aliasState} from "/components/context.js";
-//import { button_test } from "../tests/buttonname.js";
+import { aliasState, roleState } from "../context.js";
 
 const {button, h1, div, label} = van.tags;
 
 function Page_Home() {
 
-  const username = van.derive(()=>{
-    //console.log("user change name:", aliasState.val);
-    return aliasState.val
+  const username = van.derive(()=>aliasState.val);
+
+  const role = van.derive(()=>{
+    console.log("roleState.val:", roleState.val);
+    return roleState.val
   });
+
 
   return div({id:"home" },
     HomeNavMenu(),
@@ -29,6 +31,7 @@ function Page_Home() {
       div({class:"ccontent"},
         label("[Home]"), 
         label("User: ", username),
+        label("Role: ", role),
       ),
     ),
   );

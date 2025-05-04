@@ -5,7 +5,8 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-import jwt from 'jsonwebtoken';
+//import jwt from 'jsonwebtoken';
+import { verify, decode } from 'hono/jwt'
 import { checkPermission } from '../../models/sqlite/sqlite_user.js';
 import { getCookie } from 'hono/cookie';
 
@@ -20,6 +21,8 @@ export async function authenticate(c, next) {
   } else {
     // Fallback to cookie
     const tokenCookie = getCookie(c, 'token');
+    // const tokenCookie = getCookie(c, 'auth_token');
+    console.log("tokenCookie: ", tokenCookie);
     if (tokenCookie) {
       token = tokenCookie;
     }
@@ -32,7 +35,9 @@ export async function authenticate(c, next) {
 
   try {
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'SECRET');
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET || 'SECRET');
+    const decoded = verify(token, process.env.JWT_SECRET || 'SECRET');
+    console.log("decoded: ", decoded);
     c.set('user', decoded); // Store user in context
     return await next(); // Proceed to next middleware/route
   } catch (error) {
@@ -41,8 +46,7 @@ export async function authenticate(c, next) {
 }
 
 
-export function authorize(resourceType, resourceId, action) {
-  
+export function authorize(resourceType, resourceId, action) {  
   return async (ctx, next) => {
     // console.log("[[ ctx ]]");
     // console.log(ctx);

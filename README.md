@@ -97,13 +97,15 @@ logAudit(user.id, 'create_group', {
     - [ ] Pages
 - [ ] backup
   - [ ] layout
-  - [ ] save
+  - [x] save
+  - [x] save table name
   - [ ] load / restore
 
 # Page Admin
 - [ ] Server status
 - [ ] Database
 - [ ] Loggings
+  - [x] simple audit logs
 - [ ] Members
 - [ ] Permissions
 - [ ] Ban List

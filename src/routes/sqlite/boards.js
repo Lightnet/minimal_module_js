@@ -6,7 +6,7 @@
 */
 
 import { Hono } from 'hono';
-import { scriptHtml02 } from '../pages.js';
+// import { scriptHtml02 } from '../pages.js';
 import { getDB } from '../../db/sqlite/sqlite_db.js';
 import { authenticate } from '../../middleware/sqlite/sqlite_auth.js';
 

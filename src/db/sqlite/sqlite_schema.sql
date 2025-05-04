@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS permissions (
   resource_id INTEGER, -- Optional: specific resource ID
   action TEXT NOT NULL, -- e.g., create, read, update, delete
   allowed INTEGER NOT NULL DEFAULT 1, -- 1 for true, 0 for false
-  UNIQUE(entity_type, entity_id, resource_type, resource_id, action)
+  UNIQUE(entity_type, entity_id, resource_type, action)
 );
 
 CREATE TABLE IF NOT EXISTS audit_logs (
@@ -101,9 +101,9 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 
 CREATE TABLE IF NOT EXISTS reports (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  aliasId varchar(255),
+  user_id INTEGER,
   title varchar(255) NOT NULL,
-  sumbittype varchar(255) NOT NULL,
+  type varchar(255) NOT NULL,
   content TEXT(65535) NOT NULL,
   isdone BOOLEAN DEFAULT 0,
   isclose BOOLEAN DEFAULT 0,

@@ -4,10 +4,8 @@
   Created By: Lightnet
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
-
-// 
 // https://github.com/orgs/honojs/discussions/1355
-// 
+// https://hono.dev/helpers/cookie
 
 import { Server } from 'socket.io'
 //import { Server as HttpServer } from 'http'
@@ -18,24 +16,14 @@ import { Hono } from 'hono';
 //import { html } from 'hono/html';
 //import { logger } from 'hono/logger';
 //import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
-//import { jwt } from 'hono/jwt'
-// https://hono.dev/helpers/cookie
+import { jwt } from 'hono/jwt'
 
-// import SQLDB from './database/node_sql_database.js';
-import auth from './routes/sqlite/auth.js';
-// import blog from './routes/blog.js';
+import { scriptHtml02 } from './routes/pages.js';
+import module_routes from './routes/index.js'
+const PORT = process.env.PORT || 3000;
+// const {head, body, style, script} = van.tags
 
-import pages, { scriptHtml02 } from './routes/pages.js';
-import admin from './routes/sqlite/admin.js';
-// import message from './routes/message.js';
-
-import forum from './routes/sqlite/forums.js';
-import board from './routes/sqlite/boards.js';
-import topic from './routes/sqlite/topics.js';
-import comment from './routes/sqlite/comments.js';
-import groups from './routes/sqlite/groups.js';
-import permissions from './routes/sqlite/permissions.js';
-import backup from './routes/sqlite/backup.js'
+console.log(jwt);
 
 // middleware for db
 // note it reload for every request
@@ -55,17 +43,18 @@ export function useDB(options){
     await next();
   }
 }
-// DATABASE
-// const db = new SQLDB();
-//const db = new ORMSQLITE();
-
-const PORT = process.env.PORT || 3000;
-// const {head, body, style, script} = van.tags
 
 // Web Fetch Server
 const app = new Hono({ 
   //strict: false 
 });
+
+app.use('/auth/*',
+  jwt({
+    secret: process.env.JWT_SECRET || 'SECRET',
+    cookie:'token'
+  })
+)
 
 //middleware
 //note this will request every action if set to '*' to allow all url
@@ -85,38 +74,16 @@ const app = new Hono({
   //console.log(`[${c.req.method}] ${c.req.url}`)
   //await next()
 //})
-// console.log("AUTH...");
-app.route('/', auth);
-// app.route('/', message);
-// app.route('/', blog);
-app.route('/', forum);
-app.route('/', board);
-app.route('/', topic);
-app.route('/', comment);
-app.route('/api/', groups);
-app.route('/api/', permissions);
-app.route('/', admin);
-app.route('/', pages);
-app.route('/api/', backup);
+// 
+app.route('/', module_routes);
 //<script type="module" src="/client.js"></script>
-
 app.get('/', (c) => {
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
 
-app.get('/test', (c) => {
-  const pageHtml = scriptHtml02("/index.js");
-  return c.html(pageHtml);
-});
-
-app.post('/login', async (c) => {
-  return c.json({ api:"test" });
-});
-
 //set up static folder for public access
 app.use('/*', serveStatic({ root: './public' }));
-
 
 //wild card url for router vanjs added last
 // app.use('/*',  (c) => {
@@ -155,14 +122,13 @@ if (process.env.NODE_ENV !== 'test') {
 
     //console.log(io);
     console.log('Process Type:',typeServer)
-    console.log(`hono server  http://localhost:${PORT}`)
-    // let urlList = [
-    //   `http://localhost:${PORT}/admin`,
-    // ];
-
-    // for(var myurl in urlList){
-    //   console.log(urlList[myurl]);
-    // }
+    let urlList = [
+      `http://localhost:${PORT}`,
+      `http://localhost:${PORT}/admin`,
+    ];
+    for(var myurl in urlList){
+      console.log(urlList[myurl]);
+    }
   }
 }
 

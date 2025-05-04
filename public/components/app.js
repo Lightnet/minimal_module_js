@@ -8,7 +8,7 @@
 import van from "vanjs-core";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import useFetch from "/libs/useFetch.js";
-import { aliasState, loginState } from "/components/context.js";
+import { aliasState, loginState, roleState } from "/components/context.js";
 
 import { Page_Home } from "./pages/page_home.js";
 import { ForgotPage, SignInPage, SignOutPage, SignUpPage } from "./pages/page_auth.js";
@@ -34,12 +34,13 @@ const App = () => {
 
   async function login_check(){
     let data = await useFetch('/api/auth/user');
-    //console.log('DATA: ', data);
+    // console.log('DATA: ', data);
     if(data){
       if(data.api){
         if(data.api == 'PASS'){
           //console.log("[[ data.alias: ", data.alias);
           aliasState.val = data.alias
+          roleState.val = data.role;
           loginState.val = true;
         }else{
           loginState.val = false;

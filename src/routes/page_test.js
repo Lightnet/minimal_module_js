@@ -5,7 +5,13 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-//app.get('/page', (c) => {
+import { Hono } from 'hono';
+
+const route = new Hono({ 
+  //strict: false 
+});
+
+//route.get('/page', (c) => {
   //const payload = c.get('jwtPayload')
   //console.log(payload)
   //const token = c.get('token')
@@ -13,26 +19,37 @@
   //return c.text('You are authorized')
 //})
 //test
-//app.get('/auth/page', (c) => {
+//route.get('/auth/page', (c) => {
   //const payload = c.get('jwtPayload')
   //console.log(payload)
   //return c.text('You are authorized')
 //})
 
-app.get('/setcookie', (c) => {
+route.get('/setcookie', (c) => {
   setCookie(c, 'token', 'test',{
     httpOnly:true
   });
   return c.text('Hono!')
 })
 
-app.get('/getcookie', (c) => {
+route.get('/getcookie', (c) => {
   const token = getCookie(c, 'token')
   console.log(token);
   return c.text('Hono!')
 })
 
-app.get('/delcookie', (c) => {
+route.get('/delcookie', (c) => {
   deleteCookie(c, 'token')
   return c.text('Hono!')
 })
+
+route.get('/test', (c) => {
+  const pageHtml = scriptHtml02("/index.js");
+  return c.html(pageHtml);
+});
+
+route.post('/login', async (c) => {
+  return c.json({ api:"test" });
+});
+
+export default route;

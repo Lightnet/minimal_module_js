@@ -82,6 +82,19 @@ route.get("/:name", (c, next) => {
   return next();
 });
 
+route.get("/auth/jwt", (c, next) => {
+  const payload = c.get('jwtPayload')
+  console.log("payload: ", payload);
+  return c.text('test jwt')
+});
+
+
+route.get("/jwt", (c, next) => {
+  const payload = c.get('jwtPayload')
+  console.log("payload: ", payload);
+  return c.text('test jwt')
+});
+
 export default route;
 export {
   scriptHtml02

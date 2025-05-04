@@ -15,6 +15,7 @@ import { MessageBoard } from 'vanjs-ui';
 const board = new MessageBoard({top: "20px"});
 const loginState = van.state(false);
 const aliasState = van.state('Guest');
+const roleState = van.state('user');
 const aliasDataState = van.state({});
 const tokenState = van.state({});
 
@@ -30,6 +31,7 @@ export {
   board,
   loginState,
   aliasState,
+  roleState,
   aliasDataState,
   tokenState,
   forumIDState,

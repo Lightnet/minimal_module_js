@@ -9,8 +9,9 @@
 
 //AUTH STUFF
 // const jwt = require('jsonwebtoken');
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import { Hono } from 'hono';
+import { decode, sign, verify } from 'hono/jwt';
 import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
 
 import { adminCreateUser, checkUserExists, login, signup } from '../../models/sqlite/sqlite_user.js';
@@ -71,18 +72,29 @@ route_auth.post('/api/auth/signin', async (c) => {
           let token = {
             id: result.id, 
             alias: data.alias, 
-            role: result.role
+            role: result.role,
+            // expiresIn: '1d',
           };
           // console.log("token: ",token);
-          token = jwt.sign(token, process.env.JWT_SECRET || 'SECRET', {
-            expiresIn: '1d',
-          });
+          // token = jwt.sign(token, process.env.JWT_SECRET || 'SECRET', {
+          //   expiresIn: '1d',
+          // });
+          token = await sign(token, process.env.JWT_SECRET || 'SECRET');
+
           // token=JSON.stringify(token);
           setCookie(c, 'token', token,{
             httpOnly:true,
             path:"/"
           });
-          return c.json({api:'PASS',alias:data.alias});
+          // setCookie(c, 'token', token,{
+          //   httpOnly:true,
+          //   path:"/"
+          // });
+          return c.json({
+            api:'PASS',
+            alias:data.alias,
+            role:result.role
+          });
           // return c.json(result);
         }else{
           console.log("NOT CORRECT PASS!")
@@ -115,25 +127,26 @@ route_auth.post('/api/auth/signout', async (c) => {
 
 //get user data that is secure
 route_auth.get('/api/auth/user', async (c) => {
+  // const tokenCookie = getCookie(c, 'token');
   const tokenCookie = getCookie(c, 'token');
   if(tokenCookie){
     //deleteCookie(c, 'token');
     // console.log('tokenCookie:', tokenCookie);
-    //console.log('tokenCookie type:', typeof tokenCookie);
-    // let jsonCookie = JSON.parse(tokenCookie);
-    //console.log('tokenCookie:', jsonCookie);
-    //console.log('tokenCookie alias:', jsonCookie.alias);
-    // return c.json({api:"PASS",alias: jsonCookie.alias});
-    // return c.json({api:"PASS"});
-
     try {
       // var decoded = jwt.verify(tokenCookie, 'wrong-secret');
-      var userToken = jwt.verify(tokenCookie, process.env.JWT_SECRET || 'SECRET');
+      // var userToken = jwt.verify(tokenCookie, process.env.JWT_SECRET || 'SECRET');
+      var userToken = await verify(tokenCookie, process.env.JWT_SECRET || 'SECRET');
+      console.log("userToken")
       console.log(userToken)
 
-      return c.json({api:"PASS",alias:userToken.alias});
+      return c.json({
+        api:"PASS",
+        alias:userToken.alias,
+        role:userToken.role
+      });
     } catch(err) {
       // err
+      console.log("error:",err.message);
       return c.json({api:"ERROR"});
     }
 

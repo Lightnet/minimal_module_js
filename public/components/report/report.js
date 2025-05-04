@@ -28,22 +28,22 @@ function El_CreateReportForm(){
 // CREATE REPORT FORUM
 function createReportForm({closed}){
 
-  const forumTitle = van.state('test');
-  const forumType = van.state('user');
-  const forumContent = van.state('test');
+  const formTitle = van.state('test');
+  const formType = van.state('user');
+  const formContent = van.state('test');
 
   async function btnCreateForum(){
     console.log("create report form");
-    console.log(forumTitle.val);
-    console.log(forumType.val);
-    console.log(forumContent.val);
+    console.log(formTitle.val);
+    console.log(formType.val);
+    console.log(formContent.val);
     try{
       const data = await useFetch('/api/report',{
         method:'POST',
         body:JSON.stringify({
-          title:forumTitle.val,
-          sumbittype:forumType.val,
-          content:forumContent.val,
+          title:formTitle.val,
+          type:formType.val,
+          content:formContent.val,
         })
       });
       console.log(data);
@@ -58,11 +58,11 @@ function createReportForm({closed}){
   return div({id:'createReportForm', class:"ccontent"},
     div({class:"form-group"},
       label({class:"report-title"},"Title:"),
-      input({value:forumTitle,oninput: e => forumTitle.val = e.target.value, type:"text",placeholder:"Enter Report Title"}),
+      input({value:formTitle,oninput: e => formTitle.val = e.target.value, type:"text",placeholder:"Enter Report Title"}),
     ),
     div({class:"form-group"},
       label({class:"report-type"},"Submit Type:"),
-      select({value:forumType,oninput: e => forumType.val = e.target.value,},
+      select({value:formType,oninput: e => formType.val = e.target.value,},
         option({},"User"),
         option({},"Bugs"),
         option({},"Feedback"),
@@ -70,7 +70,7 @@ function createReportForm({closed}){
     ),
     div({class:"form-group"},
       label({class:"report-content"},"Content:"),
-      textarea({value:forumContent,oninput: e => forumContent.val = e.target.value,placeholder:"Enter report details"}),
+      textarea({value:formContent,oninput: e => formContent.val = e.target.value,placeholder:"Enter report details"}),
     ),
 
     div({class:"form-group"},

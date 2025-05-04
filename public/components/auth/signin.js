@@ -34,9 +34,10 @@ const SignInEL = () => {
     });
     console.log(data);
     if(data){
-      if(data.api){
+      if(data?.api){
         if(data.api == 'PASS'){
           aliasState.val = user.val
+          roleState.val = data.role;
           loginState.val = true;
           pass.val = '';
           notify({
