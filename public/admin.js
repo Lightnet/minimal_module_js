@@ -7,6 +7,7 @@
 import van from "vanjs-core";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import { Page_Admin, Page_Logs, Page_Accounts, Page_Tickets, Page_Reports, Page_Database, Page_Settings } from "/components/admin/admin_access.js";
+import { Page_Backup } from "./components/admin/admin_access.js";
 
 //import useFetch from "../libs/useFetch.js";
 // import { UIStyle } from "/components/theme/theme.js";
@@ -56,6 +57,7 @@ const PageAdmin = () => {
       { path: "/admin/reports", component:  Page_Reports},
       { path: "/admin/database", component:  Page_Database},
       { path: "/admin/settings", component:  Page_Settings},
+      { path: "/admin/backup", component:  Page_Backup},
     ]
   })
 }

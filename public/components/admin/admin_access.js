@@ -12,7 +12,14 @@ import { toggleTheme } from "../theme/theme.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import useFetch from '/libs/useFetch.js';
 import { El_CreateReportForm } from "../report/report.js";
-const {button, div, span, label} = van.tags;
+import { AdminNavMenus, Header } from "./admin_layout.js";
+const {button, div, span, label,
+  table,
+  thead,
+  tr,
+  td,
+  tbody
+} = van.tags;
 
 // Mock dependencies (replace with actual imports)
 // const El_CreateReportForm = () => van.tags.div("Report Form Placeholder");
@@ -23,46 +30,6 @@ const {button, div, span, label} = van.tags;
 //     { id: 2, title: "Report 2", content: "Content 2", isdone: true, isclose: false },
 //   ];
 // };
-
-function AdminNavMenus() {
-  return div(
-    { class: "sidebar active" },
-    div(
-      toggleTheme(),
-      button({ onclick: () => navigate("/admin") }, "Home"),
-      button({ onclick: () => navigate("/admin/logs") }, "Logs"),
-      button({ onclick: () => navigate("/admin/reports") }, "Reports"),
-      button({onclick:()=>navigate('/admin/accounts')},'Accounts'),
-      button({onclick:()=>navigate('/admin/tickets')},'Tickets'),
-      button({onclick:()=>navigate('/admin/database')},'Database'),
-      button({onclick:()=>navigate('/admin/settings')},'Settings'),
-    )
-  );
-}
-
-function Header() {
-  const isSidebarActive = van.state(true);
-
-  function toggleSidebar() {
-    console.log("Toggle...")
-    isSidebarActive.val = !isSidebarActive.val;
-    const sidebar = document.querySelector(".sidebar");
-    if (sidebar) {
-      if (isSidebarActive.val) {
-        sidebar.classList.add("active");
-      } else {
-        sidebar.classList.remove("active");
-      }
-    }
-  }
-
-  return div(
-    { class: "header" },
-    button({ class: "toggle-btn", onclick: toggleSidebar }, "☰"),
-    div({ class: "logo" }, "Admin Panel"),
-    div({ class: "user-profile" }, "User")
-  );
-}
 
 function Page_Admin() {
   return div(
@@ -173,6 +140,77 @@ function Page_Settings() {
   );
 }
 
+function Page_Backup() {
+
+
+  async function cBackUp(){
+    try {
+      const data = await useFetch(`/api/backup`);
+      console.log(data)  
+    } catch (error) {
+      console.log("error:", error.message);
+    }
+  }
+
+  async function cBackupTableName(name){
+    try {
+      const data = await useFetch(`/api/backup-table/${name}`);
+      console.log(data);
+    } catch (error) {
+      console.log("error table name:", error.message);
+    }
+  }
+
+  async function cFetchTables(){
+    try {
+      const data = await useFetch(`/api/backup/tables`);
+      console.log(data)  
+      if(data?.tables){
+        let _tablebody = document.getElementById(`sqltable`);
+        for(const item of data.tables){
+           van.add(_tablebody,
+            tr(
+              td(`${item}`),
+              td(
+                button({onclick:()=>cBackupTableName(item)},"backup")
+              ),
+            )
+           )
+        }
+      }
+    } catch (error) {
+      console.log("error:", error.message);
+    }
+  }
+
+  return div(
+    { class: "container" },
+    Header(),
+    AdminNavMenus(),
+    div({ class: "main-content" },
+      div(
+        label("Backup Page"),
+      ),
+      div(
+        button({class:"normal",onclick:cBackUp},`Back Up`),
+        button({class:"warn",onclick:()=>{}},`Restore`)
+      ),
+      div(
+        button({class:"normal",onclick:cFetchTables},`Get Tables`)
+      ),
+      table(
+        thead(
+          tr(
+            td("Name:"),
+            td("Actions:"),
+          )
+        ),
+        tbody({id:"sqltable"})
+      )
+    )
+  );
+}
+
 function ButtonMaintenanceMode() {
   function btn_Maintenance_on() {
     console.log("Maintenance Mode On");
@@ -197,4 +235,5 @@ export {
   Page_Reports,
   Page_Database,
   Page_Settings,
+  Page_Backup
 }

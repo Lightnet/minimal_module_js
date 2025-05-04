@@ -35,6 +35,7 @@ import topic from './routes/sqlite/topics.js';
 import comment from './routes/sqlite/comments.js';
 import groups from './routes/sqlite/groups.js';
 import permissions from './routes/sqlite/permissions.js';
+import backup from './routes/sqlite/backup.js'
 
 // middleware for db
 // note it reload for every request
@@ -96,6 +97,7 @@ app.route('/api/', groups);
 app.route('/api/', permissions);
 app.route('/', admin);
 app.route('/', pages);
+app.route('/api/', backup);
 //<script type="module" src="/client.js"></script>
 
 app.get('/', (c) => {
