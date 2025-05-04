@@ -16,8 +16,8 @@ async function initializeDatabase(dbPathArg) {
   
   db.pragma('foreign_keys = ON');
 
-  // const schema = fs.readFileSync(path.join(__dirname, 'sqlite_schema.sql'), 'utf8');
-  // db.exec(schema);
+  const schema = fs.readFileSync(path.join(__dirname, 'sqlite_schema.sql'), 'utf8');
+  db.exec(schema);
 
   // const insertUser = db.prepare(`
   //   INSERT OR IGNORE INTO users (username, email, password_hash, role) 

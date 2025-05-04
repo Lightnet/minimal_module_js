@@ -5,7 +5,8 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-import { van } from "/dps.js";
+// import { van } from "/dps.js";
+import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import useFetch from "/libs/useFetch.js";
 const {button, div, label, select, option, textarea, input} = van.tags;

@@ -4,14 +4,35 @@
   Created By: Lightnet
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
-
+import van from "vanjs-core";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-import { THREE, ECS, van } from "/dps.js";
 import { Page_Admin, Page_Logs, Page_Accounts, Page_Tickets, Page_Reports, Page_Database, Page_Settings } from "/components/admin/admin_access.js";
 
 //import useFetch from "../libs/useFetch.js";
-import { UIStyle } from "/components/theme/theme.js";
+// import { UIStyle } from "/components/theme/theme.js";
 const {button, div, pre, p, link} = van.tags;
+
+van.add(document.head, link({
+  id:"index_style",
+  rel:"stylesheet",
+  type:"text/css",
+  href:"/components/theme/theme.css"
+}));
+
+van.add(document.head, link({
+  id:"index_style",
+  rel:"stylesheet",
+  type:"text/css",
+  href:"/components/notify/notify.css"
+}));
+
+van.add(document.head, link({
+  id:"index_style",
+  rel:"stylesheet",
+  type:"text/css",
+  href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+}))
+
 
 const PageAdmin = () => {
   
@@ -39,5 +60,5 @@ const PageAdmin = () => {
   })
 }
 
-van.add(document.head, UIStyle);
+// van.add(document.head, UIStyle);
 van.add(document.body, PageAdmin());

@@ -28,21 +28,15 @@ function scriptHtml02(_script){
         overflow: hidden;
       }
       `),
-      script({src:"https://unpkg.com/three@0.170.0/examples/jsm/libs/ammo.wasm.js"}),
-      script({type:"importmap"},`{
+      script({type:"importmap"},`{ 
   "imports": {
-    "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/",
-    "remove-array-items": "https://unpkg.com/remove-array-items@3.0.0/src/remove-array-items.js",
-    "ecs":"https://cdn.skypack.dev/ecs",
     "vanjs-core":"https://cdn.jsdelivr.net/npm/vanjs-core@1.5.5/src/van.min.js",
     "van":"https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.5.min.js",
     "vanjs-ui":"https://cdn.jsdelivr.net/npm/vanjs-ui@0.11.11/dist/van-ui.min.js",
     "vanjs-ext":"https://cdn.jsdelivr.net/npm/vanjs-ext@0.6.2/src/van-x.js",
     "vanjs-routing":"https://cdn.jsdelivr.net/npm/vanjs-routing@1.1.4/dist/index.min.js"
   }
-}
-`),
+}`),
     ),
     body(
       script({type:"module",src:_script})
@@ -51,43 +45,6 @@ function scriptHtml02(_script){
 
   return pageHtml;
 }
-
-function scriptHtml03(_script){
-  // background:gray;
-  const pageHtml = van.html(
-    head(
-      style(`
-      body{
-        
-        margin: 0px 0px 0px 0px;
-        overflow: hidden;
-      }
-      `),
-      script({type:"importmap"},`{
-  "imports": {
-    "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/",
-    "remove-array-items": "https://unpkg.com/remove-array-items@3.0.0/src/remove-array-items.js",
-    "ecs":"https://unpkg.com/ecs@0.23.0/ecs.js"
-  }
-}
-`),
-    ),
-    body(
-      script({src:"https://unpkg.com/three@0.170.0/examples/jsm/libs/ammo.wasm.js"}),
-      script({type:"module",src:_script}),
-    ),
-  );
-
-  return pageHtml;
-}
-
-// route.get('/threeammo', (c) => {
-//   //const db = c.get('db');
-//   const pageHtml = scriptHtml03("/van_threeammo.js");
-//   return c.html(pageHtml);
-// });
-// https://threejs.org/docs/index.html#manual/en/introduction/Installation
 
 var urlandjs = [
   // {url:'/admin/logs',         file:'/admin.js'},

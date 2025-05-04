@@ -5,7 +5,8 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-import { THREE, ECS, van } from "/dps.js";
+// import { THREE, ECS, van } from "/dps.js";
+import van from "vanjs-core";
 import { toggleTheme } from "../theme/theme.js";
 //import van from "vanjs-core";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
@@ -35,7 +36,6 @@ function AdminNavMenus() {
       button({onclick:()=>navigate('/admin/tickets')},'Tickets'),
       button({onclick:()=>navigate('/admin/database')},'Database'),
       button({onclick:()=>navigate('/admin/settings')},'Settings'),
-      
     )
   );
 }
@@ -103,6 +103,7 @@ function Page_Reports() {
     try {
       const data = await useFetch("/api/report");
       reports.val = data; // Update state to trigger re-render
+      console.log(data);
 
       for(let item of data){
         van.add(reportElement,div(

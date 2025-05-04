@@ -26,7 +26,7 @@ import auth from './routes/sqlite/auth.js';
 // import blog from './routes/blog.js';
 
 import pages, { scriptHtml02 } from './routes/pages.js';
-// import admin from './routes/admin.js';
+import admin from './routes/sqlite/admin.js';
 // import message from './routes/message.js';
 
 import forum from './routes/sqlite/forums.js';
@@ -94,8 +94,8 @@ app.route('/', topic);
 app.route('/', comment);
 app.route('/api/', groups);
 app.route('/api/', permissions);
-// app.route('/', admin);
-
+app.route('/', admin);
+app.route('/', pages);
 //<script type="module" src="/client.js"></script>
 
 app.get('/', (c) => {
@@ -114,7 +114,7 @@ app.post('/login', async (c) => {
 
 //set up static folder for public access
 app.use('/*', serveStatic({ root: './public' }));
-// app.route('/', pages);
+
 
 //wild card url for router vanjs added last
 // app.use('/*',  (c) => {

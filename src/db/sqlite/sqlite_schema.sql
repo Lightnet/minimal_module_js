@@ -98,3 +98,15 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   created_at TEXT DEFAULT (datetime('now')),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS reports (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  aliasId varchar(255),
+  title varchar(255) NOT NULL,
+  sumbittype varchar(255) NOT NULL,
+  content TEXT(65535) NOT NULL,
+  isdone BOOLEAN DEFAULT 0,
+  isclose BOOLEAN DEFAULT 0,
+  create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
