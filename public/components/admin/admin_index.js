@@ -34,12 +34,35 @@ function pageIndex() {
 }
 
 function ButtonMaintenanceMode() {
-  function btn_Maintenance_on() {
+  async function btn_Maintenance_on() {
     console.log("Maintenance Mode On");
+    try {
+      const data = await useFetch(`/api/maintenance`,{
+        method:'POST',
+        body:JSON.stringify({
+          enable:true
+        })
+      });
+      console.log("data:", data)
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   }
 
-  function btn_Maintenance_off() {
+  async function btn_Maintenance_off() {
     console.log("Maintenance Mode Off");
+    console.log("Maintenance Mode On");
+    try {
+      const data = await useFetch(`/api/maintenance`,{
+        method:'POST',
+        body:JSON.stringify({
+          enable:false
+        })
+      });
+      console.log("data:", data);
+    } catch (error) {
+      console.log("Error:", error.message);
+    }
   }
 
   return div(

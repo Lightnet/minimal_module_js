@@ -17,13 +17,15 @@ import { Hono } from 'hono';
 //import { logger } from 'hono/logger';
 //import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
 import { jwt } from 'hono/jwt'
+import { rateLimiter } from 'hono-rate-limiter';
 
 import { scriptHtml02 } from './routes/pages.js';
 import module_routes from './routes/index.js'
+import { maintenanceMiddleware } from './utils/maintenance.js';
 const PORT = process.env.PORT || 3000;
 // const {head, body, style, script} = van.tags
 
-console.log(jwt);
+// console.log(jwt);
 
 // middleware for db
 // note it reload for every request
@@ -49,6 +51,21 @@ const app = new Hono({
   //strict: false 
 });
 
+// Apply the rate limiting middleware to all requests.
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    // limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+    limit: 1000,
+    standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+    keyGenerator: (c) => {
+      // console.log(c);
+      // console.log("unique_key");
+      return "<unique_key>"
+    },
+  })
+);
+
 app.use('/auth/*',
   jwt({
     secret: process.env.JWT_SECRET || 'SECRET',
@@ -62,22 +79,16 @@ app.use('/auth/*',
 //   db:db,
 // }));
 
-//app.use(
-  //'/auth/*',
-  //jwt({
-    //secret: 'it-is-very-secret',
-    //cookie:'token',
-  //})
-//)
 //app.use('*', logger())
 //app.use('*', async (c, next) => {
   //console.log(`[${c.req.method}] ${c.req.url}`)
   //await next()
 //})
-// 
+//
+
 app.route('/', module_routes);
 //<script type="module" src="/client.js"></script>
-app.get('/', (c) => {
+app.get('/', maintenanceMiddleware, (c) => {
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });

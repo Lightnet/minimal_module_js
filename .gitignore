@@ -3,3 +3,5 @@ database.sqlite
 package-lock.json
 .env
 /backups
+fallback_admins.json
+maintenance.json

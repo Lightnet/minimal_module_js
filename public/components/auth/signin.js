@@ -9,12 +9,9 @@ import van from "vanjs-core";
 import { useFetch } from "./useFetch.js";
 const {button, input, label, div, table, tbody, tr, td, center} = van.tags;
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-import {
-  aliasState,
-  loginState
-} from "/components/context.js";
 import { notify } from "../notify/notify.js";
 import { Color } from "../notify/notifycontext.js";
+import { aliasState, loginState ,roleState } from "../context.js";
 
 const SignInEL = () => {
   const user = van.state('guest');

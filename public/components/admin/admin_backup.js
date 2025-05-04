@@ -67,6 +67,24 @@ function pageBackup() {
     }
   }
 
+  async function cBackupStart(name){
+    try {
+      const data = await useFetch(`/api/admin/backup/start`);
+      console.log(data);
+    } catch (error) {
+      console.log("error cBackupStart:", error.message);
+    }
+  }
+
+  async function cBackupStop(name){
+    try {
+      const data = await useFetch(`/api/admin/backup/stop`);
+      console.log(data);
+    } catch (error) {
+      console.log("error cBackupStart:", error.message);
+    }
+  }
+
   return div(
     { class: "container" },
     Header(),
@@ -77,6 +95,8 @@ function pageBackup() {
       ),
       div(
         button({class:"normal",onclick:cBackUp},`Back Up`),
+        button({class:"normal",onclick:cBackupStart},`Back Up Start`),
+        button({class:"normal",onclick:cBackupStop},`Back Up Stop`),
         button({class:"warn",onclick:()=>{}},`Restore`)
       ),
       div(

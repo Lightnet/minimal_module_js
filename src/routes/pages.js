@@ -88,7 +88,6 @@ route.get("/auth/jwt", (c, next) => {
   return c.text('test jwt')
 });
 
-
 route.get("/jwt", (c, next) => {
   const payload = c.get('jwtPayload')
   console.log("payload: ", payload);

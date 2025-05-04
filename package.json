@@ -18,14 +18,19 @@
     "better-sqlite3": "^11.9.1",
     "dotenv": "^16.5.0",
     "hono": "^4.7.7",
+    "hono-rate-limiter": "^0.4.2",
     "jsonwebtoken": "^9.0.2",
     "mini-van-plate": "^0.6.3",
     "nanoid": "^5.1.5",
+    "node-cron": "^3.0.3",
     "socket.io": "^4.8.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
     "supertest": "^7.1.0",
     "vitest": "^3.1.2"
+  },
+  "nodemonConfig": {
+    "ignore": ["**/public/**", "**/docs/**","**/node_modules/**","fallback_admins.json"]
   }
 }

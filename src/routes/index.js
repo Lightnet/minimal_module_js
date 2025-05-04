@@ -24,8 +24,12 @@ import topic from './sqlite/topics.js';
 import comment from './sqlite/comments.js';
 import groups from './sqlite/groups.js';
 import permissions from './sqlite/permissions.js';
-import backup from './sqlite/backup.js'
+import backup from './sqlite/backup.js';
+import database from './sqlite/database.js';
 
+import maintenance from '../utils/maintenance.js';
+
+route.route('/', maintenance);
 route.route('/', auth);
 // app.route('/', message);
 // app.route('/', blog);
@@ -38,5 +42,6 @@ route.route('/api/', permissions);
 route.route('/', admin);
 route.route('/', pages);
 route.route('/api/', backup);
+route.route('/', database);
 
 export default route;
