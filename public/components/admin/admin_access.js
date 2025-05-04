@@ -45,11 +45,49 @@ function Page_Admin() {
 }
 
 function Page_Logs() {
+  const auditlogs = tbody()
+  async function fetchLogs(){
+    try {
+      const data = await useFetch('/api/admin/logs');
+      console.log("data: ",data)
+      for(const item of data){
+        van.add(auditlogs,
+          tr(
+            td(item.id),
+            td(item.user_id),
+            td(item.created_at),
+            td(item.action),
+            td(item.details),
+            
+          )
+        )
+      }
+    } catch (error) {
+      console.log("error: ", error.message);
+    }
+  }
+
+  fetchLogs();
+
   return div(
     { class: "container" },
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" }, label("Logs Page"))
+    div({ class: "main-content" }, 
+      div(label("Logs Page")),
+      table(
+        thead(
+          tr(
+            td("ID"),
+            td("User ID"),
+            td("Created At"),
+            td("Actions"),
+            td("detail"),
+          )
+        ),
+        auditlogs
+      )
+    )
   );
 }
 
@@ -167,6 +205,11 @@ function Page_Backup() {
       console.log(data)  
       if(data?.tables){
         let _tablebody = document.getElementById(`sqltable`);
+        const parentNode = _tablebody;
+        while (parentNode.firstChild) {
+          parentNode.removeChild(parentNode.firstChild);
+        }
+
         for(const item of data.tables){
            van.add(_tablebody,
             tr(

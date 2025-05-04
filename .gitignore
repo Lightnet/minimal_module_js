@@ -2,3 +2,4 @@
 database.sqlite
 package-lock.json
 .env
+/backups

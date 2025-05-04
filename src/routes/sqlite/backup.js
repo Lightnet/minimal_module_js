@@ -11,10 +11,12 @@ const app = new Hono();
 // Initialize database with DATABASE_PATH from .env
 const db = new Database(process.env.DATABASE_PATH || 'database.sqlite');
 
+const savePath = './backups'
+
 // Route to trigger backup
 app.get('/backup', async (c) => {
   try {
-    const backupPath = `backup-${Date.now()}.db`;
+    const backupPath = `${savePath}/backup-${Date.now()}.db`;
     await db.backup(backupPath);
     return c.json({ message: 'Backup completed', backupPath });
   } catch (error) {
@@ -45,7 +47,7 @@ app.get('/backup/tables', (c) => {
 // Endpoint for specific table backup
 app.get('/backup-table/:tableName', async (c) => {
   const tableName = c.req.param('tableName');
-  const backupPath = `backup-${tableName}-${Date.now()}.db`;
+  const backupPath = `${savePath}/backup-${tableName}-${Date.now()}.db`;
 
   // Validate table name to prevent SQL injection
   if (!/^[a-zA-Z0-9_]+$/.test(tableName)) {
