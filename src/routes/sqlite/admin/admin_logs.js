@@ -15,11 +15,12 @@ const route = new Hono({
   //strict: false 
 });
 
-route.get('/logs', authenticate, authorize('audit_logs', null, 'manage'), async (c) => {    
+route.get('/api/admin/logs', authenticate, authorize('audit_logs', null, 'manage'), async (c) => {    
   try {
     const db = await getDB();
     const stmt = db.prepare('SELECT * FROM audit_logs');
     const groups = stmt.all();
+    // console.log("groups: ", groups);
     return c.json(groups);
   } catch (error) {
     return c.json({error:"error logs"})

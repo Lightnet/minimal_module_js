@@ -31,7 +31,7 @@ const route = new Hono({
   //strict: false 
 });
 route.route('/', admin_backup);
-route.route('/api/admin/', audit_logs);
+route.route('/', audit_logs);
 route.route('/api/', admin_reports);
 route.route('/api/admin/', admin_accounts);
 
@@ -61,6 +61,14 @@ route.get('/admin/settings', (c) => {
   return c.html(pageHtml);
 });
 route.get('/admin/database', (c) => {
+  const pageHtml = scriptHtml02("/admin.js");
+  return c.html(pageHtml);
+});
+route.get('/admin/groups', (c) => {
+  const pageHtml = scriptHtml02("/admin.js");
+  return c.html(pageHtml);
+});
+route.get('/admin/permissions', (c) => {
   const pageHtml = scriptHtml02("/admin.js");
   return c.html(pageHtml);
 });

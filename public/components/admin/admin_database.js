@@ -21,23 +21,54 @@ const {button, div, span, label,
 } = van.tags;
 
 function pageDatabase() {
-  return div(
-    { class: "container" },
+
+  const elTables = tbody();
+  
+  function viewTable(name){
+    console.log("name:", name)
+  }
+
+  async function getTables(){
+    try {
+      const data = await useFetch(`/api/database/tables`);
+      console.log(data);
+      const pNode = elTables;
+      while (pNode.firstChild) {
+        pNode.removeChild(pNode.firstChild);
+      }
+
+      for(const t of data.tables){
+        console.log(t);
+        van.add(elTables,
+          tr(
+            td(t),
+            td(
+              button({onclick:()=>viewTable(t)},"View Table")
+            ),
+          )
+        )
+      }
+    } catch (error) {
+      console.log("error:",error.message);
+    }
+  }
+
+  return div({class:"container"},
     Header(),
     AdminNavMenus(),
     div({ class: "main-content" }, 
       label("Database Page"),
       div(
-        button("Create Ticket")
+        button({onclick:getTables},"Get Tables")
       ),
       table(
         thead(
           tr(
             td("Name"),
-            td("Status"),
-            td("Created At"),
+            td("Actions"),
           )
-        )
+        ),
+        elTables,
       )
     )
   );

@@ -4,6 +4,7 @@
   Created By: Lightnet
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
+
 import van from "vanjs-core";
 import { Router } from "vanjs-routing";
 
@@ -16,10 +17,11 @@ import {
   pageReports,
   pageSettings,
   pageTickets,
-} from '/components/admin/index.js'
+  pageAdminPermissions,
+  pageAdminGroups,
+} from './components/admin/index.js'
 
-//import useFetch from "../libs/useFetch.js";
-// import { UIStyle } from "/components/theme/theme.js";
+// import useFetch from "../libs/useFetch.js";
 const {button, div, pre, p, link} = van.tags;
 
 van.add(document.head, link({
@@ -59,6 +61,8 @@ const PageAdmin = () => {
   return Router({
     routes: [
       { path: "/admin", component:  pageIndex},
+      { path: "/admin/groups", component:  pageAdminGroups},
+      { path: "/admin/permissions", component:  pageAdminPermissions},
       { path: "/admin/logs", component:  pageLogs},
       { path: "/admin/accounts", component:  pageAccounts},
       { path: "/admin/tickets", component:  pageTickets},
@@ -70,5 +74,4 @@ const PageAdmin = () => {
   })
 }
 
-// van.add(document.head, UIStyle);
 van.add(document.body, PageAdmin());

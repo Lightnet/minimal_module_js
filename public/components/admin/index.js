@@ -14,6 +14,9 @@ import pageReports from './admin_reports.js';
 import pageSettings from './admin_settings.js';
 import pageTickets from './admin_tickets.js';
 
+import pageAdminPermissions from './admin_permissions.js';
+import pageAdminGroups from './admin_groups.js';
+
 export {
   pageAccounts,
   pageBackup,
@@ -23,5 +26,7 @@ export {
   pageReports,
   pageSettings,
   pageTickets,
+  pageAdminPermissions,
+  pageAdminGroups
 }
 

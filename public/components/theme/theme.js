@@ -58,6 +58,18 @@ export function clickToggleTheme(){
   document.body.setAttribute("data-theme", data_theme);
 }
 
+export function ctoggleTheme(){
+  console.log("themeIDState.val",themeIDState.val)
+  if(themeIDState.val == 'light'){
+    themeIDState.val = 'dark';
+  }else{
+    themeIDState.val = 'light';
+  }
+  //set theme
+  localStorage.setItem("data-theme", themeIDState.val);
+  document.body.setAttribute("data-theme", themeIDState.val);
+}
+
 export function checkTheme(){
   // document.body.setAttribute("data-theme", themeState.val);
   const data_theme = localStorage.getItem("data-theme");

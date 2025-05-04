@@ -66,9 +66,17 @@ function ButtonMaintenanceMode() {
   }
 
   return div(
-    label("Maintenance Mode "),
-    button({ class: "btn-ok", onclick: btn_Maintenance_on }, " On "),
-    button({ class: "btn-cancel", onclick: btn_Maintenance_off }, " Off ")
+    label("Maintenance Mode:"),
+    div(
+      button({ class: "warn", onclick: btn_Maintenance_on }, " On "),
+      button({ class: "btn-cancel", onclick: btn_Maintenance_off }, " Off ")
+    ),
+    div(
+      label("In case of emergency for Maintenance.")
+    ),
+    div(
+      
+    ),
   );
 }
 

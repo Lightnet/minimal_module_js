@@ -6,18 +6,24 @@
 */
 
 import van from "vanjs-core";
-import { toggleTheme } from "../theme/theme.js";
+import { ctoggleTheme, toggleTheme } from "../theme/theme.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import useFetch from '/libs/useFetch.js';
+import { themeIDState } from "../context.js";
 
 const {button, div, span, label} = van.tags;
 
 export function AdminNavMenus() {
-  return div(
-    { class: "sidebar active" },
+
+
+
+  return div({ class: "sidebar active" },
     div(
-      toggleTheme(),
+      // toggleTheme(),
+      button({ onclick:()=> ctoggleTheme() }, ()=> themeIDState.val === 'light' ? "Theme Light" : "Theme Dark"),
       button({ onclick:()=> navigate("/admin") }, "Home"),
+      button({ onclick:()=> navigate("/admin/groups") }, "Groups"),
+      button({ onclick:()=> navigate("/admin/permissions") }, "Permissions"),
       button({ onclick:()=> navigate("/admin/logs") }, "Logs"),
       button({ onclick:()=> navigate("/admin/reports") }, "Reports"),
       button({ onclick:()=> navigate('/admin/accounts')},'Accounts'),

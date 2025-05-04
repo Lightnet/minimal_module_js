@@ -36,7 +36,7 @@ export async function authenticate(c, next) {
   try {
     // Verify token
     // const decoded = jwt.verify(token, process.env.JWT_SECRET || 'SECRET');
-    const decoded = verify(token, process.env.JWT_SECRET || 'SECRET');
+    const decoded = await verify(token, process.env.JWT_SECRET || 'SECRET');
     console.log("decoded: ", decoded);
     c.set('user', decoded); // Store user in context
     return await next(); // Proceed to next middleware/route

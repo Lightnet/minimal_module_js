@@ -130,6 +130,30 @@ route.get('/api/status', async (c) => {
 //   return c.html('<h1>Welcome</h1>');
 // });
 
+route.get('/api/database/tables', async (c) => {
+
+  try {
+
+    const db = await getDB();
+    const tables = db
+      .prepare(`
+        SELECT name 
+        FROM sqlite_master 
+        WHERE type='table' AND name NOT LIKE 'sqlite_%'
+      `)
+      .all()
+      .map(row => row.name);
+
+      return c.json({ tables });
+
+  } catch (error) {
+    return c.json({error:"ERROR"});  
+  }
+
+});
+
+
+
 export default route;
 
 // Database health check

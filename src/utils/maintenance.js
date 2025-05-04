@@ -115,7 +115,6 @@ route.post('/api/maintenance', async (c)=>{
 
 export default route;
 
-
 // Maintenance Middleware
 // const maintenanceMiddleware = async (c, next) => {
 //   const isMaintenanceMode = await getMaintenanceState();
@@ -167,7 +166,7 @@ export default route;
 //   }
 //   try {
 //     await setMaintenanceState(enable);
-//     return c.json({ message: `Maintenanceモードが${enable ? '有効化' : '無効化'}されました` });
+//     return c.json({ message: `Maintenance mode has been enabled ${enable ? 'enabled' : 'disabled' });
 //   } catch (err) {
 //     return c.json({ error: 'Failed to update maintenance mode' }, 500);
 //   }
