@@ -19,6 +19,8 @@ import {
   pageTickets,
   pageAdminPermissions,
   pageAdminGroups,
+  pageAdminSignOut,
+  pageAdminSignIn,
 } from './components/admin/index.js'
 
 // import useFetch from "../libs/useFetch.js";
@@ -70,6 +72,8 @@ const PageAdmin = () => {
       { path: "/admin/database", component:  pageDatabase},
       { path: "/admin/settings", component:  pageSettings},
       { path: "/admin/backup", component:  pageBackup},
+      { path: "/admin/signin", component:  pageAdminSignIn},
+      { path: "/admin/signout", component:  pageAdminSignOut},
     ]
   })
 }

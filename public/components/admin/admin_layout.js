@@ -15,8 +15,6 @@ const {button, div, span, label} = van.tags;
 
 export function AdminNavMenus() {
 
-
-
   return div({ class: "sidebar active" },
     div(
       // toggleTheme(),
@@ -31,6 +29,8 @@ export function AdminNavMenus() {
       button({ onclick:()=> navigate('/admin/database')},'Database'),
       button({ onclick:()=> navigate('/admin/backup')},'Back Up'),
       button({ onclick:()=> navigate('/admin/settings')},'Settings'),
+      button({ onclick:()=> navigate('/admin/signin')},'Sign In'),
+      button({ onclick:()=> navigate('/admin/signout')},'Sign Out'),
     )
   );
 }

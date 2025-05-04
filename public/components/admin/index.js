@@ -16,6 +16,8 @@ import pageTickets from './admin_tickets.js';
 
 import pageAdminPermissions from './admin_permissions.js';
 import pageAdminGroups from './admin_groups.js';
+import pageAdminSignIn from './admin_signin.js';
+import pageAdminSignOut from './admin_signout.js';
 
 export {
   pageAccounts,
@@ -27,6 +29,8 @@ export {
   pageSettings,
   pageTickets,
   pageAdminPermissions,
-  pageAdminGroups
+  pageAdminGroups,
+  pageAdminSignIn,
+  pageAdminSignOut
 }
 

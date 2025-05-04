@@ -28,7 +28,7 @@
 
   Still need to have secure security and flood spam protection is no easy task.
 
-# Gaols:
+# Goals:
   To have simple forum and message system to handle basic access to posts.
 
   To keep everythings simple for testing builds. As for plugin or mod is just idea. Which required time to work on.
@@ -37,9 +37,9 @@
  Needed to run sample test build to make sure the forum, board, topic and comment for create, update, delete. As well other features.
 
 ## File Size:
-- node_modules 18.2 MB
-- public 232 KB
-- src 160 KB
+- node_modules 49.0 MB
+- public 288 KB
+- src 192 KB
 
 # Audit Logs:
   Simple logging. Base on the Grok 3.0 A.I model reference. 

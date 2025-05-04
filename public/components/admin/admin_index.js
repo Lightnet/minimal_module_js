@@ -12,13 +12,7 @@ import { toggleTheme } from "../theme/theme.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import useFetch from '/libs/useFetch.js';
 import { AdminNavMenus, Header } from "./admin_layout.js";
-const {button, div, span, label,
-  table,
-  thead,
-  tr,
-  td,
-  tbody
-} = van.tags;
+const {button, div, label} = van.tags;
 
 function pageIndex() {
   return div(
@@ -75,7 +69,7 @@ function ButtonMaintenanceMode() {
       label("In case of emergency for Maintenance.")
     ),
     div(
-      
+
     ),
   );
 }
