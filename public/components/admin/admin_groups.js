@@ -23,7 +23,7 @@ export default function pageAdminGroups(){
   return div({ class: "container" },
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" }, 
+    div({ class: "admin-content" }, 
       pageForumGroups()
     )
   );

@@ -44,7 +44,7 @@ function pageLogs() {
   return div({ class: "container" },
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" }, 
+    div({ class: "admin-content" }, 
       div(label("Logs Page")),
       table(
         thead(

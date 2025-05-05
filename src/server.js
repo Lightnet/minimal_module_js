@@ -51,20 +51,20 @@ const app = new Hono({
   //strict: false 
 });
 
-// Apply the rate limiting middleware to all requests.
-app.use(
-  rateLimiter({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    // limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-    limit: 1000,
-    standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-    keyGenerator: (c) => {
-      // console.log(c);
-      // console.log("unique_key");
-      return "<unique_key>"
-    },
-  })
-);
+// // Apply the rate limiting middleware to all requests.
+// app.use(
+//   rateLimiter({
+//     windowMs: 15 * 60 * 1000, // 15 minutes
+//     // limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+//     limit: 1000,
+//     standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+//     keyGenerator: (c) => {
+//       // console.log(c);
+//       // console.log("unique_key");
+//       return "<unique_key>"
+//     },
+//   })
+// );
 
 app.use('/auth/*',
   jwt({

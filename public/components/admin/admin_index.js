@@ -29,7 +29,7 @@ function pageIndex() {
     { class: "container" },
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" },
+    div({ class: "admin-content" },
       label("Welcome to the Admin Panel"),
       renderLogin
     )

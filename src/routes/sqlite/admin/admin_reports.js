@@ -6,8 +6,7 @@
 */
 
 import { Hono } from 'hono';
-import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
-import { scriptHtml02 } from '../../pages.js';
+// import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
 import { getDB } from '../../../db/sqlite/sqlite_db.js';
 import { authenticate, authorize } from '../../../middleware/sqlite/sqlite_auth.js';
 

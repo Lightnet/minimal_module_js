@@ -89,7 +89,7 @@ function pageBackup() {
     { class: "container" },
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" },
+    div({ class: "admin-content" },
       div(
         label("Backup Page"),
       ),

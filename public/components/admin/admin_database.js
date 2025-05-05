@@ -74,7 +74,7 @@ function pageDatabase() {
   return div({class:"container"},
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" }, 
+    div({ class: "admin-content" }, 
       label("Database Page"),
       div(
         button({onclick:getTables},"Get Tables"),

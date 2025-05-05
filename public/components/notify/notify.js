@@ -76,6 +76,47 @@ function NotifyContainer(props){
 }
 // add top html element for handle notify
 const NotifyManager = ()=>{
+  // Create a ref for the div
+  let id="notify";
+
+  const checkAndUpdateZIndex = () => {
+    // Get the div by its id
+    const alertDiv = document.getElementById(id);
+    if (!alertDiv) {
+      // console.log("Div with id 'alert' not found.");
+      return;
+    }
+
+    // Get the current z-index
+    const currentZIndex = window.getComputedStyle(alertDiv).zIndex;
+    const currentZ = currentZIndex === "auto" ? 0 : parseInt(currentZIndex);
+    // console.log(`Current z-index of alert div: ${currentZ}`);
+
+    // Find the highest z-index among all divs
+    const allElements = document.querySelectorAll("div");
+    let maxZIndex = currentZ;
+    allElements.forEach((el) => {
+      if (el !== alertDiv) {
+        const otherZIndex = window.getComputedStyle(el).zIndex;
+        const otherZ = otherZIndex === "auto" ? 0 : parseInt(otherZIndex);
+        if (otherZ > maxZIndex) {
+          maxZIndex = otherZ;
+        }
+      }
+    });
+
+    // Check if the alert div is on top
+    const isTop = currentZ >= maxZIndex;
+    // console.log(`Is alert div on top? ${isTop}`);
+
+    // If not on top, update z-index to be higher than the max
+    if (!isTop) {
+      const newZIndex = maxZIndex + 1;
+      alertDiv.style.zIndex = newZIndex;
+      // console.log(`Updated z-index to ${newZIndex} to bring alert div to top.`);
+    }
+  };
+
   // html element
   const notifiesDiv = div();
   //detect for objNotify changes
@@ -88,10 +129,11 @@ const NotifyManager = ()=>{
       //append notify html to notify message as render html
       van.add(notifiesDiv, newNotifyContainer);
     }
+    checkAndUpdateZIndex();
   });
 
   //html top right
-  return div({style:"position:fixed;top:4px;right:4px;overflow:hidden;"},
+  return div({id:id,style:"position:fixed;top:4px;right:4px;overflow:hidden;z-index:10;"},
     notifiesDiv
   )
 }

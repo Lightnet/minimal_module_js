@@ -8,7 +8,7 @@
 import van from "vanjs-core";
 import { ctoggleTheme, toggleTheme } from "../theme/theme.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-import useFetch from '/libs/useFetch.js';
+// import useFetch from '/libs/useFetch.js';
 import { themeIDState } from "../context.js";
 import { loginState } from "../context.js";
 
@@ -58,6 +58,8 @@ export function AdminNavMenus() {
 
 export function Header() {
   const isSidebarActive = van.state(true);
+
+
   function toggleSidebar() {
     console.log("Toggle...")
     isSidebarActive.val = !isSidebarActive.val;
@@ -65,8 +67,10 @@ export function Header() {
     if (sidebar) {
       if (isSidebarActive.val) {
         sidebar.classList.add("active");
+        document.documentElement.style.setProperty('--sidebar-width', '250px');
       } else {
         sidebar.classList.remove("active");
+        document.documentElement.style.setProperty('--sidebar-width', '10px');
       }
     }
   }

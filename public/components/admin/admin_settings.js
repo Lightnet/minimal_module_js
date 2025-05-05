@@ -7,25 +7,20 @@
 
 // import { THREE, ECS, van } from "/dps.js";
 import van from "vanjs-core";
-import { toggleTheme } from "../theme/theme.js";
+// import { toggleTheme } from "../theme/theme.js";
 //import van from "vanjs-core";
-import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
-import useFetch from '/libs/useFetch.js';
+// import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
+// import useFetch from '/libs/useFetch.js';
 import { AdminNavMenus, Header } from "./admin_layout.js";
-const {button, div, span, label,
-  table,
-  thead,
-  tr,
-  td,
-  tbody
-} = van.tags;
+const {button, div, span, label} = van.tags;
 
 function pageSettings() {
-  return div(
-    { class: "container" },
+  return div({ class: "container" },
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" }, label("Settings Page"))
+    div({ class: "admin-content" }, 
+      label("Settings Page")
+    )
   );
 }
 

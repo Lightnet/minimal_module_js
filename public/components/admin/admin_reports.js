@@ -77,7 +77,7 @@ function pageReports() {
     { class: "container" },
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" },
+    div({ class: "admin-content" },
       div(
         label("Reports Page"),
       ),

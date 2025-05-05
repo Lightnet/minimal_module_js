@@ -24,6 +24,7 @@ import {
 } from './components/admin/index.js'
 import useFetch from "./libs/useFetch.js";
 import { aliasState, loginState, roleState } from "./components/context.js";
+import { NotifyManager } from "./components/notify/notify.js";
 
 const { link} = van.tags;
 
@@ -75,9 +76,15 @@ const pageAdmin = () => {
         loginState.val = false;
       }
     } catch (error) {
-      
+      console.log("error:", error.message);
     }
-  } 
+  }
+
+  function setupSideBar(){
+    document.documentElement.style.setProperty('--sidebar-width', '250px');
+  }
+
+  setupSideBar();
 
   checkUser();
 
@@ -100,3 +107,6 @@ const pageAdmin = () => {
 }
 
 van.add(document.body, pageAdmin());
+setTimeout(()=>{
+  van.add(document.body, NotifyManager());
+},100);

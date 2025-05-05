@@ -12,12 +12,11 @@ import { SignInEL } from "../auth/signin.js";
 const { div } = van.tags;
 
 export default function pageAdminSignIn(){
-  //return pageForumPermissions();
 
   return div({ class: "container" },
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" }, 
+    div({ class: "admin-content" }, 
       SignInEL('/admin')
     )
   );

@@ -156,6 +156,17 @@ body {
   overflow:scroll;
 }
 
+.admin-content {
+  margin-left: var(--sidebar-width);
+  /* margin-left: 250px; */
+  padding-top: 54px;
+  padding-bottom: 50px;
+  min-height: 100vh;
+  height: 100vh;
+  background-color: var(--cbody-color);
+  overflow:scroll;
+}
+
 .cheader {
   background-color: var(--cheader-color);
   padding: 15px;

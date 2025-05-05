@@ -169,7 +169,7 @@ function pageTickets() {
     { class: "container" },
     Header(),
     AdminNavMenus(),
-    div({ class: "main-content" }, 
+    div({ class: "admin-content" }, 
       label("Tickets Page"),
       div(
         createButtonFormTicket()

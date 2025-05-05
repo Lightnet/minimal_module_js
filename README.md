@@ -100,21 +100,35 @@ logAudit(user.id, 'create_group', {
   - [x] save
   - [x] save table name
   - [ ] load / restore
+- [ ] report
+  - [x] create
+  - [x] update
+  - [x] delete
+  - [ ] forum
+  - [ ] access
+- [ ] ticket
+  - [x] create
+  - [x] update
+  - [x] delete
+  - [ ] access
 
 # Page Admin
 - [ ] Server status
 - [ ] Database
 - [ ] Loggings
   - [x] simple audit logs
-- [ ] Members
+- [ ] Accounts
+  - [x] layout
+- [ ] Groups
+  - [x] layout
 - [ ] Permissions
-- [ ] Ban List
-- [ ] Forums
+  - [x] layout
 - [ ] Novels
 - [ ] Monitor
 - [ ] Tickets
+  - [x] layout
 - [ ] Report
-  - [ ] layout
+  - [x] layout
 
 # Forum 
 - [ ] groups (wip)
