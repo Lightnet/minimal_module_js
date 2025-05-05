@@ -52,6 +52,7 @@ const BlogEL = () => {
       const data = await resp.json();
       console.log(data);
       //blogs.val = data;
+      blogId.val=null;
     }catch(e){
       console.log("ERROR: ", e)
     }

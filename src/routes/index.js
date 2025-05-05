@@ -12,11 +12,11 @@ const route = new Hono({
 });
 
 import auth from './sqlite/auth.js';
-// import blog from './routes/blog.js';
+import blog from './blog.js';
 
 import pages, { scriptHtml02 } from './pages.js';
 import admin from './sqlite/admin/index.js';
-// import message from './message.js';
+import message from './message.js';
 
 import forum from './sqlite/forums.js';
 import board from './sqlite/boards.js';
@@ -33,9 +33,9 @@ import localdb from './local/index.js';;
 route.route('/', localdb);
 
 route.route('/', maintenance);
+route.route('/', message);
 route.route('/', auth);
-// app.route('/', message);
-// app.route('/', blog);
+route.route('/', blog);
 route.route('/', forum);
 route.route('/', board);
 route.route('/', topic);

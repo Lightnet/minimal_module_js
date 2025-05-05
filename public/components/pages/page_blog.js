@@ -10,7 +10,7 @@ import van from "vanjs-core";
 import { BlogEL } from "../blog/blogpost.js";
 import { HomeNavMenu } from "../navmenu.js";
 
-const {button, div} = van.tags
+const {button, h1, div} = van.tags
 
 function BlogPage() {
 

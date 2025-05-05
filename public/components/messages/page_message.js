@@ -14,6 +14,44 @@ const {button, h1, div, label, table, tbody, tr, td, input, textarea} = van.tags
 
 function Page_Message(){
 
+  const messagesDiv = div();
+
+  async function btnDeleteMessageId(id){
+    try {
+      const data = await useFetch(`/api/message/${id}`,{
+        method:'DELETE'
+      });
+      console.log(data);
+
+    } catch (error) {
+      console.log(error.message);
+    }
+    
+  }
+
+  async function fetchMessages() {
+    try {
+      const data = await useFetch('/api/message');
+      console.log(data)
+      if(data){
+        for(const item of data){
+          console.log(item);
+          van.add(messagesDiv,
+            div(
+              label('content:'+ item.content),
+              button({onclick:()=>btnDeleteMessageId(item.id)},"Delete")
+            )
+          )
+        }
+      }
+
+    } catch (error) {
+      console.log("Error: ",error.message);
+    }
+  }
+
+  fetchMessages();
+
   return div({id:"message"},
     HomeNavMenu(),
     div({class:"main-content"},
@@ -22,7 +60,8 @@ function Page_Message(){
       ),
       div({class:"ccontent"},
         label('Message'),
-        El_CreateMessageForm()
+        El_CreateMessageForm(),
+        messagesDiv
       ),
     ),
   );

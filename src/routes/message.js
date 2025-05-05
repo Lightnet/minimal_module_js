@@ -6,35 +6,44 @@
 */
 
 import { Hono } from 'hono';
+import { getDB } from '../db/sqlite/sqlite_db.js';
 
 const route = new Hono();
-// GET BLOGS
-route.get('/api/message',(c)=>{
-  const db = c.get('db');
-  const results = db.get_messages();
-  //console.log(results);
-  return c.json(results);
+// GET MESSAGES
+route.get('/api/message', async (c)=>{
+  try {
+    const db = await getDB();
+    let stmt = db.prepare(`SELECT * FROM messages`);
+    const results = stmt.all();
+    return c.json(results);
+  } catch (error) {
+    return c.json({api:"error"});
+  }
 })
 
 // CREATE
 route.post('/api/message', async(c)=>{
-  const data = await c.req.json();
-  const db = c.get('db');
-  console.log(data);
-
-  const results = db.create_message("0",data.alias,data.subject,data.content);
-  console.log("results", results);
-  //console.log(results);
-
-  return c.json(results);
+  try {
+    // const data = await c.req.json();
+    const {alias, subject, content} = await c.req.json();
+    // console.log("data: ", data);
+    const db = await getDB();
+    const stmt = db.prepare('INSERT INTO messages (to_username, subject, content) VALUES (?, ?, ?)');
+    stmt.run(alias, subject, content);
+    return c.json({api:"CREATED"});
+  } catch (error) {
+    console.log("error: ", error.message);
+    return c.json({api:"ERROR"});
+  }
 })
 
 //DELETE
-route.delete('/api/message/:id',(c)=>{
+route.delete('/api/message/:id', async(c)=>{
   const id = c.req.param('id');
   console.log('ID: ', id);
-  const db = c.get('db');
-  const result = db.delete_message(id);
+  const db = await getDB();
+  const stmt = db.prepare('DELETE FROM messages WHERE id=?')
+  const result = stmt.run(id);
   console.log("result: ",result)
   //console.log(db);
 
