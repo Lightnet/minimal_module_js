@@ -12,22 +12,32 @@ import { toggleTheme } from "../theme/theme.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import useFetch from '/libs/useFetch.js';
 import { AdminNavMenus, Header } from "./admin_layout.js";
+import { loginState } from "../context.js";
 const {button, div, label} = van.tags;
 
 function pageIndex() {
+
+  const renderLogin = van.derive(()=>{
+    if(loginState.val){
+      return ButtonMaintenanceMode()
+    }else{
+      return div('Non Admin.')
+    }
+  });
+
   return div(
     { class: "container" },
     Header(),
     AdminNavMenus(),
-    div(
-      { class: "main-content" },
+    div({ class: "main-content" },
       label("Welcome to the Admin Panel"),
-      ButtonMaintenanceMode()
+      renderLogin
     )
   );
 }
 
 function ButtonMaintenanceMode() {
+  
   async function btn_Maintenance_on() {
     console.log("Maintenance Mode On");
     try {

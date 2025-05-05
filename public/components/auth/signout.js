@@ -16,7 +16,7 @@ import { notify } from "../notify/notify.js";
 import { Color } from "../notify/notifycontext.js";
 const {button, input, label, div, table, tbody, tr, td,center} = van.tags;
 
-const SignOutEL = () => {
+const SignOutEL = (_url='/') => {
 
   async function b_signout(){
     let data = await useFetch('/api/auth/signout',{
@@ -32,7 +32,7 @@ const SignOutEL = () => {
         color:Color.success,
         content:"Sign Out Success!"
       })
-      navigate('/');
+      navigate(_url);
     }
   }
 

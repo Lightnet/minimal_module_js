@@ -13,14 +13,14 @@ import { notify } from "../notify/notify.js";
 import { Color } from "../notify/notifycontext.js";
 import { aliasState, loginState ,roleState } from "../context.js";
 
-const SignInEL = () => {
+const SignInEL = (_url='/') => {
   const user = van.state('guest');
   const pass = van.state('guest');
 
   async function c_login(){
-    console.log("Login...")
-    console.log(user.val)
-    console.log(pass.val)
+    // console.log("Login...")
+    // console.log(user.val)
+    // console.log(pass.val)
 
     let data = await useFetch('/api/auth/signin',{
       method:'POST',
@@ -29,7 +29,7 @@ const SignInEL = () => {
         passphrase:pass.val,
       })
     });
-    console.log(data);
+    // console.log(data);
     if(data){
       if(data?.api){
         if(data.api == 'PASS'){
@@ -41,7 +41,7 @@ const SignInEL = () => {
             color:Color.success,
             content:"Sign In Success!"
           })
-          navigate('/')
+          navigate(_url)
         }else{
           notify({
             color:Color.warn,

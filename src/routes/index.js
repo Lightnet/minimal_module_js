@@ -28,6 +28,9 @@ import backup from './sqlite/backup.js';
 import database from './sqlite/database.js';
 
 import maintenance from '../utils/maintenance.js';
+import localdb from './local/index.js';;
+
+route.route('/', localdb);
 
 route.route('/', maintenance);
 route.route('/', auth);

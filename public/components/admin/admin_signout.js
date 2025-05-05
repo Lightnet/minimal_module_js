@@ -18,7 +18,7 @@ export default function pageAdminSignOut(){
     Header(),
     AdminNavMenus(),
     div({ class: "main-content" }, 
-      SignOutEL()
+      SignOutEL('/admin')
     )
   );
 

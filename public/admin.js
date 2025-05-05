@@ -22,9 +22,10 @@ import {
   pageAdminSignOut,
   pageAdminSignIn,
 } from './components/admin/index.js'
+import useFetch from "./libs/useFetch.js";
+import { aliasState, loginState, roleState } from "./components/context.js";
 
-// import useFetch from "../libs/useFetch.js";
-const {button, div, pre, p, link} = van.tags;
+const { link} = van.tags;
 
 van.add(document.head, link({
   id:"index_style",
@@ -47,18 +48,38 @@ van.add(document.head, link({
   href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 }))
 
-const PageAdmin = () => {
-  
+if(!document.getElementById("admin_style")){
+  van.add(document.head, link({
+    id:"admin_style",
+    rel:"stylesheet",
+    type:"text/css",
+    href:"/components/admin/admin.css"
+  }))
+}
+
+const pageAdmin = () => {
+
   console.log("ADMIN");
 
-  if(!document.getElementById("admin_style")){
-    van.add(document.head, link({
-      id:"admin_style",
-      rel:"stylesheet",
-      type:"text/css",
-      href:"/components/admin/admin.css"
-    }))
-  }
+  async function checkUser(){
+    try {
+      const data = await useFetch(`/api/auth/user`);
+      console.log("data: ", data); 
+      if(data){
+        if(data?.alias){
+          aliasState.val = data.alias;
+          roleState.val = data.role;
+          loginState.val = true;
+        }
+      }else{
+        loginState.val = false;
+      }
+    } catch (error) {
+      
+    }
+  } 
+
+  checkUser();
 
   return Router({
     routes: [
@@ -75,7 +96,7 @@ const PageAdmin = () => {
       { path: "/admin/signin", component:  pageAdminSignIn},
       { path: "/admin/signout", component:  pageAdminSignOut},
     ]
-  })
+  });
 }
 
-van.add(document.body, PageAdmin());
+van.add(document.body, pageAdmin());

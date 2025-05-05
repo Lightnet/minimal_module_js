@@ -16,9 +16,9 @@ const LoginEL = () => {
   const pass = van.state('guest');
 
   async function c_login(){
-    console.log("Login...")
-    console.log(user.val)
-    console.log(pass.val)
+    // console.log("Login...")
+    // console.log(user.val)
+    // console.log(pass.val)
 
     let data = await useFetch('/api/auth/signin',{
       method:'POST',

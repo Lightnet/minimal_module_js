@@ -23,9 +23,9 @@ const SignUpEL = () => {
   const email2 = van.state('guest');
 
   async function c_signup(){
-    console.log("Login...")
-    console.log(username.val)
-    console.log(pass.val)
+    // console.log("Login...")
+    // console.log(username.val)
+    // console.log(pass.val)
     try {
       let data = await useFetch('/api/auth/signup',{
         method:'POST',

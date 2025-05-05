@@ -10,28 +10,43 @@ import { ctoggleTheme, toggleTheme } from "../theme/theme.js";
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import useFetch from '/libs/useFetch.js';
 import { themeIDState } from "../context.js";
+import { loginState } from "../context.js";
 
 const {button, div, span, label} = van.tags;
 
 export function AdminNavMenus() {
 
-  return div({ class: "sidebar active" },
-    div(
+  const renderLogin = van.derive(()=>{
+    console.log("loginState.val: ", loginState.val);
+    if(loginState.val){
+      console.log("LOGIN...");
+      return div(
+        button({ onclick:()=> ctoggleTheme() }, ()=> themeIDState.val === 'light' ? "Theme Light" : "Theme Dark"),
+        button({ onclick:()=> navigate("/admin") }, "Home"),
+        button({ onclick:()=> navigate("/admin/groups") }, "Groups"),
+        button({ onclick:()=> navigate("/admin/permissions") }, "Permissions"),
+        button({ onclick:()=> navigate("/admin/logs") }, "Logs"),
+        button({ onclick:()=> navigate("/admin/reports") }, "Reports"),
+        button({ onclick:()=> navigate('/admin/accounts')},'Accounts'),
+        button({ onclick:()=> navigate('/admin/tickets')},'Tickets'),
+        button({ onclick:()=> navigate('/admin/database')},'Database'),
+        button({ onclick:()=> navigate('/admin/backup')},'Back Up'),
+        button({ onclick:()=> navigate('/admin/settings')},'Settings'),
+        button({ onclick:()=> navigate('/admin/signout')},'Sign Out'),
+      );
+    }else{
+      console.log("GUEST ONLY...");
+      return div(
       // toggleTheme(),
-      button({ onclick:()=> ctoggleTheme() }, ()=> themeIDState.val === 'light' ? "Theme Light" : "Theme Dark"),
-      button({ onclick:()=> navigate("/admin") }, "Home"),
-      button({ onclick:()=> navigate("/admin/groups") }, "Groups"),
-      button({ onclick:()=> navigate("/admin/permissions") }, "Permissions"),
-      button({ onclick:()=> navigate("/admin/logs") }, "Logs"),
-      button({ onclick:()=> navigate("/admin/reports") }, "Reports"),
-      button({ onclick:()=> navigate('/admin/accounts')},'Accounts'),
-      button({ onclick:()=> navigate('/admin/tickets')},'Tickets'),
-      button({ onclick:()=> navigate('/admin/database')},'Database'),
-      button({ onclick:()=> navigate('/admin/backup')},'Back Up'),
-      button({ onclick:()=> navigate('/admin/settings')},'Settings'),
-      button({ onclick:()=> navigate('/admin/signin')},'Sign In'),
-      button({ onclick:()=> navigate('/admin/signout')},'Sign Out'),
-    )
+        button({ onclick:()=> ctoggleTheme() }, ()=> themeIDState.val === 'light' ? "Theme Light" : "Theme Dark"),
+        button({ onclick:()=> navigate("/admin") }, "Home"),
+        button({ onclick:()=> navigate('/admin/signin')},'Sign In'),
+      )
+    }
+  })
+
+  return div({ class: "sidebar active" },
+    renderLogin
   );
 }
 
