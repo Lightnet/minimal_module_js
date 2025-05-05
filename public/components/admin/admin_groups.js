@@ -6,16 +6,10 @@
 */
 
 import van from "vanjs-core";
-import { pageForumGroups } from "../forum/bb_groups.js";
 import { AdminNavMenus, Header } from "./admin_layout.js";
+import { btnCreateGroup, renderFormGroupMembership, renderGroupMembership, renderGroups } from "../groups/index.js";
 
-const {button, div, span, label,
-  table,
-  thead,
-  tr,
-  td,
-  tbody
-} = van.tags;
+const { div} = van.tags;
 
 export default function pageAdminGroups(){
   // return pageForumGroups();
@@ -24,7 +18,10 @@ export default function pageAdminGroups(){
     Header(),
     AdminNavMenus(),
     div({ class: "admin-content" }, 
-      pageForumGroups()
+      btnCreateGroup(),
+      renderGroups(),
+      renderFormGroupMembership(),
+      renderGroupMembership(),
     )
   );
 }

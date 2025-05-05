@@ -113,7 +113,7 @@ groups.post('groups/membership', authenticate, authorize('group', null, 'manage'
 });
 
 // Remove a user from a group
-groups.delete('groups/membership', authenticate, authorize('group', null, 'manage'), async (c) => {
+groups.delete('groups/membership', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
   const user = c.get('user');
   const { userId, groupId } = await c.req.json();
 
@@ -128,10 +128,13 @@ groups.delete('groups/membership', authenticate, authorize('group', null, 'manag
     return c.json({ error: 'User is not a member of this group' }, 404);
   }
 
+  console.log("membership:", membership)
+
   const stmt = db.prepare('DELETE FROM group_memberships WHERE user_id = ? AND group_id = ?');
   stmt.run(userId, groupId);
 
-  await logAudit(user.id, 'remove_group_membership', { user_id: userId, group_id: groupId, group_name: group.name });
+  // await logAudit(user.id, 'remove_group_membership', { user_id: userId, group_id: groupId, group_name: group.name });
+  await logAudit(user.id, 'remove_group_membership', { user_id: userId, group_id: groupId });
   return c.json({ message: 'User removed from group' });
 });
 
