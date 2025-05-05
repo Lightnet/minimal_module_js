@@ -96,6 +96,11 @@ const AccessNavMenu=()=>{
     div({class:"sidebar-item",title:"test",onclick:()=>navigate("/test")},
       i({class:"fas fa-flask"},''),
     ),
+    div({class:"sidebar-item",title:"admin",onclick:()=>{
+      window.location.href = "/admin"
+    }},
+      i({class:"fas fa-user-tie"},''),
+    ),
   );
 }
 

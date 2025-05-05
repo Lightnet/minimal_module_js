@@ -12,7 +12,7 @@ import { aliasState, roleState } from "../context.js";
 
 const {button, h1, div, label} = van.tags;
 
-function Page_Home() {
+function pageHome() {
 
   const username = van.derive(()=>aliasState.val);
 
@@ -38,5 +38,5 @@ function Page_Home() {
 }
 
 export{
-  Page_Home
+  pageHome
 }

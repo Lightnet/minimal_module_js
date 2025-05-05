@@ -12,7 +12,7 @@ import { HomeNavMenu } from "../navmenu.js";
 
 const {button, h1, div} = van.tags
 
-function BlogPage() {
+function pageBlog() {
 
   return div({id:"blog" },
     HomeNavMenu(),
@@ -29,5 +29,5 @@ function BlogPage() {
 }
 
 export{
-  BlogPage
+  pageBlog
 }

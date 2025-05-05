@@ -6,23 +6,14 @@
 */
 
 import { Hono } from 'hono';
-// import { scriptHtml02 } from '../pages.js';
 import { getDB } from '../../db/sqlite/sqlite_db.js';
-import { authenticate } from '../../middleware/sqlite/sqlite_auth.js';
+import { authenticate, authorize } from '../../middleware/sqlite/sqlite_auth.js';
 
 const route = new Hono();
 
-// BOARD GET test
-// route.get('/api/board',(c)=>{
-//   const db = c.get('db');
-//   const results = db.get_boards();
-//   return c.json(results);
-// })
-
 // https://hono.dev/docs/api/routing
 // BOARD GET
-route.get('/api/boards/:id', async (c)=>{
-  
+route.get('/api/boards/:id', authenticate, authorize('board', null, 'read'), async (c)=>{
   try {
     const db = await getDB();
     const id = c.req.param('id');
@@ -37,7 +28,7 @@ route.get('/api/boards/:id', async (c)=>{
 })
 
 // Boards get parent id
-route.get('/api/board/:id', async (c)=>{
+route.get('/api/board/:id', authenticate, authorize('board', null, 'read'), async (c)=>{
   try {
     const { id } = c.req.param();
     const db = await getDB();
@@ -50,7 +41,7 @@ route.get('/api/board/:id', async (c)=>{
 })
 
 // BOARD CREATE
-route.post('/api/board', authenticate, async(c)=>{
+route.post('/api/board', authenticate, authorize('board', null, 'create'), async(c)=>{
   try {
     const db = await getDB();
     const { name, description, moderator_group_id, parentid } = await c.req.json();
@@ -74,7 +65,7 @@ route.post('/api/board', authenticate, async(c)=>{
   }
 })
 // BOARD UPDATE
-route.put('/api/board/:id', async (c)=>{
+route.put('/api/board/:id', authenticate, authorize('board', null, 'update'), async (c)=>{
   const { id } = c.req.param();
   try {
     const db = await getDB();
@@ -95,7 +86,7 @@ route.put('/api/board/:id', async (c)=>{
   }
 })
 // BOARD DELETE
-route.delete('/api/board/:id', authenticate, async (c)=>{
+route.delete('/api/board/:id', authenticate, authorize('board', null, 'delete'), async (c)=>{
   try {
     const db = await getDB();
     const { id } = c.req.param();

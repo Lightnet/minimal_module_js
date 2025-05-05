@@ -43,7 +43,7 @@ route.get('/comment/*', (c) => {
 // FORUM
 //===============================================
 // FORUM GET
-route.get('/api/forum', async (c)=>{
+route.get('/api/forum', authenticate, async (c)=>{
   const db = await getDB();
   const stmt = db.prepare('SELECT * FROM forums');
   const forums = stmt.all();
@@ -51,7 +51,7 @@ route.get('/api/forum', async (c)=>{
   // return c.json({});
 });
 
-route.get('/api/forum/:id', (c)=>{
+route.get('/api/forum/:id', authenticate, (c)=>{
   const { id } = c.req.param();
   const forum = getForumById(id);
   if (!forum) {
@@ -86,7 +86,7 @@ route.post('/api/forum', authenticate, authorize('forum', null, 'create'), async
   // return c.json({ error: "error" }, 400);
 })
 // FORUM UPDATE
-route.put('/api/forum/:id', authenticate, async (c)=>{
+route.put('/api/forum/:id', authenticate, authorize('forum', null, 'update'),async (c)=>{
   const { id } = c.req.param();
   const forumId = parseInt(id, 10);
   const authResult = await authorize('forum', forumId, 'update')(c, c);
@@ -114,7 +114,7 @@ route.put('/api/forum/:id', authenticate, async (c)=>{
   
 })
 // FORUM DELETE
-route.delete('/api/forum/:id', authenticate, async (c)=>{
+route.delete('/api/forum/:id', authenticate, authorize('forum', null, 'delete'), async (c)=>{
   const { id } = c.req.param();
   const forumId = parseInt(id, 10);
   const authResult = await authorize('forum', forumId, 'delete')(c, c);

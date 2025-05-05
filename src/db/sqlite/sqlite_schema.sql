@@ -101,14 +101,36 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 
 CREATE TABLE IF NOT EXISTS reports (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER,
-  title varchar(255) NOT NULL,
-  type varchar(255) NOT NULL,
-  content TEXT(65535) NOT NULL,
-  isdone BOOLEAN DEFAULT 0,
-  isclose BOOLEAN DEFAULT 0,
-  create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  reporter_id INTEGER, -- User who submitted the report
+  resource_type TEXT NOT NULL, -- Type of resource	`topic`, `comment`, `blog`, `user`, `message`, etc.
+  resource_id INTEGER NOT NULL, -- ID of the specific resource
+  title TEXT NOT NULL, -- Brief summary of the report
+  reason TEXT NOT NULL, -- Detailed description of the issue
+  status TEXT NOT NULL DEFAULT 'open', -- Status: open, resolved, closed
+  created_at TEXT DEFAULT (datetime('now')),
+  updated_at TEXT DEFAULT (datetime('now'))
+  -- FOREIGN KEY (reporter_id) REFERENCES users(id),
+  -- CONSTRAINT valid_resource CHECK (resource_type IN ('topic', 'comment', 'blog', 'user', 'message'))
+);
+
+CREATE TABLE IF NOT EXISTS tickets (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  reporter_id INTEGER NOT NULL, -- User who submitted the ticket
+  resource_type TEXT, -- Optional: Type of resource (e.g., `topic`, `comment`, `blog`, `general`)
+  resource_id INTEGER, -- Optional: ID of the specific resource
+  title TEXT NOT NULL, -- Brief summary of the ticket
+  description TEXT NOT NULL, -- Detailed feedback or suggestion
+  category TEXT NOT NULL, -- e.g., `bug`, `feature`, `improvement`, `support`
+  priority TEXT NOT NULL DEFAULT 'low', -- e.g., `low`, `medium`, `high`
+  status TEXT NOT NULL DEFAULT 'open', -- e.g., `open`, `in_progress`, `resolved`, `closed`
+  response TEXT, -- Optional: Admin or support team response
+  created_at TEXT DEFAULT (datetime('now')),
+  updated_at TEXT DEFAULT (datetime('now'))
+  -- FOREIGN KEY (reporter_id) REFERENCES users(id),
+  -- CONSTRAINT valid_resource_type CHECK (resource_type IN ('topic', 'comment', 'blog', 'user', 'message', 'general') OR resource_type IS NULL),
+  -- CONSTRAINT valid_category CHECK (category IN ('bug', 'feature', 'improvement', 'support')),
+  -- CONSTRAINT valid_priority CHECK (priority IN ('low', 'medium', 'high')),
+  -- CONSTRAINT valid_status CHECK (status IN ('open', 'in_progress', 'resolved', 'closed'))
 );
 
 CREATE TABLE IF NOT EXISTS blogs (

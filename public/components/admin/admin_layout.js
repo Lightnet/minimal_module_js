@@ -22,7 +22,10 @@ export function AdminNavMenus() {
       console.log("LOGIN...");
       return div(
         button({ onclick:()=> ctoggleTheme() }, ()=> themeIDState.val === 'light' ? "Theme Light" : "Theme Dark"),
-        button({ onclick:()=> navigate("/admin") }, "Home"),
+        button({ onclick:()=> {
+          window.location.href = "/"
+        } }, "Home"),
+        button({ onclick:()=> navigate("/admin") }, "Admin Index"),
         button({ onclick:()=> navigate("/admin/groups") }, "Groups"),
         button({ onclick:()=> navigate("/admin/permissions") }, "Permissions"),
         button({ onclick:()=> navigate("/admin/logs") }, "Logs"),
@@ -39,7 +42,10 @@ export function AdminNavMenus() {
       return div(
       // toggleTheme(),
         button({ onclick:()=> ctoggleTheme() }, ()=> themeIDState.val === 'light' ? "Theme Light" : "Theme Dark"),
-        button({ onclick:()=> navigate("/admin") }, "Home"),
+        button({ onclick:()=> {
+          window.location.href = "/"
+        } }, "Home"),
+        button({ onclick:()=> navigate("/admin") }, "Admin Index"),
         button({ onclick:()=> navigate('/admin/signin')},'Sign In'),
       )
     }

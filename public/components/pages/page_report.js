@@ -12,7 +12,7 @@ import { HomeNavMenu } from "../navmenu.js";
 
 const {button, div, h1, pre, p, br} = van.tags
 
-function Page_Report() {
+function pageReport() {
 
   return div({id:"report" },
     HomeNavMenu(),
@@ -28,5 +28,5 @@ function Page_Report() {
 }
 
 export{
-  Page_Report
+  pageReport
 }

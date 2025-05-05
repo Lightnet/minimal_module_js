@@ -11,7 +11,7 @@ import { HomeNavMenu } from "../navmenu.js";
 
 const {button, div, h1} = van.tags
 
-function HelpPage() {
+function pageHelp() {
   van.derive(() => {
     console.log(getRouterParams()); // { section: "profile" }
   });
@@ -31,5 +31,5 @@ function HelpPage() {
 }
 
 export{
-  HelpPage
+  pageHelp
 }

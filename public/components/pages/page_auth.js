@@ -13,33 +13,33 @@ import { ForgotEL } from "../auth/forgot.js";
 
 const { div } = van.tags;
 
-function SignInPage(){
+function pageSignIn(){
   return div(
     SignInEL()
   );
 }
 
-function SignUpPage(){
+function pageSignUp(){
   return div(
     SignUpEL()
   )
 }
 
-function SignOutPage(){
+function pageSignOut(){
   return div(
     SignOutEL()
   )
 }
 
-function ForgotPage(){
+function pageForgot(){
   return div(
     ForgotEL()
   )
 }
 
 export {
-  SignInPage,
-  SignUpPage,
-  SignOutPage,
-  ForgotPage,
+  pageSignIn,
+  pageSignUp,
+  pageSignOut,
+  pageForgot,
 }

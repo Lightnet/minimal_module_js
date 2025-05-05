@@ -10,7 +10,7 @@ import { HomeNavMenu } from "../navmenu.js";
 
 const {button, input, h1, label, div} = van.tags;
 
-const Page_Setting = () => {
+const pageSetting = () => {
 
   return div({id:"settings" },
     HomeNavMenu(),
@@ -36,5 +36,5 @@ const Page_Setting = () => {
 }
 
 export {
-  Page_Setting
+  pageSetting
 }

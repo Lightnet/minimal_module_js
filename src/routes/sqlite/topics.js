@@ -9,11 +9,11 @@ import { Hono } from 'hono';
 // import { scriptHtml02 } from '../pages.js';
 // import db from '../../db/sqlite/sqlite_db.js';
 import { getDB } from '../../db/sqlite/sqlite_db.js';
-import { authenticate } from '../../middleware/sqlite/sqlite_auth.js';
+import { authenticate, authorize } from '../../middleware/sqlite/sqlite_auth.js';
 const route = new Hono();
 
 // topic get list parent id
-route.get('/api/topics/:id', async (c)=>{
+route.get('/api/topics/:id', authenticate, authorize('topic', null, 'read'), async (c)=>{
   try {
     const id = c.req.param('id');
     console.log("BOARDS: ", id);
@@ -27,7 +27,7 @@ route.get('/api/topics/:id', async (c)=>{
   }
 })
 // TOPIC CREATE
-route.post('/api/topic', authenticate, async (c)=>{
+route.post('/api/topic', authenticate, authorize('topic', null, 'create'), async (c)=>{
   try {
     const db = await getDB();
     const { title, content, parentid } = await c.req.json();
@@ -48,7 +48,7 @@ route.post('/api/topic', authenticate, async (c)=>{
 
 })
 // TOPIC UPDATE
-route.put('/api/topic/:id', async (c)=>{
+route.put('/api/topic/:id', authenticate, authorize('topic', null, 'update'), async (c)=>{
   const { id } = c.req.param();
   try {
     const db = await getDB();
@@ -69,7 +69,7 @@ route.put('/api/topic/:id', async (c)=>{
   }
 })
 // TOPIC DELETE
-route.delete('/api/topic/:id', authenticate, async (c)=>{
+route.delete('/api/topic/:id', authenticate, authorize('topic', null, 'delete'), async (c)=>{
   try {
     const db = await getDB();
     const { id } = c.req.param();
@@ -84,14 +84,8 @@ route.delete('/api/topic/:id', authenticate, async (c)=>{
   }
 })
 // GET TOPIC ID
-route.get('/api/topic/:id',(c)=>{
-  // const db = c.get('db');
-  // const id = c.req.param('id');
-  // console.log("board ID: ", c.req.param());
-  // const results = db.get_TopicID(id);
-  // //console.log(results);
-  // return c.json(results);
-  return c.json({api:"ERROR"});
-})
+// route.get('/api/topic/:id', authenticate, authorize('topic', null, 'read'), async(c)=>{
+//   return c.json({api:"ERROR"});
+// })
 
 export default route;

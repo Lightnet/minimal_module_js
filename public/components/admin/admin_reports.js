@@ -26,6 +26,25 @@ function pageReports() {
   const reports = van.state([]);
   const reportElement = tbody();
 
+  async function cfetchDeleteReport(id){
+    try {
+      const data = await useFetch(`/api/report/${id}`,{
+        method:'DELETE'
+      });
+      console.log("data: ",data)
+    } catch (error) {
+      console.log("error:", error.message);
+    }
+  }
+
+  async function cUserIdBan(id){
+    console.log("ID:", id)
+  }
+
+  async function cCheckUserId(id){
+    console.log("ID:", id)
+  }
+
   async function getReports() {
     try {
       const data = await useFetch("/api/report");
@@ -33,23 +52,16 @@ function pageReports() {
       console.log(data);
 
       for(let item of data){
-        van.add(reportElement,tr({class:""},
-          td(item.id),
-          td(item.user_id),
+        van.add(reportElement,tr({id:item.id},
+          td(item.reporter_id),
+          td(item.resource_type),
+          td(item.resource_id),
           td(item.title),
-          td(
-            button({ onclick: () => console.log(`Mark Done: ${item.id}`) },
-              `Done: ${item.isdone ? "True" : "False"}`
-            )
-          ),
-          td(
-            button({ onclick: () => console.log(`Close: ${item.id}`) },
-              `Close: ${item.isclose ? "True" : "False"}`
-            )
-          ),
-          td(item.create_at),
+          td(item.reason),
+          td(item.created_at),
           td({},
-            button("Delete")
+            button({onclick:()=>cfetchDeleteReport(item.id)},"Delete"),
+            button({onclick:()=>cCheckUserId(item.id)},"Check"),
           )
         ));
       }
@@ -74,11 +86,11 @@ function pageReports() {
         table(
           thead(
             tr(
-              td("ID"),
               td("User ID"),
-              td("Title"),
-              td("Done"),
-              td("Close"),
+              td("Resource Type"),
+              td("Resource Id"),
+              td("User ID"),
+              td("Reason"),
               td("Created"),
               td("Actions"),
             )

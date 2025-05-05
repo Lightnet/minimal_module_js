@@ -12,6 +12,7 @@ import { authenticate, authorize } from '../../../middleware/sqlite/sqlite_auth.
 
 import audit_logs from './admin_logs.js';
 import admin_reports from './admin_reports.js';
+import admin_tickets from './admin_tickets.js';
 import admin_accounts from './admin_accounts.js';
 import admin_backup from './admin_backup.js';
 import { getDB } from '../../../db/sqlite/sqlite_db.js';
@@ -32,8 +33,9 @@ const route = new Hono({
 });
 route.route('/', admin_backup);
 route.route('/', audit_logs);
-route.route('/api/', admin_reports);
 route.route('/api/admin/', admin_accounts);
+route.route('/api/', admin_reports);
+route.route('/api/', admin_tickets);
 
 //page
 route.get('/admin/logs', (c) => {

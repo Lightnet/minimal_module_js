@@ -12,7 +12,7 @@ import { AccountEL } from "../account/profile.js";
 
 const {button, h1, div, pre, p} = van.tags
 
-function AccountPage() {
+function pageAccount() {
 
   return div({id:"account" },
     HomeNavMenu(),
@@ -29,5 +29,5 @@ function AccountPage() {
 }
 
 export{
-  AccountPage
+  pageAccount
 }

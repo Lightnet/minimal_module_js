@@ -108,17 +108,20 @@ const route = new Hono({
   //strict: false 
 });
 
-route.get('/api/data', async (c) => {
+//test for fail
+route.get('/api/database/data', async (c) => {
   try {
+    console.log('/api/database/data')
     const db = await getDB();
     const data = db.prepare('SELECT * FROM some_table').all();
+    console.log(data)
     return c.json(data);
   } catch (err) {
     return c.json({ error: 'Service unavailable' }, 503);
   }
 });
 
-route.get('/api/status', async (c) => {
+route.get('/api/database/status', async (c) => {
   const isDb = await checkDbHealth();
   return c.json({ maintenance: isMaintenanceMode, dbStatus: isDb ? 'up' : 'down' });
 });
@@ -151,8 +154,6 @@ route.get('/api/database/tables', async (c) => {
   }
 
 });
-
-
 
 export default route;
 

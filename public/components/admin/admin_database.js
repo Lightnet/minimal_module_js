@@ -53,13 +53,33 @@ function pageDatabase() {
     }
   }
 
+  async function checkDBStatusFail(){
+    try {
+      const data = await useFetch(`/api/database/data`);
+      console.log(data);
+    } catch (error) {
+      
+    }
+  }
+
+  async function checkDBStatus(){
+    try {
+      const data = await useFetch(`/api/database/status`);
+      console.log(data);
+    } catch (error) {
+      
+    }
+  }
+
   return div({class:"container"},
     Header(),
     AdminNavMenus(),
     div({ class: "main-content" }, 
       label("Database Page"),
       div(
-        button({onclick:getTables},"Get Tables")
+        button({onclick:getTables},"Get Tables"),
+        button({onclick:checkDBStatusFail},"Check Tables (Fail)"),
+        button({onclick:checkDBStatus},"Check Status"),
       ),
       table(
         thead(

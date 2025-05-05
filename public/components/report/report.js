@@ -29,21 +29,24 @@ function El_CreateReportForm(){
 function createReportForm({closed}){
 
   const formTitle = van.state('test');
-  const formType = van.state('user');
-  const formContent = van.state('test');
-
+  const formReason = van.state('test');
+  const formResourceType = van.state('');
+  const formResourceId = van.state('');
+  
   async function btnCreateForum(){
     console.log("create report form");
     console.log(formTitle.val);
-    console.log(formType.val);
-    console.log(formContent.val);
+    console.log(formReason.val);
+    console.log(formResourceType.val);
+    console.log(formResourceId.val);
     try{
       const data = await useFetch('/api/report',{
         method:'POST',
         body:JSON.stringify({
           title:formTitle.val,
-          type:formType.val,
-          content:formContent.val,
+          reason:formReason.val,
+          resource_type:formResourceType.val,
+          resource_id:formResourceId.val,
         })
       });
       console.log(data);
@@ -61,16 +64,22 @@ function createReportForm({closed}){
       input({value:formTitle,oninput: e => formTitle.val = e.target.value, type:"text",placeholder:"Enter Report Title"}),
     ),
     div({class:"form-group"},
-      label({class:"report-type"},"Submit Type:"),
-      select({value:formType,oninput: e => formType.val = e.target.value,},
-        option({},"User"),
-        option({},"Bugs"),
-        option({},"Feedback"),
+      label({class:"report-type"},"Type:"),
+      select({value:formResourceType,oninput: e => formResourceType.val = e.target.value,},
+        option({value:"forum"},"Forum"),
+        option({value:"board"},"Board"),
+        option({value:"topic"},"Topic"),
+        option({value:"comment"},"Comment"),
+        option({value:"message"},"Message"),
       )
     ),
     div({class:"form-group"},
-      label({class:"report-content"},"Content:"),
-      textarea({value:formContent,oninput: e => formContent.val = e.target.value,placeholder:"Enter report details"}),
+      label({class:"report-type"},"Type ID:"),
+      input({type:"number",value:formResourceId,oninput: e => formResourceId.val = e.target.value,})
+    ),
+    div({class:"form-group"},
+      label({class:"report-content"},"Reason:"),
+      textarea({value:formReason,oninput: e => formReason.val = e.target.value,placeholder:"Enter report details"}),
     ),
 
     div({class:"form-group"},

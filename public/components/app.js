@@ -5,29 +5,30 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
+//const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 import van from "vanjs-core";
+// const {button, div, pre, p} = van.tags
+
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
 import useFetch from "/libs/useFetch.js";
 import { aliasState, loginState, roleState } from "/components/context.js";
 
-import { Page_Home } from "./pages/page_home.js";
-import { ForgotPage, SignInPage, SignOutPage, SignUpPage } from "./pages/page_auth.js";
-import { Page_About } from "./pages/page_about.js";
-//import { BlogPage } from "./pages/page_blog.js";
-import { Page_Report } from "./pages/page_report.js";
+import { pageHome } from "./pages/page_home.js";
+import { pageForgot, pageSignIn, pageSignOut, pageSignUp } from "./pages/page_auth.js";
+import { pageAbout } from "./pages/page_about.js";
+import { pageReport } from "./pages/page_report.js";
 // import { Page_Novel } from "./novel/novel.js";
-import { AccountPage } from "./pages/page_account.js";
+import { pageAccount } from "./pages/page_account.js";
 import { Page_Message } from "./messages/page_message.js";
-import { Page_Setting } from "./pages/page_settings.js";
+import { pageSetting } from "./pages/page_settings.js";
 import { pageForum, pageBoard, pageTopic, pageComment } from "./forum/bb_page.js";
 import { checkTheme } from "./theme/theme.js";
-import { HelpPage } from "./pages/page_help.js";
+import { pageHelp } from "./pages/page_help.js";
 import { Page_UI_Test } from "./pages/page_ui_test.js";
 import { pageForumPermissions } from "./forum/bb_permission.js";
 import { pageForumGroups } from "./forum/bb_groups.js";
-import { BlogPage } from "./pages/page_blog.js";
-// const {button, div, pre, p} = van.tags
-//const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+import { pageBlog } from "./pages/page_blog.js";
+
 
 const App = () => {
 
@@ -55,25 +56,24 @@ const App = () => {
   return Router({id:"route",
     //basename: "/", // Optional base name (All links are now prefixed with '/vanjs-routing')
     routes: [
-      { path: "/", component: Page_Home },
-      { path: "/about", component: Page_About },
-      { path: "/account", component: AccountPage },
-      { path: "/signin", component: SignInPage },
-      { path: "/signup", component: SignUpPage },
-      { path: "/signout", component: SignOutPage },
-      { path: "/forgot", component: ForgotPage },
-      { path: "/settings", component: Page_Setting },
+      { path: "/", component: pageHome },
+      { path: "/about", component: pageAbout },
+      { path: "/account", component: pageAccount },
+      { path: "/signin", component: pageSignIn },
+      { path: "/signup", component: pageSignUp },
+      { path: "/signout", component: pageSignOut },
+      { path: "/forgot", component: pageForgot },
+      { path: "/settings", component: pageSetting },
       { path: "/message", component: Page_Message },
       { path: "/forum", component: pageForum },
       { path: "/board", component: pageBoard },
       { path: "/topic", component: pageTopic },
       { path: "/permissions", component: pageForumPermissions },
       { path: "/groups", component: pageForumGroups },
-      { path: "/report", component: Page_Report },
-      { path: "/help", component: HelpPage },
+      { path: "/report", component: pageReport },
+      { path: "/help", component: pageHelp },
       { path: "/test", component: Page_UI_Test },
-      { path: "/blog", component: BlogPage },
-      // { path: "/help/:section", component: HelpPage },
+      { path: "/blog", component: pageBlog },
       // { path: "/novel", component: Page_Novel },
     ]
   });
