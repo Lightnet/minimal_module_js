@@ -6,8 +6,8 @@
 */
 
 import { Hono } from 'hono';
-import { getPool } from '../db/pg_pool.js';
-import { authenticate, authorize } from '../middleware/pg_auth.js'; // Update to pg_auth.js
+import { getPool } from '../../db/pg_pool.js';
+import { authenticate, authorize } from '../../middleware/pg_auth.js'; // Update to pg_auth.js
 
 const route = new Hono();
 

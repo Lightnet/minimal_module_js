@@ -8,7 +8,7 @@
 import { Hono } from 'hono';
 import { decode, sign, verify } from 'hono/jwt';
 import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
-import { adminCreateUser, checkUserExists, login, signup } from '../models/pg_user.js';
+import { adminCreateUser, checkUserExists, login, signup } from '../../models/pg_user.js';
 
 const route_auth = new Hono({ 
   //strict: false

@@ -6,10 +6,10 @@
 */
 
 import { Hono } from 'hono';
-import { scriptHtml02 } from '../../routes/pages.js';
-import { getPool } from '../db/pg_pool.js';
-import { getForumById, createForum } from '../models/pg_user.js'; // Update to pg_user.js
-import { authenticate, authorize } from '../middleware/pg_auth.js'; // Update to pg_auth.js
+import { scriptHtml02 } from '../../../routes/pages.js';
+import { getPool } from '../../db/pg_pool.js';
+import { getForumById, createForum } from '../../models/pg_user.js'; // Update to pg_user.js
+import { authenticate, authorize } from '../../middleware/pg_auth.js'; // Update to pg_auth.js
 
 const route = new Hono();
 

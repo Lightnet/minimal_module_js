@@ -5,3 +5,4 @@
 - post
 - put
 - patch
+- delete

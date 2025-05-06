@@ -6,11 +6,11 @@
 */
 
 import { Hono } from 'hono';
-import { getPool } from '../db/pg_pool.js';
-import { authenticate, authorize } from '../middleware/pg_auth.js';
-import { addPermission } from '../models/pg_user.js';
-import { logAudit } from '../utils/pg_audit.js';
-import { hashPassword } from '../../helpers.js';
+import { getPool } from '../../db/pg_pool.js';
+import { authenticate, authorize } from '../../middleware/pg_auth.js';
+import { addPermission } from '../../models/pg_user.js';
+import { logAudit } from '../../utils/pg_audit.js';
+import { hashPassword } from '../../../helpers.js';
 
 const permissions = new Hono();
 

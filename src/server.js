@@ -130,7 +130,8 @@ if (process.env.NODE_ENV !== 'test') {
     });
 
     //console.log(io);
-    console.log('Process Type:',typeServer)
+    console.log('Process Type:',typeServer);
+    console.log('SQLITE');
     let urlList = [
       `http://localhost:${PORT}`,
       `http://localhost:${PORT}/admin`,

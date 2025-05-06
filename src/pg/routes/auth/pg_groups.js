@@ -6,9 +6,9 @@
 */
 
 import { Hono } from 'hono';
-import { getPool } from '../db/pg_pool.js';
-import { authenticate, authorize } from '../middleware/pg_auth.js';
-import { logAudit } from '../utils/pg_audit.js';
+import { getPool } from '../../db/pg_pool.js';
+import { authenticate, authorize } from '../../middleware/pg_auth.js';
+import { logAudit } from '../../utils/pg_audit.js';
 
 const groups = new Hono();
 

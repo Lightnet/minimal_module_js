@@ -9,13 +9,11 @@ import { Server } from 'socket.io'
 import { serve } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
-// import { jwt } from 'hono/jwt'
 // import { rateLimiter } from 'hono-rate-limiter';
 import { scriptHtml02 } from './routes/pages.js';
 import module_routes from './pg/routes/index.js';
 // import { maintenanceMiddleware } from './utils/maintenance.js';
 const PORT = process.env.PORT || 3000;
-console.log("pg server");
 const app = new Hono({ 
   //strict: false 
 });
@@ -56,7 +54,8 @@ if (process.env.NODE_ENV !== 'test') {
     });
 
     //console.log(io);
-    console.log('Process Type:',typeServer)
+    console.log('Process Type:',typeServer);
+    console.log('PGSQL SERVER');
     let urlList = [
       `http://localhost:${PORT}`,
       `http://localhost:${PORT}/admin`,
