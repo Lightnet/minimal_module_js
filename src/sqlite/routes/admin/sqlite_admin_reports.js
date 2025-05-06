@@ -49,14 +49,16 @@ route.put('/report', authenticate, async (c)=>{
   
   const data = await c.req.json();
   console.log("data: ", data);
-  // const {title, type, content} = await c.req.json();
+  const { id, status } = await c.req.json();
+  console.log("id:", id);
+  console.log("status:", status);
 
   try {
     const user = c.get('user');
     const db = await getDB();
-    // const stmt = db.prepare(`UPDATE tickets SET status=? WHERE id=?`);
-    // const results = stmt.run(status, id);
-    // console.log(results);
+    const stmt = db.prepare(`UPDATE reports SET status=? WHERE id=?`);
+    const results = stmt.run(status, id);
+    console.log(results);
     return c.json({api:"UPDATE"});
   } catch (error) {
     console.log(error.message);

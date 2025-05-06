@@ -11,27 +11,31 @@ import { Modal } from "vanjs-ui";
 import useFetch from "/libs/useFetch.js";
 const {button, div, label, select, option, textarea, input} = van.tags;
 
-//BUTTON MODAL
-function El_CreateReportForm(){
-
-  const isCreated = van.state(false);
-  function btnCreateForum(){
-    isCreated.val = false;
-    van.add(document.body, Modal({closed:isCreated},
-      createReportForm({closed:isCreated})
-    ));
-  }
-
-  return button({class:"normal",onclick:()=>btnCreateForum()},"Create Report");
+//BUTTON CREATE REPORT WITH PARAMS
+export function btnCreateReportForm(type, id){
+  return button({class:"normal",onclick:()=>createReportForm(type, id, false)},"Create Report");
 }
 
-// CREATE REPORT FORUM
-function createReportForm({closed}){
+export function createReportForm(type, id, isDisable=true){
+  const isCreated = van.state(false);
+  van.add(document.body, Modal({closed:isCreated},
+    createReportFormParams({closed:isCreated,type:type,id:id,isDisable:isDisable})
+  ));
+}
+
+function createReportFormParams({closed, type, id, isDisable}){
 
   const formTitle = van.state('test');
   const formReason = van.state('test');
-  const formResourceType = van.state('');
-  const formResourceId = van.state('');
+  const formResourceType = van.state(type || '');
+  const formResourceId = van.state(id || '');
+  const _isDisable = van.state(isDisable || false);
+  //render set correctly
+  setTimeout(()=>{
+    formResourceType.val = type || '';
+    document.getElementById('resourcetype').value = type || ''
+    console.log(formResourceType.val);
+  },1);
   
   async function btnCreateForum(){
     console.log("create report form");
@@ -65,7 +69,12 @@ function createReportForm({closed}){
     ),
     div({class:"form-group"},
       label({class:"report-type"},"Type:"),
-      select({value:formResourceType,oninput: e => formResourceType.val = e.target.value,},
+      select({
+        id:"resourcetype",
+        value:formResourceType,
+        oninput: e => formResourceType.val = e.target.value,
+        disabled:_isDisable.val
+      },
         option({value:"forum"},"Forum"),
         option({value:"board"},"Board"),
         option({value:"topic"},"Topic"),
@@ -75,7 +84,7 @@ function createReportForm({closed}){
     ),
     div({class:"form-group"},
       label({class:"report-type"},"Type ID:"),
-      input({type:"number",value:formResourceId,oninput: e => formResourceId.val = e.target.value,})
+      input({type:"number",value:formResourceId,oninput: e => formResourceId.val = e.target.value,disabled:_isDisable.val})
     ),
     div({class:"form-group"},
       label({class:"report-content"},"Reason:"),
@@ -90,6 +99,3 @@ function createReportForm({closed}){
 
 }
 
-export {
-  El_CreateReportForm
-}

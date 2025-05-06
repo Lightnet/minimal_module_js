@@ -16,6 +16,7 @@ import { topicContentState, topicTitleState } from "../context.js";
 import { Color } from "../notify/notifycontext.js";
 import { notify } from "../notify/notify.js";
 import { getQueryId } from "./base_layout.js";
+import { createReportForm } from "../report/report.js";
 
 const {button, input, textarea, i, p, link, label, h2, div} = van.tags;
 // BUTTON CREATE TOPIC
@@ -409,7 +410,7 @@ export async function getBoardIDTopics(topicEl,_id){
                 i({class:"fa-solid fa-trash"}),
                 label(' Delete')
               ),
-              button({class:"report-btn"},
+              button({class:"report-btn", onclick:()=>createReportForm('topic',item.id)},
                 i({class:"fa-solid fa-flag"}),
                 label(' Report')
               ),

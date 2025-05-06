@@ -12,6 +12,7 @@ import {useFetch} from "/libs/useFetch.js";
 import { aliasState, loginState, forumIDState, boardIDState, topicIDState, commentIDState } from "/components/context.js";
 import { notify } from "../notify/notify.js";
 import { Color } from "../notify/notifycontext.js";
+import { createReportForm } from "../report/report.js";
 
 const {button, input, textarea, i, p, h2, label, div} = van.tags;
 
@@ -305,7 +306,7 @@ export async function getTopicIDComments(topicEl, _id){
                 i({class:"fa-solid fa-trash"}),
                 label(" Delete")
               ),
-              button({class:"report-btn"},
+              button({class:"report-btn",onclick:()=>createReportForm('comment',item.id)},
                 i({class:"fa-solid fa-flag"}),
                 label(" Report")
               ),
