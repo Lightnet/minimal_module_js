@@ -38,7 +38,7 @@ route.post('/api/blog', authenticate, async(c)=>{
     console.log("error: ", error.message);
     return c.json({api:"error"});
   }
-  return c.json({error:'error'});
+  
 })
 // UPDATE
 route.put('/api/blog/:id', authenticate,async (c)=>{

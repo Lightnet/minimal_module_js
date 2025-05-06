@@ -100,3 +100,4 @@ app.get('/backup-table/:tableName', authenticate, async (c) => {
 });
 // Start server
 export default app;
+

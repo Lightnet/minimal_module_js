@@ -14,7 +14,7 @@ const AccountEL = () => {
 
   async function c_info(){
     try {
-      let data = await useFetch('/api/user');
+      let data = await useFetch('/api/auth/user');
       console.log(data);
       if(data){
         ELInfon.innerHTML = '';//clear children
@@ -32,7 +32,7 @@ const AccountEL = () => {
       }
 
     } catch (error) {
-      
+      console.log("error: ", error.message)
     }
   }
 

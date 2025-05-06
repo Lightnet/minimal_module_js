@@ -16,6 +16,7 @@ import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } 
 
 import { adminCreateUser, checkUserExists, login, signup } from '../../models/sqlite_user.js';
 import { authenticate } from '../../middleware/sqlite_auth.js';
+import { getDB } from '../../db/sqlite_db.js';
 // console.log("auth.js")
 const route_auth = new Hono({ 
   //strict: false
@@ -135,13 +136,18 @@ route_auth.get('/api/auth/user', authenticate, async (c) => {
       // var decoded = jwt.verify(tokenCookie, 'wrong-secret');
       // var userToken = jwt.verify(tokenCookie, process.env.JWT_SECRET || 'SECRET');
       var userToken = await verify(tokenCookie, process.env.JWT_SECRET || 'SECRET');
-      console.log("userToken")
-      console.log(userToken)
+      console.log("userToken");
+      console.log(userToken);
+
+      const db = await getDB();
+      const stmt = db.prepare('SELECT * FROM users WHERE id = ?');
+      const user = stmt.get(userToken.id);
 
       return c.json({
         api:"PASS",
         alias:userToken.alias,
-        role:userToken.role
+        role:userToken.role,
+        join:user.created_at
       });
     } catch(err) {
       // err

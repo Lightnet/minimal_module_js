@@ -7,7 +7,7 @@
 
 import van from "vanjs-core";
 // import { Router, Link, getRouterParams, navigate, getRouterQuery } from "vanjs-routing";
-import { El_CreateReportForm } from "../report/report.js";
+import { btnCreateReportForm } from "../report/report.js";
 import { HomeNavMenu } from "../navmenu.js";
 
 const {button, div, h1, pre, p, br} = van.tags
@@ -21,7 +21,7 @@ function pageReport() {
          h1("Report"),
       ),
       div({class:"ccontent"},
-        El_CreateReportForm(),
+        btnCreateReportForm(),
       ),
     ),
   );
