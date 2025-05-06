@@ -7,10 +7,11 @@
 
 import { Hono } from 'hono';
 import { getDB } from '../db/sqlite_db.js';
+import { authenticate } from '../middleware/sqlite_auth.js';
 
 const route = new Hono();
 // GET MESSAGES
-route.get('/api/message', async (c)=>{
+route.get('/api/message', authenticate, async (c)=>{
   try {
     const db = await getDB();
     let stmt = db.prepare(`SELECT * FROM messages`);
@@ -20,9 +21,8 @@ route.get('/api/message', async (c)=>{
     return c.json({api:"error"});
   }
 })
-
 // CREATE
-route.post('/api/message', async(c)=>{
+route.post('/api/message', authenticate, async(c)=>{
   try {
     // const data = await c.req.json();
     const {alias, subject, content} = await c.req.json();
@@ -36,9 +36,8 @@ route.post('/api/message', async(c)=>{
     return c.json({api:"ERROR"});
   }
 })
-
 //DELETE
-route.delete('/api/message/:id', async(c)=>{
+route.delete('/api/message/:id', authenticate, async(c)=>{
   const id = c.req.param('id');
   console.log('ID: ', id);
   const db = await getDB();

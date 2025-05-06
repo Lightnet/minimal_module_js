@@ -1,10 +1,10 @@
 
 import { Hono } from 'hono';
-import { authenticate, authorize } from '../middleware/sqlite_auth.js';
-import { addPermission } from '../models/sqlite_user.js';
+import { authenticate, authorize } from '../../middleware/sqlite_auth.js';
+import { addPermission } from '../../models/sqlite_user.js';
 // import db from '../../db/sqlite/sqlite_db.js';
-import { logAudit } from '../utils/sqlite_audit.js';
-import { getDB } from '../db/sqlite_db.js';
+import { logAudit } from '../../utils/sqlite_audit.js';
+import { getDB } from '../../db/sqlite_db.js';
 // import db from '../db/sqlite/sqlite_db.js';
 // const { rateLimiter } = require('@hono/rate-limiter');
 // permissions.use('/permissions', rateLimiter({ windowMs: 15 * 60 * 1000, limit: 100 }));
@@ -52,7 +52,7 @@ permissions.post('permissions', authenticate, authorize('group', null, 'manage')
     return c.json({ error: error.message }, 400);
   }
 });
-
+// permission delete
 permissions.delete('permissions/:id', authenticate, authorize('group', null, 'manage'), async (c) => {
   const { id } = c.req.param();
 
@@ -85,10 +85,7 @@ export default permissions;
 
 /*
 GET /permissions: Returns all permissions as JSON for the list table.
-
 POST /permissions: Unchanged, but ensures resource_id is parsed as an integer and allowed handles boolean-like inputs.
-
 GET /permissions/manage: Serves the permissions.html file (created below) for the admin interface.
-
 Authentication: All endpoints require authenticate and authorize('group', null, 'manage') to restrict to admins.
 */

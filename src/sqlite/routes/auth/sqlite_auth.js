@@ -14,8 +14,8 @@ import { Hono } from 'hono';
 import { decode, sign, verify } from 'hono/jwt';
 import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie';
 
-import { adminCreateUser, checkUserExists, login, signup } from '../models/sqlite_user.js';
-import { authenticate } from '../middleware/sqlite_auth.js';
+import { adminCreateUser, checkUserExists, login, signup } from '../../models/sqlite_user.js';
+import { authenticate } from '../../middleware/sqlite_auth.js';
 // console.log("auth.js")
 const route_auth = new Hono({ 
   //strict: false
@@ -152,7 +152,8 @@ route_auth.get('/api/auth/user', async (c) => {
   return c.json({api:"ERROR"});
 });
 
-route_auth.get('/api/admin', async (c) => {
+//tested for account
+route_auth.get('/api/admin/create', async (c) => {
   let username = "admin";
   let email = "admin";
   let password = "admin";

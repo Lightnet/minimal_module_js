@@ -2,16 +2,12 @@
 // const { authenticate, authorize } = require('../middleware/auth');
 // const pool = require('../db');
 import { Hono } from 'hono';
-import { authenticate, authorize } from '../middleware/sqlite_auth.js';
+import { authenticate, authorize } from '../../middleware/sqlite_auth.js';
 // import db from '../../db/sqlite/sqlite_db.js';
-import { getDB } from '../db/sqlite_db.js';
-import { logAudit } from '../utils/sqlite_audit.js';
+import { getDB } from '../../db/sqlite_db.js';
+import { logAudit } from '../../utils/sqlite_audit.js';
 const groups = new Hono();
 
-// Test
-// groups.get('groups/test', async (c) => {
-//   return c.json({test:"test"});
-// });
 // Get all groups
 groups.get('groups', async (c) => {
   const db = await getDB();
@@ -19,7 +15,6 @@ groups.get('groups', async (c) => {
   const groups = stmt.all();
   return c.json(groups);
 });
-
 // Create a new group
 groups.post('groups', authenticate, authorize('group', null, 'manage'), async (c) => {
   const user = c.get('user');
@@ -48,7 +43,6 @@ groups.post('groups', authenticate, authorize('group', null, 'manage'), async (c
     return c.json({ error: 'Failed to create group' }, 500);
   }
 });
-
 // Update a group
 groups.put('group/:id', authenticate, authorize('group', null, 'manage'), async (c) => {
   const user = c.get('user');
@@ -78,7 +72,6 @@ groups.put('group/:id', authenticate, authorize('group', null, 'manage'), async 
     return c.json({ error: 'Failed to update group' }, 500);
   }
 });
-
 // Assign a user to a group
 groups.post('groups/membership', authenticate, authorize('group', null, 'manage'), async (c) => {
   const user = c.get('user');
@@ -111,9 +104,8 @@ groups.post('groups/membership', authenticate, authorize('group', null, 'manage'
     return c.json({ error: 'Failed to assign user to group' }, 500);
   }
 });
-
 // Remove a user from a group
-groups.delete('groups/membership', authenticate, /*authorize('group', null, 'manage'),*/ async (c) => {
+groups.delete('groups/membership', authenticate, authorize('group', null, 'manage'), async (c) => {
   const user = c.get('user');
   const { userId, groupId } = await c.req.json();
 
@@ -137,7 +129,6 @@ groups.delete('groups/membership', authenticate, /*authorize('group', null, 'man
   await logAudit(user.id, 'remove_group_membership', { user_id: userId, group_id: groupId });
   return c.json({ message: 'User removed from group' });
 });
-
 // Delete a group
 groups.delete('groups/:id', authenticate, authorize('group', null, 'manage'), async (c) => {
   const user = c.get('user');
@@ -163,7 +154,6 @@ groups.delete('groups/:id', authenticate, authorize('group', null, 'manage'), as
   await logAudit(user.id, 'delete_group', { group_id: id, name: group.name });
   return c.json({ message: 'Group deleted' });
 });
-
 // List group memberships
 groups.get('groups/memberships/:groupId', authenticate, authorize('group', null, 'manage'), async (c) => {
   // const { groupId } = c.req.query();

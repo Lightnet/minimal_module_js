@@ -6,17 +6,10 @@
 */
 
 import { Hono } from 'hono';
-// import { scriptHtml02 } from '../pages.js';
-// import db from '../../db/sqlite/sqlite_db.js';
-import { getDB } from '../db/sqlite_db.js';
-import { authenticate, authorize } from '../middleware/sqlite_auth.js';
+import { getDB } from '../../db/sqlite_db.js';
+import { authenticate, authorize } from '../../middleware/sqlite_auth.js';
 
 const route = new Hono();
-
-//===============================================
-// COMMENT
-//===============================================
-
 // get comments from topic id parent
 route.get('/api/comments/:id', authenticate, authorize('comment', null, 'read'),async (c)=>{
   try {

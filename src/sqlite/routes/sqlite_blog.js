@@ -7,6 +7,7 @@
 
 import { Hono } from 'hono';
 import { getDB } from '../db/sqlite_db.js';
+import { authenticate } from '../middleware/sqlite_auth.js';
 
 const route = new Hono();
 // GET BLOGS
@@ -22,7 +23,7 @@ route.get('/api/blog', async (c)=>{
 
 })
 // CREATE
-route.post('/api/blog', async(c)=>{
+route.post('/api/blog', authenticate, async(c)=>{
   try {
     const data = await c.req.json();
     console.log("data:", data);
@@ -40,7 +41,7 @@ route.post('/api/blog', async(c)=>{
   return c.json({error:'error'});
 })
 // UPDATE
-route.put('/api/blog/:id',async (c)=>{
+route.put('/api/blog/:id', authenticate,async (c)=>{
   try {
     const { id } = c.req.param();
     const {title, content} = await c.req.json();
@@ -51,10 +52,9 @@ route.put('/api/blog/:id',async (c)=>{
   } catch (error) {
     return c.json({error:'error'});
   }
-  return c.json({api:'ERROR'});
 })
 //DELETE
-route.delete('/api/blog/:id', async (c)=>{
+route.delete('/api/blog/:id', authenticate, async (c)=>{
   try {
     const { id } = c.req.param();
     const db = await getDB();
@@ -64,7 +64,6 @@ route.delete('/api/blog/:id', async (c)=>{
   } catch (error) {
     return c.json({api:'ERROR'});
   }
-  return c.json({api:'ERROR'});
 })
 
 export default route;

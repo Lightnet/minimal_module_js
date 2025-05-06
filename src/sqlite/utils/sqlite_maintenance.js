@@ -45,15 +45,14 @@ export async function setMaintenanceState(isEnabled) {
   }
 }
 
-/*
 // maintenance.json
-{
-  "isMaintenanceMode": false
-}
-*/
+//{"isMaintenanceMode": false}
 export async function maintenanceMiddleware(c, next){
   const isMaintenanceMode = await getMaintenanceState();
   const isDbHealthMode = await checkDbHealth();
+  if (isMaintenanceMode || !isDbHealthMode) {
+    return c.html('<h1>Under Maintenance</h1><p>Back soon!</p>');
+  }
   if (!isMaintenanceMode && isDbHealthMode) {
     await next(); // Proceed if not in maintenance mode and DB is up
     return;
@@ -114,25 +113,6 @@ route.post('/api/maintenance', async (c)=>{
 });
 
 export default route;
-
-// Maintenance Middleware
-// const maintenanceMiddleware = async (c, next) => {
-//   const isMaintenanceMode = await getMaintenanceState();
-//   if (!isMaintenanceMode && checkDbHealth()) {
-//     await next(); // Proceed if not in maintenance mode and DB is up
-//     return;
-//   }
-//   const payload = c.get('jwtPayload');
-//   if (!payload) {
-//     return c.json({ error: 'Unauthorized' }, 401);
-//   }
-//   const role = await getUserRole(payload.userId);
-//   if (['admin', 'super_admin'].includes(role)) {
-//     await next(); // Allow admins/super-admins
-//     return;
-//   }
-//   return c.json({ error: 'Service under maintenance' }, 503);
-// };
 
 // Middleware
 // app.use('*', async (c, next) => {

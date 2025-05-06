@@ -6,52 +6,45 @@
 */
 
 import { Hono } from 'hono';
-import { scriptHtml02 } from '../../routes/pages.js';
-// import db from '../../db/sqlite/sqlite_db.js';
-import { getDB } from '../db/sqlite_db.js';
-import { getForumById, createForum } from '../models/sqlite_user.js';
-import { authenticate, authorize } from '../middleware/sqlite_auth.js';
+import { scriptHtml02 } from '../../../routes/pages.js';
+import { getDB } from '../../db/sqlite_db.js';
+import { getForumById, createForum } from '../../models/sqlite_user.js';
+import { authenticate, authorize } from '../../middleware/sqlite_auth.js';
 
 const route = new Hono();
 
-route.get('/forum', (c) => {
+route.get('/forum', authenticate, authorize('forum', null, 'read'), (c) => {
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
-
-route.get('/forum/*', (c) => {
+route.get('/forum/*', authenticate, authorize('forum', null, 'read'), (c) => {
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
-
-route.get('/board/*', (c) => {
+route.get('/board/*', authenticate, authorize('board', null, 'read'), (c) => {
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
-
-route.get('/topic/*', (c) => {
+route.get('/topic/*', authenticate, authorize('topic', null, 'read'), (c) => {
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
-
-route.get('/comment/*', (c) => {
+route.get('/comment/*', authenticate, authorize('comment', null, 'read'), (c) => {
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
-
 //===============================================
 // FORUM
 //===============================================
 // FORUM GET
-route.get('/api/forum', authenticate, async (c)=>{
+route.get('/api/forum', authenticate, authorize('forum', null, 'read'), async (c)=>{
   const db = await getDB();
   const stmt = db.prepare('SELECT * FROM forums');
   const forums = stmt.all();
   return c.json(forums);
   // return c.json({});
 });
-
-route.get('/api/forum/:id', authenticate, (c)=>{
+route.get('/api/forum/:id', authenticate, authorize('forum', null, 'read'), (c)=>{
   const { id } = c.req.param();
   const forum = getForumById(id);
   if (!forum) {
@@ -59,10 +52,8 @@ route.get('/api/forum/:id', authenticate, (c)=>{
   }
   return c.json(forum);
 });
-
 // FORUM CREATE
 route.post('/api/forum', authenticate, authorize('forum', null, 'create'), async (c)=>{
-
   const { name, description, moderator_group_id } = await c.req.json();
   console.log("name:", name);
   console.log("description:", description);
@@ -80,10 +71,8 @@ route.post('/api/forum', authenticate, authorize('forum', null, 'create'), async
       description:description,
     });
   } catch (error) {
-
     return c.json({ error: error.message }, 400);
   }
-  // return c.json({ error: "error" }, 400);
 })
 // FORUM UPDATE
 route.put('/api/forum/:id', authenticate, authorize('forum', null, 'update'),async (c)=>{
@@ -131,8 +120,5 @@ route.delete('/api/forum/:id', authenticate, authorize('forum', null, 'delete'),
   }
   
 })
-
-//===============================================
-// EXPORT
-//===============================================
+// EXPORT DEFAULT
 export default route;

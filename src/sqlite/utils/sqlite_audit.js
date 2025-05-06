@@ -5,7 +5,6 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-// import db from '../db/sqlite/sqlite_db.js';
 import { Hono } from 'hono';
 import { authenticate, authorize } from '../middleware/sqlite_auth.js';
 import { getDB } from '../db/sqlite_db.js';

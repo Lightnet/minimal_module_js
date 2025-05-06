@@ -1,14 +1,18 @@
-// for utis database
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
 
+// for utis database
 import fs from 'fs/promises';
 import { Hono } from 'hono';
 import { getDB } from '../db/sqlite_db.js';
 import van from "mini-van-plate/van-plate"
 import { checkUserExists } from '../models/sqlite_user.js';
 import { hashPassword } from '../../helpers.js';
-
-const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true';
-
+import { getMaintenanceState } from '../utils/sqlite_maintenance.js';
 
 const adminCache = new Map();
 // Cache admin roles
@@ -126,20 +130,21 @@ route.get('/api/database/data', async (c) => {
 
 route.get('/api/database/status', async (c) => {
   const isDb = await checkDbHealth();
+  const isMaintenanceMode = await getMaintenanceState();
   return c.json({ maintenance: isMaintenanceMode, dbStatus: isDb ? 'up' : 'down' });
 });
 
-// app.get('/', (c) => {
-//   if (isMaintenanceMode || !checkDbHealth()) {
+// app.get('/', async (c) => {
+//   const isMaintenanceMode = await getMaintenanceState();
+//   const isDbHealthMode = await checkDbHealth();
+//   if (isMaintenanceMode || !isDbHealthMode) {
 //     return c.html('<h1>Under Maintenance</h1><p>Back soon!</p>');
 //   }
 //   return c.html('<h1>Welcome</h1>');
 // });
 
 route.get('/api/database/tables', async (c) => {
-
   try {
-
     const db = await getDB();
     const tables = db
       .prepare(`
@@ -149,13 +154,10 @@ route.get('/api/database/tables', async (c) => {
       `)
       .all()
       .map(row => row.name);
-
       return c.json({ tables });
-
   } catch (error) {
     return c.json({error:"ERROR"});  
   }
-
 });
 
 const {a, body, div, form, button, label, input, li, p, ul} = van.tags
@@ -168,7 +170,6 @@ route.get('/setup', async (c) => {
   // if(adminExists){
   //   return c.text('404 Not Found', 404);
   // }
-
   return c.html(
     van.html(
       body(
@@ -195,7 +196,6 @@ route.get('/setup', async (c) => {
       )
     )
   )
-
 })
 
 route.post('/setup', async (c, next) => {
@@ -229,7 +229,6 @@ route.post('/setup', async (c, next) => {
     console.log("username:",username)
     console.log("passphrase:",passphrase)
     console.log("email:",email)
-
     const user = await checkUserExists({
       username: username, 
       email: email
@@ -239,25 +238,20 @@ route.post('/setup', async (c, next) => {
       // const result = signup(username, email , passphrase);
       let {salt, hash} = hashPassword(passphrase);
       const role = "admin"
-
       const stmt = db.prepare(`
         INSERT INTO users (username, email, password_hash, role, salt)
         VALUES (?, ?, ?, ?, ?)
       `);
-
       const result = stmt.run(username, email, hash, role, salt);
       console.log(result)
-
       username = null;
       passphrase = null;
       email = null;
       return c.text('CREATE', 200);
     }
   }
-
   return c.text('404 Not Found', 404);
 })
-
 
 export default route;
 

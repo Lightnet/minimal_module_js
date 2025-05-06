@@ -6,8 +6,8 @@
 */
 
 import { Hono } from 'hono';
-import { getDB } from '../db/sqlite_db.js';
-import { authenticate, authorize } from '../middleware/sqlite_auth.js';
+import { getDB } from '../../db/sqlite_db.js';
+import { authenticate, authorize } from '../../middleware/sqlite_auth.js';
 
 const route = new Hono();
 
