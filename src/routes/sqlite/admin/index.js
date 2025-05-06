@@ -75,4 +75,19 @@ route.get('/admin/permissions', (c) => {
   return c.html(pageHtml);
 });
 
+
+// route.use('/admin/*', async (c, next) => {
+//   if (!isSetupComplete) {
+//     return c.json({ error: 'Admin setup not complete. Please run /setup.' }, 403);
+//   }
+//   // Add authentication check here (e.g., JWT or session)
+//   const user = c.get('user'); // Assume user is set by auth middleware
+//   if (!user || user.role !== 'admin') {
+//     return c.json({ error: 'Unauthorized. Admin access required.' }, 403);
+//   }
+//   await next();
+// });
+
+
+
 export default route;

@@ -31,7 +31,6 @@ route_auth.post('/api/auth/signup', async (c) => {
       if((!data.alias)||(!data.passphrase)){
         return c.json({api:"EMPTY"});  
       }
-      const db = c.get('db');
       // const user = db.user_exist(data.alias);
       const user = await checkUserExists({
         username: data.username, 

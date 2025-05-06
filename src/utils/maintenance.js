@@ -68,7 +68,7 @@ export async function maintenanceMiddleware(c, next){
     // Fallback to cookie
     const tokenCookie = getCookie(c, 'token');
     // const tokenCookie = getCookie(c, 'auth_token');
-    console.log("tokenCookie: ", tokenCookie);
+    // console.log("tokenCookie: ", tokenCookie);
     if (tokenCookie) {
       token = tokenCookie;
     }
@@ -81,10 +81,10 @@ export async function maintenanceMiddleware(c, next){
 
   try {
     const decoded = await verify(token, process.env.JWT_SECRET || 'SECRET');
-    console.log("decoded: ", decoded);
+    // console.log("decoded: ", decoded);
 
     const role = await getUserRole(decoded.id);
-    console.log("role:", role);
+    // console.log("role:", role);
     if (['admin', 'super_admin'].includes(role)) {
       await next(); // Allow admins/super-admins
       return;

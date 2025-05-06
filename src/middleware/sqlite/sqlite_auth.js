@@ -22,7 +22,7 @@ export async function authenticate(c, next) {
     // Fallback to cookie
     const tokenCookie = getCookie(c, 'token');
     // const tokenCookie = getCookie(c, 'auth_token');
-    console.log("tokenCookie: ", tokenCookie);
+    // console.log("tokenCookie: ", tokenCookie);
     if (tokenCookie) {
       token = tokenCookie;
     }

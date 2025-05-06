@@ -3,6 +3,9 @@
 import fs from 'fs/promises';
 import { Hono } from 'hono';
 import { getDB } from '../../db/sqlite/sqlite_db.js';
+import van from "mini-van-plate/van-plate"
+import { checkUserExists } from '../../models/sqlite/sqlite_user.js';
+import { hashPassword } from '../../helpers.js';
 
 const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true';
 
@@ -154,6 +157,107 @@ route.get('/api/database/tables', async (c) => {
   }
 
 });
+
+const {a, body, div, form, button, label, input, li, p, ul} = van.tags
+route.get('/setup', async (c) => {
+  const db = await getDB();
+  const adminExists = db
+    .prepare(`SELECT COUNT(*) as count FROM users WHERE role = 'admin'`)
+    .get().count > 0;
+  console.log(adminExists);
+  // if(adminExists){
+  //   return c.text('404 Not Found', 404);
+  // }
+
+  return c.html(
+    van.html(
+      body(
+        p("Admin setup"),
+        form({method:'POST',url:'/setup'},
+          div(
+            label('User Name:'),
+            input({value:'admin',name:"username"})
+          ),
+          div(
+            label('Passphrase:'),
+            input({value:'admin',name:"passphrase"})
+          ),
+          div(
+            label('Email:'),
+            input({value:'admin',name:"email"})
+          ),
+          div(
+          ),
+          div(
+            button({type:"submit"},'Register')
+          )
+        )
+      )
+    )
+  )
+
+})
+
+route.post('/setup', async (c, next) => {
+  const db = await getDB();
+  const adminExists = db
+    .prepare(`SELECT COUNT(*) as count FROM users WHERE role = 'admin'`)
+    .get().count > 0;
+  console.log(adminExists);
+  // if(adminExists){
+  //   return c.text('404 Not Found', 404);
+  // }
+
+  let username = "";
+  let passphrase = "";
+  let email = "";
+  
+  try {
+    let data = await c.req.parseBody();
+    console.log("parseBody:",data)
+    if(data){
+      username = data.username
+      passphrase = data.passphrase
+      email = data.email
+    }  
+  } catch (error) {
+    
+  }
+
+  if(username && passphrase){
+    console.log("FOUND");
+    console.log("username:",username)
+    console.log("passphrase:",passphrase)
+    console.log("email:",email)
+
+    const user = await checkUserExists({
+      username: username, 
+      email: email
+    });
+
+    if(!user){
+      // const result = signup(username, email , passphrase);
+      let {salt, hash} = hashPassword(passphrase);
+      const role = "admin"
+
+      const stmt = db.prepare(`
+        INSERT INTO users (username, email, password_hash, role, salt)
+        VALUES (?, ?, ?, ?, ?)
+      `);
+
+      const result = stmt.run(username, email, hash, role, salt);
+      console.log(result)
+
+      username = null;
+      passphrase = null;
+      email = null;
+      return c.text('CREATE', 200);
+    }
+  }
+
+  return c.text('404 Not Found', 404);
+})
+
 
 export default route;
 
