@@ -20,8 +20,8 @@ import { jwt } from 'hono/jwt'
 import { rateLimiter } from 'hono-rate-limiter';
 
 import { scriptHtml02 } from './routes/pages.js';
-import module_routes from './routes/sqlite/index.js'
-import { maintenanceMiddleware } from './utils/maintenance.js';
+import module_routes from './sqlite/routes/sqlite_index.js'
+import { maintenanceMiddleware } from './sqlite/utils/sqlite_maintenance.js';
 const PORT = process.env.PORT || 3000;
 // const {head, body, style, script} = van.tags
 

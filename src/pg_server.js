@@ -6,7 +6,7 @@ import { jwt } from 'hono/jwt'
 // import { rateLimiter } from 'hono-rate-limiter';
 import { scriptHtml02 } from './routes/pages.js';
 // import module_routes from './routes/sqlite/index.js';
-import module_routes from './routes/pg/index.js';
+import module_routes from './pg/routes/index.js';
 // import { maintenanceMiddleware } from './utils/maintenance.js';
 const PORT = process.env.PORT || 3000;
 console.log("pg server");
