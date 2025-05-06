@@ -6,7 +6,7 @@
 */
 
 import { Hono } from 'hono';
-import { getDB } from '../db/sqlite/sqlite_db.js';
+import { getDB } from '../../db/sqlite/sqlite_db.js';
 
 const route = new Hono();
 // GET MESSAGES

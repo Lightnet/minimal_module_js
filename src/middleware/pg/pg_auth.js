@@ -1,30 +1,69 @@
-import jwt from 'jsonwebtoken';
-import { checkPermission } from "../../models/pg/pg_user.js";
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
 
-export function authenticate(req, c) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return c.json({ error: 'Unauthorized' }, 401);
+//import jwt from 'jsonwebtoken';
+import { verify, decode } from 'hono/jwt'
+import { checkPermission } from '../../models/pg/pg_user.js';
+import { getCookie } from 'hono/cookie';
+
+//check for cookie and Bearer
+export async function authenticate(c, next) {
+  // Check Authorization header (Bearer token)
+  const authHeader = c.req.header('Authorization');
+  let token = null;
+
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
+  } else {
+    // Fallback to cookie
+    const tokenCookie = getCookie(c, 'token');
+    // const tokenCookie = getCookie(c, 'auth_token');
+    // console.log("tokenCookie: ", tokenCookie);
+    if (tokenCookie) {
+      token = tokenCookie;
+    }
   }
-  const token = authHeader.split(' ')[1];
+
+  // If no token found, return 401
+  if (!token) {
+    return c.json({ error: 'Unauthorized: No token provided' }, 401);
+  }
+
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Verify token
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET || 'SECRET');
+    const decoded = await verify(token, process.env.JWT_SECRET || 'SECRET');
+    console.log("decoded: ", decoded);
     c.set('user', decoded); // Store user in context
-    return null;
+    return await next(); // Proceed to next middleware/route
   } catch (error) {
     return c.json({ error: 'Invalid token' }, 401);
   }
 }
 
-export function authorize(resourceType, resourceId, action) {
-  return async (req, c) => {
-    const user = c.get('user');
-    if (!user) return c.json({ error: 'Unauthorized' }, 401);
 
+export function authorize(resourceType, resourceId, action) {  
+  return async (ctx, next) => {
+    // console.log("[[ ctx ]]");
+    // console.log(ctx);
+    // console.log("next",next);
+    const user = ctx.get('user');
+    // console.log("[authorize]",user);
+    if (!user) return ctx.json({ error: 'Unauthorized' }, 401);
     const hasPermission = await checkPermission(user, resourceType, resourceId, action);
     if (!hasPermission) {
-      return c.json({ error: 'Forbidden' }, 403);
+      console.log("Forbidden");
+      // await next();
+      return ctx.json({ error: 'Forbidden' }, 403);
     }
-    return null;
+    // return await next();
+    if(typeof next === 'function'){
+      return await next();
+    }
   };
 }
+

@@ -11,24 +11,24 @@ const route = new Hono({
   //strict: false 
 });
 
-import auth from './sqlite/auth.js';
+import auth from './auth.js';
 import blog from './blog.js';
 
-import pages, { scriptHtml02 } from './pages.js';
-import admin from './sqlite/admin/index.js';
+import pages, { scriptHtml02 } from '../pages.js';
+import admin from './admin/index.js';
 import message from './message.js';
 
-import forum from './sqlite/forums.js';
-import board from './sqlite/boards.js';
-import topic from './sqlite/topics.js';
-import comment from './sqlite/comments.js';
-import groups from './sqlite/groups.js';
-import permissions from './sqlite/permissions.js';
-import backup from './sqlite/backup.js';
-import database from './sqlite/database.js';
+import forum from './forums.js';
+import board from './boards.js';
+import topic from './topics.js';
+import comment from './comments.js';
+import groups from './groups.js';
+import permissions from './permissions.js';
+import backup from './backup.js';
+import database from './database.js';
 
-import maintenance from '../utils/maintenance.js';
-import localdb from './local/index.js';;
+import maintenance from '../../utils/maintenance.js';
+import localdb from '../local/index.js';;
 
 route.route('/', localdb);
 
