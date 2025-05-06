@@ -1,3 +1,5 @@
+
+// 
 import { getPool } from '../../db/pg/pg_pool.js';
 import { compareHashPassword, hashPassword } from '../../helpers.js';
 
@@ -211,3 +213,51 @@ export async function addPermission({ entity_type, entity_id, resource_type, res
     throw err;
   }
 }
+
+export async function getForumById(id) {
+  const pool = getPool();
+  try {
+    const result = await pool.query('SELECT * FROM forums WHERE id = $1', [id]);
+    return result.rows[0] || null;
+  } catch (err) {
+    console.error('Error fetching forum by ID:', err.stack);
+    throw err;
+  }
+}
+
+export async function createForum(name, description, creator_id, moderator_group_id) {
+  const pool = getPool();
+  try {
+    // Validate inputs
+    if (!name) {
+      throw new Error('Forum name is required');
+    }
+    if (!creator_id) {
+      throw new Error('Creator ID is required');
+    }
+
+    // Validate moderator_group_id if provided
+    if (moderator_group_id) {
+      const groupResult = await pool.query('SELECT id FROM groups WHERE id = $1', [moderator_group_id]);
+      if (!groupResult.rows.length) {
+        throw new Error(`Group with ID ${moderator_group_id} does not exist`);
+      }
+    }
+
+    const result = await pool.query(
+      'INSERT INTO forums (name, description, creator_id, moderator_group_id) VALUES ($1, $2, $3, $4) RETURNING *',
+      [name, description, creator_id, moderator_group_id || null]
+    );
+
+    return result.rows[0];
+  } catch (err) {
+    console.error('Error creating forum:', err.stack);
+    throw err;
+  }
+}
+
+
+
+
+
+

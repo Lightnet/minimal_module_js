@@ -7,8 +7,8 @@
 
 // import db from '../db/sqlite/sqlite_db.js';
 import { Hono } from 'hono';
-import { authenticate, authorize } from '../middleware/sqlite/sqlite_auth.js';
-import { getDB } from '../db/sqlite/sqlite_db.js';
+import { authenticate, authorize } from '../../../middleware/sqlite/sqlite_auth.js';
+import { getDB } from '../../../db/sqlite/sqlite_db.js';
 
 // for logging access for groups, permssions. 
 export async function logAudit(userId, action, details) {

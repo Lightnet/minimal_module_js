@@ -8,7 +8,7 @@
 import fs from 'fs/promises';
 import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
-import { checkDbHealth, getUserRole } from '../routes/sqlite/database.js';
+import { checkDbHealth, getUserRole } from '../database.js';
 import { verify } from 'hono/jwt';
 
 // Initialize maintenance state

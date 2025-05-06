@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { authenticate, authorize } from '../../middleware/sqlite/sqlite_auth.js';
 import { addPermission } from '../../models/sqlite/sqlite_user.js';
 // import db from '../../db/sqlite/sqlite_db.js';
-import { logAudit } from '../../utils/audit.js';
+import { logAudit } from './utils/audit.js';
 import { getDB } from '../../db/sqlite/sqlite_db.js';
 // import db from '../db/sqlite/sqlite_db.js';
 // const { rateLimiter } = require('@hono/rate-limiter');

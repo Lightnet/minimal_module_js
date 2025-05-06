@@ -27,7 +27,7 @@ import permissions from './permissions.js';
 import backup from './backup.js';
 import database from './database.js';
 
-import maintenance from '../../utils/maintenance.js';
+import maintenance from './utils/maintenance.js';
 import localdb from '../local/index.js';;
 
 route.route('/', localdb);

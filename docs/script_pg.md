@@ -1,5 +1,5 @@
 
-```
+```bat
 @echo off
 setlocal
 

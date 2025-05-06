@@ -10,7 +10,7 @@ import { verify, decode } from 'hono/jwt'
 import { checkPermission } from '../../models/pg/pg_user.js';
 import { getCookie } from 'hono/cookie';
 
-//check for cookie and Bearer
+// Check for cookie and Bearer token
 export async function authenticate(c, next) {
   // Check Authorization header (Bearer token)
   const authHeader = c.req.header('Authorization');
@@ -21,8 +21,6 @@ export async function authenticate(c, next) {
   } else {
     // Fallback to cookie
     const tokenCookie = getCookie(c, 'token');
-    // const tokenCookie = getCookie(c, 'auth_token');
-    // console.log("tokenCookie: ", tokenCookie);
     if (tokenCookie) {
       token = tokenCookie;
     }
@@ -35,15 +33,50 @@ export async function authenticate(c, next) {
 
   try {
     // Verify token
-    // const decoded = jwt.verify(token, process.env.JWT_SECRET || 'SECRET');
     const decoded = await verify(token, process.env.JWT_SECRET || 'SECRET');
-    console.log("decoded: ", decoded);
-    c.set('user', decoded); // Store user in context
+    console.log('decoded: ', decoded);
+
+    // Fetch user from database
+    const pool = getPool();
+    const result = await pool.query('SELECT id, username, email, role, salt FROM users WHERE id = $1', [decoded.sub || decoded.userId]);
+    const user = result.rows[0];
+
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
+
+    c.set('user', user); // Store user in context
     return await next(); // Proceed to next middleware/route
-  } catch (error) {
+  } catch (err) {
+    console.error('Authentication error:', err.stack);
     return c.json({ error: 'Invalid token' }, 401);
   }
 }
+
+/*
+export async function authenticate(c, next) {
+  const authHeader = c.req.header('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return c.json({ error: 'Unauthorized' }, 401);
+  }
+  const token = authHeader.replace('Bearer ', '');
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const pool = getPool();
+    const result = await pool.query('SELECT * FROM users WHERE id = $1', [decoded.userId]);
+    const user = result.rows[0];
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
+    c.set('user', user);
+    await next();
+  } catch (err) {
+    console.error('Authentication error:', err.stack);
+    return c.json({ error: 'Invalid token' }, 401);
+  }
+}
+
+*/
 
 
 export function authorize(resourceType, resourceId, action) {  

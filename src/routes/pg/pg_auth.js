@@ -135,7 +135,4 @@ route_auth.get('/api/auth/user', async (c) => {
   return c.json({api:"ERROR"});
 });
 
-
-
-
 export default route_auth;

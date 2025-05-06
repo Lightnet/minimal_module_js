@@ -5,7 +5,7 @@ import { Hono } from 'hono';
 import { authenticate, authorize } from '../../middleware/sqlite/sqlite_auth.js';
 // import db from '../../db/sqlite/sqlite_db.js';
 import { getDB } from '../../db/sqlite/sqlite_db.js';
-import { logAudit } from '../../utils/audit.js';
+import { logAudit } from './utils/audit.js';
 const groups = new Hono();
 
 // Test
