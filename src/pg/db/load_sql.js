@@ -1,3 +1,10 @@
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
 import { getPool } from './pg_pool.js'; // Adjust the path to your pg_pool.js file
 import fs from 'fs/promises'; // Use promises-based fs for async/await
 import { config } from 'dotenv';

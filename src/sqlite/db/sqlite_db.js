@@ -1,7 +1,10 @@
-// const Database = require('better-sqlite3');
-// const initializeDatabase = require('./init');
-// require('dotenv').config();
-// import Database from "better-sqlite3";
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
 import initializeDatabase from "./sqlite_init.js";
 import { config } from "dotenv";
 config();
@@ -18,7 +21,6 @@ async function getDB() {
   return dbInstance;
 }
 
-//module.exports = db;
 export{
   db,
   getDB

@@ -1,6 +1,10 @@
-// const Database = require('better-sqlite3');
-// const fs = require('fs');
-// const path = require('path');
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";

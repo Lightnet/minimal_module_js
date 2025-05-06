@@ -1,5 +1,10 @@
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
 
-// 
 import { getPool } from '../db/pg_pool.js';
 import { compareHashPassword, hashPassword } from '../../helpers.js';
 

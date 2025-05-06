@@ -1,7 +1,11 @@
-// const db = require('../db');
-// const bcrypt = require('bcrypt');
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
 import { getDB } from '../db/sqlite_db.js';
-// import bcrypt from 'bcrypt';
 import { compareHashPassword, hashPassword } from '../../helpers.js';
 
 async function signup(username, email, password, role = 'user') {
@@ -196,7 +200,6 @@ async function addPermission({ entity_type, entity_id, resource_type, resource_i
   return { id: result.lastInsertRowid, entity_type, entity_id, resource_type, resource_id, action, allowed };
 }
 
-// module.exports = { signup, login, getUserGroups, checkPermission };
 export { 
   signup, 
   login, 
