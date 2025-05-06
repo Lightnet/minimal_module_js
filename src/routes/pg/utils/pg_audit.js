@@ -1,4 +1,11 @@
-import { getPool } from '../db/pg/pg_pool.js';
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
+import { getPool } from "../../../db/pg/pg_pool.js";
 
 export async function logAudit(userId, action, details) {
   try {

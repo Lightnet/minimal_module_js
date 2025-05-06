@@ -12,3 +12,9 @@ run web db access.
 ```
 DATABASE_URL=postgresql://postgres:your_password@localhost:5432/postgres
 ```
+
+```sql
+INSERT INTO permissions (entity_type, entity_id, resource_type, resource_id, action, allowed)
+VALUES ('user', '1', 'forum', NULL, 'create', true);
+
+```

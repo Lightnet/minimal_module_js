@@ -139,10 +139,12 @@ export async function checkPermission(user, resourceType, resourceId, action) {
   const pool = getPool();
   try {
     const groupIds = await getUserGroups(user.id);
+    console.log("groupIds:", groupIds);
     const entities = [
       { type: 'role', id: user.role },
       ...groupIds.map((id) => ({ type: 'group', id: id.toString() })),
     ];
+    console.log("entities: ", entities);
 
     // Build query to check permissions
     const query = `
@@ -163,7 +165,10 @@ export async function checkPermission(user, resourceType, resourceId, action) {
         resourceId,
         action,
       ]);
+      console.log("result:", result);
+
       if (result.rows.length > 0 && result.rows[0].allowed) {
+        console.log("result.rows[0].allowed: ",result.rows[0].allowed)
         return true;
       }
     }
