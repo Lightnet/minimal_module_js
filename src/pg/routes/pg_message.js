@@ -6,7 +6,7 @@
 */
 
 import { Hono } from 'hono';
-import { getPool } from '../../pg/db/pg_pool.js';
+import { getPool } from '../db/pg_pool.js';
 
 const route = new Hono();
 
