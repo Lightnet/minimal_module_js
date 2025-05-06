@@ -1,7 +1,13 @@
-// 
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
 import { Hono } from 'hono';
 import Database from 'better-sqlite3';
-
+import { authenticate } from '../middleware/sqlite_auth.js';
 // process.env.DATABASE_PATH
 
 // Initialize Hono app
@@ -12,9 +18,8 @@ const app = new Hono();
 const db = new Database(process.env.DATABASE_PATH || 'database.sqlite');
 
 const savePath = './backups'
-
 // Route to trigger backup
-app.get('/backup', async (c) => {
+app.get('/backup', authenticate, async (c) => {
   try {
     const backupPath = `${savePath}/backup-${Date.now()}.db`;
     await db.backup(backupPath);
@@ -24,9 +29,8 @@ app.get('/backup', async (c) => {
     return c.json({ error: 'Backup failed' }, 500);
   }
 });
-
 // Endpoint to list all tables
-app.get('/backup/tables', (c) => {
+app.get('/backup/tables', authenticate, (c) => {
   try {
     const tables = db
       .prepare(`
@@ -43,9 +47,8 @@ app.get('/backup/tables', (c) => {
     return c.json({ error: 'Failed to list tables' }, 500);
   }
 });
-
 // Endpoint for specific table backup
-app.get('/backup-table/:tableName', async (c) => {
+app.get('/backup-table/:tableName', authenticate, async (c) => {
   const tableName = c.req.param('tableName');
   const backupPath = `${savePath}/backup-${tableName}-${Date.now()}.db`;
 
@@ -95,6 +98,5 @@ app.get('/backup-table/:tableName', async (c) => {
     return c.json({ error: `Table backup failed: ${error.message}` }, 500);
   }
 });
-
 // Start server
 export default app;

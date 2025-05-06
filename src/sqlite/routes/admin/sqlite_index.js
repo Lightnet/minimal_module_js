@@ -73,7 +73,6 @@ route.get('/admin/permissions', (c) => {
   return c.html(pageHtml);
 });
 
-
 // route.use('/admin/*', async (c, next) => {
 //   if (!isSetupComplete) {
 //     return c.json({ error: 'Admin setup not complete. Please run /setup.' }, 403);
@@ -85,7 +84,6 @@ route.get('/admin/permissions', (c) => {
 //   }
 //   await next();
 // });
-
 
 
 export default route;

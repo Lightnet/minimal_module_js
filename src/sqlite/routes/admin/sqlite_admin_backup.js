@@ -27,7 +27,7 @@ const route = new Hono({
   //strict: false 
 });
 
-route.get('/api/admin/backup/start', async (c)=>{
+route.get('/api/admin/backup/start', authenticate, async (c)=>{
   if(task){
     console.log("start timer");
     task.start();
@@ -35,7 +35,7 @@ route.get('/api/admin/backup/start', async (c)=>{
   return c.json({api:"start"});
 })
 
-route.get('/api/admin/backup/stop', async (c)=>{
+route.get('/api/admin/backup/stop', authenticate, async (c)=>{
   if(task){
     console.log("stop timer");
     task.stop();

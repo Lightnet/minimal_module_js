@@ -25,8 +25,6 @@ import { maintenanceMiddleware } from './sqlite/utils/sqlite_maintenance.js';
 const PORT = process.env.PORT || 3000;
 // const {head, body, style, script} = van.tags
 
-// console.log(jwt);
-
 // middleware for db
 // note it reload for every request
 export function useDB(options){

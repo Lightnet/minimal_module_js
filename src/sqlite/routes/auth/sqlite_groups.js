@@ -1,15 +1,18 @@
-// const { Hono } = require('hono');
-// const { authenticate, authorize } = require('../middleware/auth');
-// const pool = require('../db');
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
 import { Hono } from 'hono';
 import { authenticate, authorize } from '../../middleware/sqlite_auth.js';
-// import db from '../../db/sqlite/sqlite_db.js';
 import { getDB } from '../../db/sqlite_db.js';
 import { logAudit } from '../../utils/sqlite_audit.js';
 const groups = new Hono();
 
 // Get all groups
-groups.get('groups', async (c) => {
+groups.get('groups', authenticate, authorize('group', null, 'manage'), async (c) => {
   const db = await getDB();
   const stmt = db.prepare('SELECT id, name, description, created_at FROM groups');
   const groups = stmt.all();
@@ -178,7 +181,5 @@ groups.get('groups/memberships/:groupId', authenticate, authorize('group', null,
 //   const html = fs.readFileSync(path.join(__dirname, '../public/groups.html'), 'utf8');
 //   return c.html(html);
 // });
-
-// module.exports = groups;
 
 export default groups;

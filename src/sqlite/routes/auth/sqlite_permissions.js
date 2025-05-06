@@ -1,3 +1,9 @@
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
 
 import { Hono } from 'hono';
 import { authenticate, authorize } from '../../middleware/sqlite_auth.js';
@@ -23,7 +29,6 @@ permissions.get('permissions', authenticate, authorize('group', null, 'manage'),
   console.log(permissions)
   return c.json(permissions);
 });
-
 // Add or update a permission
 permissions.post('permissions', authenticate, authorize('group', null, 'manage'), async (c) => {
   const user = c.get('user');

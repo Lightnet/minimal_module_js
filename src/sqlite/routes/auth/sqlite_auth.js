@@ -125,7 +125,7 @@ route_auth.post('/api/auth/signout', async (c) => {
 });
 
 //get user data that is secure
-route_auth.get('/api/auth/user', async (c) => {
+route_auth.get('/api/auth/user', authenticate, async (c) => {
   // const tokenCookie = getCookie(c, 'token');
   const tokenCookie = getCookie(c, 'token');
   if(tokenCookie){

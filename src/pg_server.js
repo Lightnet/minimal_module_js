@@ -1,11 +1,17 @@
+/*
+  Project Name: minimal_module_js
+  License: MIT
+  Created By: Lightnet
+  GitHub: https://github.com/Lightnet/minimal_module_js
+*/
+
 import { Server } from 'socket.io'
 import { serve } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
-import { jwt } from 'hono/jwt'
+// import { jwt } from 'hono/jwt'
 // import { rateLimiter } from 'hono-rate-limiter';
 import { scriptHtml02 } from './routes/pages.js';
-// import module_routes from './routes/sqlite/index.js';
 import module_routes from './pg/routes/index.js';
 // import { maintenanceMiddleware } from './utils/maintenance.js';
 const PORT = process.env.PORT || 3000;

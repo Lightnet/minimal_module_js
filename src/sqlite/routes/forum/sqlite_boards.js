@@ -10,7 +10,6 @@ import { getDB } from '../../db/sqlite_db.js';
 import { authenticate, authorize } from '../../middleware/sqlite_auth.js';
 
 const route = new Hono();
-
 // https://hono.dev/docs/api/routing
 // BOARD GET
 route.get('/api/boards/:id', authenticate, authorize('board', null, 'read'), async (c)=>{
@@ -26,7 +25,6 @@ route.get('/api/boards/:id', authenticate, authorize('board', null, 'read'), asy
     return c.json({api:"ERROR"});
   }
 })
-
 // Boards get parent id
 route.get('/api/board/:id', authenticate, authorize('board', null, 'read'), async (c)=>{
   try {
@@ -39,7 +37,6 @@ route.get('/api/board/:id', authenticate, authorize('board', null, 'read'), asyn
     return c.json({api:"ERROR"});
   }
 })
-
 // BOARD CREATE
 route.post('/api/board', authenticate, authorize('board', null, 'create'), async(c)=>{
   try {

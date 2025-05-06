@@ -14,6 +14,8 @@ import { checkUserExists } from '../models/sqlite_user.js';
 import { hashPassword } from '../../helpers.js';
 import { getMaintenanceState } from '../utils/sqlite_maintenance.js';
 
+const {a, body, div, form, button, label, input, li, p, ul} = van.tags;
+
 const adminCache = new Map();
 // Cache admin roles
 async function cacheAdmins() {
@@ -160,7 +162,6 @@ route.get('/api/database/tables', async (c) => {
   }
 });
 
-const {a, body, div, form, button, label, input, li, p, ul} = van.tags
 route.get('/setup', async (c) => {
   const db = await getDB();
   const adminExists = db

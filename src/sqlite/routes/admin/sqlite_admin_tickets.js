@@ -44,7 +44,6 @@ route.post('/ticket', authenticate, async (c)=>{
     return c.json({api:"ERROR"});
   }
 });
-
 // UPDATE TICKET
 route.put('/ticket/:id', authenticate, async (c)=>{
   const { id } = c.req.param();
@@ -66,7 +65,7 @@ route.put('/ticket/:id', authenticate, async (c)=>{
     return c.json({api:"ERROR"});
   }
 });
-
+// DELETE TICKET
 route.delete('/ticket/:id', authenticate, async (c)=>{
   try {
     const { id } = c.req.param();
@@ -80,6 +79,5 @@ route.delete('/ticket/:id', authenticate, async (c)=>{
     return c.json({api:"ERROR"});
   }
 });
-
 
 export default route;

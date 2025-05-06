@@ -5,7 +5,6 @@
   GitHub: https://github.com/Lightnet/minimal_module_js
 */
 
-//import jwt from 'jsonwebtoken';
 import { verify, decode } from 'hono/jwt'
 import { checkPermission } from '../models/sqlite_user.js';
 import { getCookie } from 'hono/cookie';
@@ -50,14 +49,14 @@ export function authorize(resourceType, resourceId, action) {
     // console.log("[[ ctx ]]");
     // console.log(ctx);
     // console.log("next",next);
-    console.log("=======================================================")
+    // console.log("=======================================================")
     const user = ctx.get('user');
-    console.log("[ authorize -> ]",user);
+    // console.log("[ authorize -> ]",user);
     if (!user) return ctx.json({ error: 'Unauthorized' }, 401);
-    console.log("resourceType:", resourceType)
-    console.log("resourceId:", resourceId)
-    console.log("action:", action)
-    console.log("=======================================================")
+    // console.log("resourceType:", resourceType)
+    // console.log("resourceId:", resourceId)
+    // console.log("action:", action)
+    // console.log("=======================================================")
     const hasPermission = await checkPermission(user, resourceType, resourceId, action);
     if (!hasPermission) {
       console.log("Forbidden");
