@@ -13,7 +13,7 @@ import { HomeNavMenu } from "../navmenu.js";
 import useFetch from "../../libs/useFetch.js";
 // import { pageState } from "../context.js";
 
-const {div, button, h1, label, input, span} = van.tags;
+const {div, button, h1, label, input, select, option} = van.tags;
 
 export function addPage(id){
   const isCreated = van.state(false);
@@ -71,10 +71,14 @@ export function pageBooks(){
     ),
   );
 }
-let pageNumber = null;
+
 export function pageBook(){
 
   const bookPage = div();
+  const selectPage = van.state('')
+
+  const _bookId = van.state(null);
+  const _pageNumber = van.state(0);
 
   van.derive(async ()=>{
     const {bookid, page } = getRouterParams();
@@ -82,16 +86,47 @@ export function pageBook(){
     console.log(typeof page);
     if(typeof bookid === 'string' && typeof page === 'string'){
       console.log("FOUND... BOOK PAGE...");
-      if(pageNumber != page){
-        console.log("once???")
-        await fetchBookPage(bookid, page);
-        pageNumber = page;
-      }
+      await fetchBookPage(bookid, page);
     }
   })
 
+  function onChangePage(e){
+    console.log("[onChangePage] e.target.value: ", e.target.value)
+    selectPage.val = e.target.value;
+    navigate(`/book/${_bookId.val}/page/${e.target.value}`);
+  }
+
+  async function getPagesNumber(bookId) {
+    try {
+      const data = await useFetch(`/api/books/${bookId}/pages`);
+      console.log(data);
+      if(data){
+        
+        const selectTop = document.getElementById('book-page-select-top');
+        const selectBottom = document.getElementById('book-page-select-bottom');
+        while(selectTop.firstChild){
+          selectTop.removeChild(selectTop.firstChild);
+        }
+        while(selectBottom.firstChild){
+          selectBottom.removeChild(selectBottom.firstChild);
+        }
+        for(let idx = 1; idx < data.pages+1; idx++){
+          van.add(selectTop,
+            option({value:idx}, `Page ${idx}`)
+          )
+          van.add(selectBottom,
+            option({value:idx}, `Page ${idx}`)
+          )
+        }
+      }
+    } catch (error) {
+      
+    }
+  }
+
   async function fetchBookPage(bookid, page){
     try {
+      _bookId.val = bookid;
       const data = await useFetch(`/api/books/${bookid}/pages/${page}`);
       console.log(data);
       while(bookPage.firstChild){
@@ -99,38 +134,44 @@ export function pageBook(){
       }
 
       van.add(bookPage,
-        div(
+        div({class:"book-nav-buttons"},
           button({onclick:()=>{
             if(data.prev_page!=null){//if null do not run
               navigate(`/book/${data.book_id}/page/${data.prev_page}`);
             }
-          }},()=> data.prev_page ? "<" : "null"),
-          span({style:"width:100%;"}," "),
+          }},()=> data.prev_page ? "Previous" : "x"),
+          select({id:"book-page-select-top",class:"book-page-select",value:selectPage,onchange:onChangePage}),
           button({onclick:()=>{
             if(data.next_page!=null){
               console.log("PRESS ONE?")
               navigate(`/book/${data.book_id}/page/${data.next_page}`);
             }
-          }},()=> data.next_page ? ">" : "null")
+          }},()=> data.next_page ? "Next" : "x")
         ),
         div({style:"min-height:400px;"},
           `${data.content} `
         ),
-        div(
+        div({class:"book-nav-buttons"},
           button({onclick:()=>{
             if(data.prev_page!=null){//if null do not run
               navigate(`/book/${data.book_id}/page/${data.prev_page}`);
             }
-          }},()=> data.prev_page ? "<" : "null"),
-          span({style:"width:100%;"}),
+          }},()=> data.prev_page ? "Previous" : "x"),
+          select({id:"book-page-select-bottom",class:"book-page-select"}),
           button({onclick:()=>{
             if(data.next_page!=null){
               console.log("PRESS ONE?")
               navigate(`/book/${data.book_id}/page/${data.next_page}`);
             }
-          }},()=> data.next_page ? ">" : "null")
+          }},()=> data.next_page ? "Next" : "x")
         ),
       )
+      getPagesNumber(bookid);
+      setTimeout(()=>{
+        console.log("page:", page);
+        document.getElementById('book-page-select-top').value = page;
+        document.getElementById('book-page-select-bottom').value = page;
+      },10)
     } catch (error) {
       console.log("ERROR",error.message)
     }

@@ -95,4 +95,24 @@ route.get('/api/books/:book_id/pages/:page_number', authenticate, async (c) => {
   });
 });
 
+route.get('/api/books/:book_id/pages', authenticate, async (c) => {
+  const { book_id } = c.req.param();
+  try {
+    const db = await getDB();
+    const book = db
+    .prepare(
+      `SELECT COUNT(*) AS total_pages 
+      FROM pages 
+      WHERE book_id = ?;`
+    )
+    .get(book_id);
+    return c.json({
+      pages:book.total_pages
+    });
+  } catch (error) {
+    console.log()
+    return c.json({error:`book ${book_id} page null`})
+  }
+});
+
 export default route;

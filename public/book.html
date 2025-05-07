@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book - Page 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Navigation Menu */
+        .book-nav-bar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .book-nav-bar a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        .book-nav-bar a:hover {
+            text-decoration: underline;
+        }
+        /* Content Area */
+        .book-content {
+            flex: 1;
+            padding: 20px;
+            min-height: 400px;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+        /* Navigation Buttons */
+        .book-nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+        .book-nav-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .book-nav-buttons button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Menu -->
+    <div class="book-nav-bar">
+        <a href="index.html">Home</a>
+        <a href="page-001.html">Chapter 1</a>
+        <a href="page-002.html">Chapter 2</a>
+        <a href="page-003.html">Chapter 3</a>
+    </div>
+
+    <!-- Top Navigation Buttons -->
+    <div class="book-nav-buttons">
+        <button onclick="goToPreviousPage()" id="book-prev-top">Previous</button>
+        <button onclick="goToNextPage()" id="book-next-top">Next</button>
+    </div>
+
+    <!-- Content Area -->
+    <div class="book-content">
+        <h1>Chapter 1</h1>
+        <p>This is the content of page 1. Add your book's text here.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+
+    <!-- Bottom Navigation Buttons -->
+    <div class="book-nav-buttons">
+        <button onclick="goToPreviousPage()" id="book-prev-bottom">Previous</button>
+        <button onclick="goToNextPage()" id="book-next-bottom">Next</button>
+    </div>
+
+    <script>
+        // Get current page number from filename (e.g., page-001.html)
+        const currentPage = parseInt(window.location.pathname.match(/page-(\d+)/)?.[1] || '1');
+
+        // Function to navigate to the previous page
+        function goToPreviousPage() {
+            if (currentPage > 1) {
+                const prevPage = `page-${String(currentPage - 1).padStart(3, '0')}.html`;
+                window.location.href = prevPage;
+            }
+        }
+
+        // Function to navigate to the next page
+        function goToNextPage() {
+            const nextPage = `page-${String(currentPage + 1).padStart(3, '0')}.html`;
+            window.location.href = nextPage;
+        }
+
+        // Disable buttons if at first or last page
+        window.onload = function () {
+            const prevButtons = document.querySelectorAll('#book-prev-top, #book-prev-bottom');
+            const nextButtons = document.querySelectorAll('#book-next-top, #book-next-bottom');
+
+            if (currentPage === 1) {
+                prevButtons.forEach(btn => btn.disabled = true);
+            }
+            // Adjust the max page number based on your total pages
+            if (currentPage === 3) { // Example: 3 pages total
+                nextButtons.forEach(btn => btn.disabled = true);
+            }
+        };
+    </script>
+</body>
+</html>
