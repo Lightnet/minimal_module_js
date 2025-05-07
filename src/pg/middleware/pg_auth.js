@@ -37,13 +37,13 @@ export async function authenticate(c, next) {
   try {
     // Verify token
     const decoded = await verify(token, process.env.JWT_SECRET || 'SECRET');
-    console.log('decoded: ', decoded);
+    // console.log('decoded: ', decoded);
 
     // Fetch user from database
     const pool = getPool();
     const result = await pool.query('SELECT id, username, role FROM users WHERE id = $1', [decoded.id]);
     const user = result.rows[0];
-    console.log(user);
+    // console.log(user);
 
     if (!user) {
       console.log("User not found");

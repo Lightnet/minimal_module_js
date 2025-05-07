@@ -13,7 +13,13 @@ import { HomeNavMenu } from "../navmenu.js";
 import useFetch from "../../libs/useFetch.js";
 // import { pageState } from "../context.js";
 
-const {div, button, h1, label, input, select, option} = van.tags;
+const {div, button, h1, label, input, select, option, textarea,
+  table,
+  thead,
+  tbody,
+  tr,
+  td
+} = van.tags;
 
 export function addPage(id){
   const isCreated = van.state(false);
@@ -25,10 +31,11 @@ export function addPage(id){
 export function viewPage(){
 
 }
-
+//books
 export function pageBooks(){
 
   const books = div();
+  console.log("Books?");
 
   async function fetchBooks(){
     try {
@@ -40,7 +47,8 @@ export function pageBooks(){
           div(
             label(`Name: ${item.title} `),
             button({onclick:()=>addPage(item.id)},"Add Page"),
-            button({onclick:()=>navigate(`/book/${item.id}/page/1`)},"View Page")
+            button({onclick:()=>navigate(`/book/${item.id}/page/1`)},"Read Page 1"),
+            button({onclick:()=>navigate(`/book/${item.id}/content`)},"Contents")
           )
         )
       }
@@ -63,15 +71,13 @@ export function pageBooks(){
       ),
       div({class:"ccontent"},
         label('Book'),
-        // El_CreateMessageForm(),
-        // messagesDiv
         btnCreateBook(),
         books,
       ),
     ),
   );
 }
-
+//book id and page
 export function pageBook(){
 
   const bookPage = div();
@@ -186,6 +192,149 @@ export function pageBook(){
       div({class:"ccontent"},
         label('Book'),
         bookPage,
+      ),
+    ),
+  );
+}
+
+export function pageBookIdContent(){
+
+  const bookContents = tbody();
+
+  const currentBookId = van.state();
+
+  van.derive(async ()=>{
+    const {bookid } = getRouterParams();
+    console.log(typeof bookid);
+    if(typeof bookid === 'string'){
+      console.log("FOUND... BOOK PAGE...");
+      await fetchBookContent(bookid);
+    }
+  })
+
+  async function btnEditPage(id, content) {
+    console.log("content: ", content);
+    const currentContent = van.state(content || '');
+    const isCreated = van.state(false);
+
+    async function fetchUpdatePageId(){
+      try {
+        console.log("currentContent.val: ", currentContent.val)
+        const data = await useFetch(`/api/book/page/${id}`,{
+          method:'PUT',
+          body:JSON.stringify({
+            content:currentContent.val,
+          })
+        })
+        console.log("data: ", data);
+      } catch (error) {
+        
+      }
+    }
+
+    van.add(document.body, Modal({closed:isCreated},
+      div(
+        div(
+          label(`Page ID: ${id}`),
+        ),
+        div(
+          textarea({value:currentContent,oninput:(e)=>currentContent.val=e.target.value}),
+        ),
+        div(
+          button({onclick: async ()=>{
+            await fetchUpdatePageId();
+            isCreated.val = true;
+          }},"Update"),
+          button({onclick:()=>{
+            isCreated.val = true;
+          }},"Cancel"),
+        ),
+      )
+    ));
+  }
+
+  async function btnDeletePage(id){
+    const isCreated = van.state(false);
+    van.add(document.body, Modal({closed:isCreated},
+      div(
+        label(`Confirm Delete ${id}?`),
+        div(
+          button({onclick:()=>{
+            fetchDeletePage(id);
+            isCreated.val = true;
+          }},"DELETE"),
+          button({onclick:()=>{
+            isCreated.val = true;
+          }},"Cancel")
+        )
+      )
+    ));
+  }
+
+  async function fetchDeletePage(id){
+    try {
+      const data = await useFetch(`/api/book/page/${id}`,{
+        method:'DELETE'
+      })
+      console.log(data)
+    } catch (error) {
+      console.log('ERROR:', error.message);
+    }
+  }
+
+
+  async function fetchBookContent(bookid){
+    currentBookId.val = bookid;
+    try {
+      console.log("bookid: ",bookid);
+      const data = await useFetch(`/api/books/${bookid}/contents`)
+      console.log("data: ", data);
+      if(data){
+        if(data?.contents){
+          for(const item of data.contents){
+            van.add(bookContents,
+              tr(
+                td(`${item.id}`),
+                td(`${item.page_number}`),
+                td(item.content.substring(0, 100)),// limited
+                td("none"),
+                td(
+                  button({onclick:()=>btnEditPage(item.id, item.content)},"Edit"),
+                  button({onclick:()=>btnDeletePage(item.id)},"Delete")
+                ),// limited
+              )
+            )
+          }
+
+        }
+      }
+    } catch (error) {
+      console.log("error: ", error.message);
+    }
+  }
+
+
+  return div({id:"bookcontent"},
+    HomeNavMenu(),
+    div({class:"main-content"},
+      div({class:"cheader"},
+         h1("Contents"),
+      ),
+      div({class:"ccontent"},
+        label('Book Content'),
+        button({onclick:()=>addPage(currentBookId.val)},"Add Page"),
+        table(
+          thead(
+            tr(
+              td("ID:"),
+              td("Page:"),
+              td("Content:"),
+              td("Created:"),
+              td("Actions:"),
+            )
+          ),
+          bookContents
+        )
       ),
     ),
   );

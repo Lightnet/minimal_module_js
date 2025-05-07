@@ -83,5 +83,4 @@ route.get('/admin/permissions', (c) => {
 //   await next();
 // });
 
-
 export default route;

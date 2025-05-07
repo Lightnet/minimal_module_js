@@ -17,7 +17,7 @@ import { pageHome } from "./pages/page_home.js";
 import { pageForgot, pageSignIn, pageSignOut, pageSignUp } from "./pages/page_auth.js";
 import { pageAbout } from "./pages/page_about.js";
 import { pageReport } from "./pages/page_report.js";
-import { pageBook, pageBooks } from "./book/book.js";
+import { pageBookIdContent, pageBook, pageBooks } from "./book/book.js";
 import { pageAccount } from "./pages/page_account.js";
 import { Page_Message } from "./messages/page_message.js";
 import { pageSetting } from "./pages/page_settings.js";
@@ -76,6 +76,7 @@ const App = () => {
       { path: "/blog", component: pageBlog },
       { path: "/books", component: pageBooks },
       { path: "/book/:bookid/page/:page", component: pageBook },
+      { path: "/book/:bookid/content", component: pageBookIdContent },
     ]
   });
 }

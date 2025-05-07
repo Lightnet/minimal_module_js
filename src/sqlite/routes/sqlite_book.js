@@ -13,8 +13,12 @@ import { scriptHtml02 } from '../../routes/pages.js';
 const route = new Hono();
 
 //page
-route.get('/book', (c) => {
-  const pageHtml = scriptHtml02("/admin.js");
+route.get('/books', (c) => {
+  const pageHtml = scriptHtml02("/index.js");
+  return c.html(pageHtml);
+});
+route.get('/book/*', (c) => {
+  const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
 //get books
@@ -94,7 +98,7 @@ route.get('/api/books/:book_id/pages/:page_number', authenticate, async (c) => {
     prev_page: prevPage ? prevPage.page_number : null,
   });
 });
-
+// get bookid with page count
 route.get('/api/books/:book_id/pages', authenticate, async (c) => {
   const { book_id } = c.req.param();
   try {
@@ -114,5 +118,68 @@ route.get('/api/books/:book_id/pages', authenticate, async (c) => {
     return c.json({error:`book ${book_id} page null`})
   }
 });
+//get bookid with contents
+route.get('/api/books/:book_id/contents', authenticate, async (c) => {
+  const { book_id } = c.req.param();
+  try {
+    const db = await getDB();
+    const contents = db
+    .prepare(
+      `SELECT *
+      FROM pages 
+      WHERE book_id = ?;`
+    )
+    .all(book_id);
+    return c.json({
+      contents
+    });
+  } catch (error) {
+    console.log()
+    return c.json({error:`book ${book_id} page null`})
+  }
+});
+
+route.delete('/api/book/page/:page_id', authenticate, async (c) => {
+  const { page_id } = c.req.param();
+  try {
+    const db = await getDB();
+    const result = db
+    .prepare(
+      `DELETE
+      FROM pages 
+      WHERE id = ?;`
+    )
+    .run(page_id);
+    return c.json(
+      result
+    );
+  } catch (error) {
+    console.log(error.message)
+    return c.json({error:`page id ${page_id} is null`})
+  }
+});
+
+route.put('/api/book/page/:page_id', authenticate, async (c) => {
+  const { page_id } = c.req.param();
+  const { content } = await c.req.json();
+  console.log("content: ", content);
+  try {
+    const db = await getDB();
+    const result = db
+    .prepare(
+      `UPDATE pages
+      SET content=? 
+      WHERE id = ?;`
+    )
+    .run(content, page_id);
+    return c.json(
+      result
+    );
+  } catch (error) {
+    console.log(error.message)
+    return c.json({error:`page id ${page_id} is null`})
+  }
+});
+
 
 export default route;

@@ -136,8 +136,8 @@ route_auth.get('/api/auth/user', authenticate, async (c) => {
       // var decoded = jwt.verify(tokenCookie, 'wrong-secret');
       // var userToken = jwt.verify(tokenCookie, process.env.JWT_SECRET || 'SECRET');
       var userToken = await verify(tokenCookie, process.env.JWT_SECRET || 'SECRET');
-      console.log("userToken");
-      console.log(userToken);
+      // console.log("userToken");
+      // console.log(userToken);
 
       const db = await getDB();
       const stmt = db.prepare('SELECT * FROM users WHERE id = ?');
