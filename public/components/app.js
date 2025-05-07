@@ -6,7 +6,7 @@
 */
 
 //const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-import van from "vanjs-core";
+// import van from "vanjs-core";
 // const {button, div, pre, p} = van.tags
 
 import { Router, Link, getRouterParams, navigate } from "vanjs-routing";
@@ -17,7 +17,7 @@ import { pageHome } from "./pages/page_home.js";
 import { pageForgot, pageSignIn, pageSignOut, pageSignUp } from "./pages/page_auth.js";
 import { pageAbout } from "./pages/page_about.js";
 import { pageReport } from "./pages/page_report.js";
-// import { Page_Novel } from "./novel/novel.js";
+import { pageBook, pageBooks } from "./book/book.js";
 import { pageAccount } from "./pages/page_account.js";
 import { Page_Message } from "./messages/page_message.js";
 import { pageSetting } from "./pages/page_settings.js";
@@ -74,7 +74,8 @@ const App = () => {
       { path: "/help", component: pageHelp },
       { path: "/test", component: Page_UI_Test },
       { path: "/blog", component: pageBlog },
-      // { path: "/novel", component: Page_Novel },
+      { path: "/books", component: pageBooks },
+      { path: "/book/:bookid/page/:page", component: pageBook },
     ]
   });
 }

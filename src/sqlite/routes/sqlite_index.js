@@ -17,6 +17,7 @@ import blog from './sqlite_blog.js';
 import pages from '../../routes/pages.js';
 import admin from './admin/sqlite_index.js';
 import message from './sqlite_message.js';
+import book from './sqlite_book.js';
 
 import forum from './forum/sqlite_forums.js';
 import board from './forum/sqlite_boards.js';
@@ -28,9 +29,10 @@ import backup from './sqlite_backup.js';
 import database from './sqlite_database.js';
 
 import maintenance from '../utils/sqlite_maintenance.js';
-import localdb from '../../routes/local/index.js';;
+// import localdb from '../../routes/local/index.js';;
 
-route.route('/', localdb);
+// route.route('/', localdb);
+route.route('/', book);
 route.route('/', maintenance);
 route.route('/', message);
 route.route('/', auth);

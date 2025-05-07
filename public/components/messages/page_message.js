@@ -10,7 +10,7 @@ import { Modal } from "vanjs-ui";
 import { HomeNavMenu } from "../navmenu.js";
 import useFetch from "/libs/useFetch.js";
 
-const {button, h1, div, label, table, tbody, tr, td, input, textarea} = van.tags;
+const {button, h1, div, label, td, input, textarea} = van.tags;
 
 function Page_Message(){
 

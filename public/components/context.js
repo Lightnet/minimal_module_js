@@ -26,6 +26,7 @@ const topicTitleState = van.state("");
 const topicContentState = van.state("");
 const commentIDState = van.state("");
 const themeIDState = van.state('light');
+const pageState = van.state(null);
 
 export {
   board,
@@ -41,4 +42,5 @@ export {
   topicContentState,
   commentIDState,
   themeIDState,
+  pageState,
 }

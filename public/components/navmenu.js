@@ -69,8 +69,11 @@ const AccessNavMenu=()=>{
     div({class:"sidebar-item",title:"Home",onclick:()=>navigate("/")},
       i({class:"fas fa-home"},''),
     ),
-    div({class:"sidebar-item",title:"blog",onclick:()=>navigate("/blog")},
+    div({class:"sidebar-item",title:"Blog",onclick:()=>navigate("/blog")},
       i({class:"fas fa-blog"},''),
+    ),
+    div({class:"sidebar-item",title:"Books",onclick:()=>navigate("/books")},
+      i({class:"fas fa-book"},''),
     ),
     div({class:"sidebar-item",title:"Account",onclick:()=>navigate("/account")},
       i({class:"fas fa-user"},''),
@@ -96,9 +99,7 @@ const AccessNavMenu=()=>{
     div({class:"sidebar-item",title:"test",onclick:()=>navigate("/test")},
       i({class:"fas fa-flask"},''),
     ),
-    div({class:"sidebar-item",title:"admin",onclick:()=>{
-      window.location.href = "/admin"
-    }},
+    div({class:"sidebar-item",title:"Admin",onclick:()=>{window.location.href="/admin"}},
       i({class:"fas fa-user-tie"},''),
     ),
   );

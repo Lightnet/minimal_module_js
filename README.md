@@ -13,36 +13,35 @@
 - dotenv 16.5.0
 - jsonwebtoken 9.0.2
 
-# Status:
-- unstable
-- work in progress auths, groups and permissions.
-- testing framework script to test forum for rest api.
+# Status
+- Unstable: Work in progress.
+- Focus Areas:
+    - Authentication, groups, and permissions.
+    - Testing framework for REST API (forum functionality).
+    - Database failover: SQLite as fallback for PostgreSQL.
 
 # Information:
   Work in progress. Using minimal packages in vanilla javascript, type module and import.
 
-  Current Forum test build.
+# Project Goals
+- Build a simple, reactive forum and messaging system with minimal bandwidth usage.
+- Prioritize security (e.g., flood/spam protection) and simplicity for testing builds.
+- Support modular plugins (future consideration).
+- Ensure database reliability with SQLite as a fallback for PostgreSQL.
 
-# Design:
-  To build simple forum test to see how far smallest.
+# Testing Framework
 
-  Still need to have secure security and flood spam protection is no easy task.
+- Purpose: Validate core forum functionality (boards, topics, comments) for CRUD operations.
+- Current Tests:
+    - Notify module tests.
+- Planned:
+    - Full REST API tests for forum, authentication, and permissions.
+    - Automated scripts to simulate user interactions.
 
-# Goals:
-  To have simple forum and message system to handle basic access to posts.
+# Audit Logging
+ Simple audit logging inspired by the Grok 3.0 AI model. Logs user actions like group creation.
 
-  To keep everythings simple for testing builds. As for plugin or mod is just idea. Which required time to work on.
-
-# Testing Framework:
- Needed to run sample test build to make sure the forum, board, topic and comment for create, update, delete. As well other features.
-
-## File Size:
-- node_modules 49.0 MB
-- public 288 KB
-- src 192 KB
-
-# Audit Logs:
-  Simple logging. Base on the Grok 3.0 A.I model reference. 
+## Example:
 ```js
 import { logAudit } from '../../utils/audit.js';
 //...
@@ -52,6 +51,21 @@ logAudit(user.id, 'create_group', {
   description
 });
 ```
+# Development
+
+- Scripts:
+    - npm start: Start the Hono server.
+    - npm test: Run the testing framework (WIP).
+- Directory Structure:
+    - src/: Core application logic.
+    - public/: Static assets (CSS, JS, images).
+    - utils/: Helper functions (audit, backup, etc.).
+
+
+## File Size:
+- node_modules 49.0 MB
+- public 288 KB
+- src 192 KB
 
 # Module:
 - [x] notify
@@ -131,12 +145,12 @@ logAudit(user.id, 'create_group', {
   - [x] layout
 
 # Forum 
-- [ ] groups (wip)
+- [ ] groups 
     - [ ] members
     - [x] add 
     - [x] delete
     - [ ] update
-- [ ] permission (wip)
+- [ ] permission 
     - [ ] members
     - [x] add 
     - [x] delete
@@ -148,31 +162,25 @@ logAudit(user.id, 'create_group', {
     - [x] create
     - [x] update
     - [x] delete
-    - [ ] report
-    - [x] permission (wip)
 - [x] Board
     - [x] nav menu
     - [x] create
     - [x] update
     - [x] delete
-    - [ ] report
-    - [ ] permissions
     - [x] get forum id by boards
 - [x] Topic
     - [x] nav menu
     - [x] create
     - [x] update
     - [x] delete
-    - [ ] report
-    - [ ] permission forum
+    - [x] report
     - [x] get board id by topics
 - [x] Comment
     - [x] nav menu
     - [x] create
     - [x] update
     - [x] delete
-    - [ ] report
-    - [ ] permission forum
+    - [x] report
     - [x] get topic id by comments
   - Nav Menu
 
@@ -187,5 +195,10 @@ logAudit(user.id, 'create_group', {
     * permission
     * group
  * https://vanjs.org
- * 
 
+# Roadmap
+- Complete authentication (recovery, advanced permissions).
+- Implement full database failover PostgreSQL (just idea for low small group of people using it.)
+- Finish testing framework for REST API.
+- Add settings (cookies, themes) and reporting features.
+- Explore plugins/mods for extensibility.
