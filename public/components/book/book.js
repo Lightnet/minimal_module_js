@@ -11,6 +11,8 @@ import { Modal } from "vanjs-ui";
 import { Router, Link, getRouterParams,getRouterPathname, navigate, getRouterQuery } from "vanjs-routing";
 import { HomeNavMenu } from "../navmenu.js";
 import useFetch from "../../libs/useFetch.js";
+import { notify } from "../notify/notify.js";
+import { Color } from "../notify/notifycontext.js";
 // import { pageState } from "../context.js";
 
 const {div, button, h1, label, input, select, option, textarea,
@@ -37,9 +39,17 @@ async function fetchDeletePage(id){
     let itemPage = document.getElementById(id);
     if(itemPage){
       itemPage.parentNode.removeChild(itemPage);
+      notify({
+        color:Color.success,
+        content:`Delete Page Id:${id}`
+      })
     }
   } catch (error) {
     console.log('ERROR:', error.message);
+    notify({
+      color:Color.warn,
+      content: error.message
+    })
   }
 }
 
@@ -208,7 +218,11 @@ export function pageBook(){
         document.getElementById('book-page-select-bottom').value = page;
       },10)
     } catch (error) {
-      console.log("ERROR",error.message)
+      console.log("ERROR",error.message);
+      notify({
+        color:Color.warn,
+        content: error.message
+      });
     }
   }
 
@@ -255,8 +269,15 @@ export function pageBookIdContent(){
           })
         })
         console.log("data: ", data);
+        notify({
+          color:Color.success,
+          content:`Update Page Id:${id}`
+        })
       } catch (error) {
-        
+        notify({
+          color:Color.warn,
+          content: error.message
+        })
       }
     }
 
@@ -308,6 +329,10 @@ export function pageBookIdContent(){
       }
     } catch (error) {
       console.log("error: ", error.message);
+      notify({
+        color:Color.warn,
+        content: error.message
+      });
     }
   }
 
@@ -401,11 +426,11 @@ function createFormPage({closed,id}){
           content: formContent.val,
         })
       });
-      console.log(data);
+      // console.log(data);
       closed.val = true;
       let currentPages = document.getElementById('bookcontent');
       if(currentPages){
-        console.log("ADD PAGE???", currentPages)
+        // console.log("ADD PAGE???", currentPages)
         van.add(currentPages,
           tr({id:data.id},
             td(`${data.id}`),
@@ -418,9 +443,18 @@ function createFormPage({closed,id}){
             ),
           )
         )
+        console.log("data: ", data);
+        notify({
+          color:Color.success,
+          content:`BookId:${id} Add Page Id:${data.id} Page Number:${data.page_number}`
+        })
       }
     } catch (error) {
-      console.log("ERROR",error.message)
+      console.log("ERROR",error.message);
+      notify({
+        color:Color.warn,
+        content: error.message
+      });
     }
   }
 

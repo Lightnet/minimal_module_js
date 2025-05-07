@@ -10,8 +10,8 @@ import fs from 'fs/promises';
 import { Hono } from 'hono';
 import { getDB } from '../db/sqlite_db.js';
 import van from "mini-van-plate/van-plate"
-import { checkUserExists } from '../models/sqlite_user.js';
-import { hashPassword } from '../../helpers.js';
+import { adminCreateUser } from '../models/sqlite_user.js';
+// import { hashPassword } from '../../helpers.js';
 import { getMaintenanceState } from '../utils/sqlite_maintenance.js';
 
 const {a, body, div, form, button, label, input, li, p, ul} = van.tags;
@@ -120,10 +120,10 @@ const route = new Hono({
 //test for fail
 route.get('/api/database/data', async (c) => {
   try {
-    console.log('/api/database/data')
+    // console.log('/api/database/data')
     const db = await getDB();
     const data = db.prepare('SELECT * FROM some_table').all();
-    console.log(data)
+    // console.log(data)
     return c.json(data);
   } catch (err) {
     return c.json({ error: 'Service unavailable' }, 503);
@@ -204,51 +204,48 @@ route.post('/setup', async (c, next) => {
   const adminExists = db
     .prepare(`SELECT COUNT(*) as count FROM users WHERE role = 'admin'`)
     .get().count > 0;
-  console.log(adminExists);
+  // console.log(adminExists);
   // if(adminExists){
   //   return c.text('404 Not Found', 404);
   // }
 
-  let username = "";
-  let passphrase = "";
-  let email = "";
+  let username = null;
+  let password = null;
+  let email = null;
   
   try {
     let data = await c.req.parseBody();
-    console.log("parseBody:",data)
+    // console.log("parseBody:",data)
     if(data){
       username = data.username
-      passphrase = data.passphrase
+      password = data.passphrase
       email = data.email
     }  
   } catch (error) {
     
   }
 
-  if(username && passphrase){
-    console.log("FOUND");
-    console.log("username:",username)
-    console.log("passphrase:",passphrase)
-    console.log("email:",email)
-    const user = await checkUserExists({
-      username: username, 
-      email: email
-    });
+  if(username!=null && password!=null){
+    // console.log("FOUND");
+    // console.log("[setup] username:",username)
+    // console.log("[setup] password:",password)
+    // console.log("[setup] email:",email)
+    let role = "admin";
+    let groupIds = 1;
 
-    if(!user){
-      // const result = signup(username, email , passphrase);
-      let {salt, hash} = hashPassword(passphrase);
-      const role = "admin"
-      const stmt = db.prepare(`
-        INSERT INTO users (username, email, password_hash, role, salt)
-        VALUES (?, ?, ?, ?, ?)
-      `);
-      const result = stmt.run(username, email, hash, role, salt);
-      console.log(result)
-      username = null;
-      passphrase = null;
-      email = null;
+    try {
+      const user = await adminCreateUser({
+        username, 
+        email, 
+        password, 
+        role, 
+        groupIds 
+      });
+      // console.log("user: ",user);
+      //return c.json(user, 201);
       return c.text('CREATE', 200);
+    } catch (error) {
+      return c.json({ error: error.message }, 400);
     }
   }
   return c.text('404 Not Found', 404);

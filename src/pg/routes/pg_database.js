@@ -163,7 +163,9 @@ route.get('/setup', async (c) => {
     const result = await pool.query("SELECT COUNT(*) AS count FROM users WHERE role = 'admin'");
     const adminExists = result.rows[0].count > 0;
     console.log('Admin exists:', adminExists);
-    // console.log(van)
+    if(adminExists){
+      return c.text('404 Not Found', 404);
+    }
 
     return c.html(
       van.html(

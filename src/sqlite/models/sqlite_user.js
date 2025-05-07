@@ -89,9 +89,9 @@ async function checkPermission(user, resourceType, resourceId, action) {
 // New function to check if a user exists
 async function checkUserExists({ email, username }) {
   const db = await getDB();
-  console.log(db);
-  console.log("username: ", username);
-  console.log("email: ", email);
+  // console.log(db);
+  // console.log("[checkUserExists] username: ", username);
+  // console.log("[checkUserExists] email: ", email);
   if (!email && !username) {
     throw new Error('At least one of email or username must be provided');
   }
@@ -113,6 +113,8 @@ async function checkUserExists({ email, username }) {
 
   const stmt = db.prepare(query);
   const user = stmt.get(...params);
+  // console.log("user",user);
+  // console.log("user",!!user);
   return !!user; // Returns true if user exists, false otherwise
 }
 
@@ -152,9 +154,14 @@ async function adminCreateUser({ username, email, password, role = 'user', group
   }
 
   // Check if user already exists
-  if (checkUserExists({ email, username })) {
+  // console.log("[adminCreateUser] username:",username)
+  // console.log("[adminCreateUser] email:",email)
+  let isExist = await checkUserExists({ email, username });
+  // console.log("[adminCreateUser] isExist:",isExist);
+  if (isExist) {
     throw new Error('User with this email or username already exists');
   }
+  // console.log("REGISTER????")
 
   // Create user
   const user = await signup(username, email, password, role);

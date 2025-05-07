@@ -138,7 +138,7 @@ route.get('/api/books/:book_id/contents', authenticate, async (c) => {
     return c.json({error:`book ${book_id} page null`})
   }
 });
-
+// page id delete
 route.delete('/api/book/page/:page_id', authenticate, async (c) => {
   const { page_id } = c.req.param();
   try {
@@ -158,7 +158,7 @@ route.delete('/api/book/page/:page_id', authenticate, async (c) => {
     return c.json({error:`page id ${page_id} is null`})
   }
 });
-
+// page update
 route.put('/api/book/page/:page_id', authenticate, async (c) => {
   const { page_id } = c.req.param();
   const { content } = await c.req.json();
@@ -180,6 +180,5 @@ route.put('/api/book/page/:page_id', authenticate, async (c) => {
     return c.json({error:`page id ${page_id} is null`})
   }
 });
-
 
 export default route;

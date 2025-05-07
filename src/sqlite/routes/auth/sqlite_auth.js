@@ -158,28 +158,6 @@ route_auth.get('/api/auth/user', authenticate, async (c) => {
   return c.json({api:"ERROR"});
 });
 
-//tested for account
-route_auth.get('/api/admin/create', async (c) => {
-  let username = "admin";
-  let email = "admin";
-  let password = "admin";
-  let role = "admin";
-  let groupIds = 1;
-
-  try {
-    const user = await adminCreateUser({
-      username, 
-      email, 
-      password, 
-      role, 
-      groupIds 
-    });
-    return c.json(user, 201);
-  } catch (error) {
-    return c.json({ error: error.message }, 400);
-  }
-});
-
 //need to fix this later.
 route_auth.post('/auth/refresh', authenticate, async (c) => {
   const user = c.get('user');
