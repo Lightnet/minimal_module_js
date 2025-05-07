@@ -28,20 +28,49 @@ export function addPage(id){
   ));
 }
 
-export function viewPage(){
-
+async function fetchDeletePage(id){
+  try {
+    const data = await useFetch(`/api/book/page/${id}`,{
+      method:'DELETE'
+    });
+    console.log(data);
+    let itemPage = document.getElementById(id);
+    if(itemPage){
+      itemPage.parentNode.removeChild(itemPage);
+    }
+  } catch (error) {
+    console.log('ERROR:', error.message);
+  }
 }
+
+async function btnDeletePage(id){
+  const isCreated = van.state(false);
+  van.add(document.body, Modal({closed:isCreated},
+    div(
+      label(`Confirm Delete ${id}?`),
+      div(
+        button({class:"warn",onclick:()=>{
+          fetchDeletePage(id);
+          isCreated.val = true;
+        }},"DELETE"),
+        button({onclick:()=>{
+          isCreated.val = true;
+        }},"Cancel")
+      )
+    )
+  ));
+}
+
 //books
 export function pageBooks(){
 
   const books = div();
-  console.log("Books?");
+  // console.log("Books?");
 
   async function fetchBooks(){
     try {
       const data = await useFetch('/api/books');
-      console.log(data);
-
+      // console.log(data);
       for(const item of data){
         van.add(books,
           div(
@@ -199,8 +228,7 @@ export function pageBook(){
 
 export function pageBookIdContent(){
 
-  const bookContents = tbody();
-
+  const bookContents = tbody({id:"bookcontent"});
   const currentBookId = van.state();
 
   van.derive(async ()=>{
@@ -253,36 +281,6 @@ export function pageBookIdContent(){
     ));
   }
 
-  async function btnDeletePage(id){
-    const isCreated = van.state(false);
-    van.add(document.body, Modal({closed:isCreated},
-      div(
-        label(`Confirm Delete ${id}?`),
-        div(
-          button({onclick:()=>{
-            fetchDeletePage(id);
-            isCreated.val = true;
-          }},"DELETE"),
-          button({onclick:()=>{
-            isCreated.val = true;
-          }},"Cancel")
-        )
-      )
-    ));
-  }
-
-  async function fetchDeletePage(id){
-    try {
-      const data = await useFetch(`/api/book/page/${id}`,{
-        method:'DELETE'
-      })
-      console.log(data)
-    } catch (error) {
-      console.log('ERROR:', error.message);
-    }
-  }
-
-
   async function fetchBookContent(bookid){
     currentBookId.val = bookid;
     try {
@@ -293,15 +291,15 @@ export function pageBookIdContent(){
         if(data?.contents){
           for(const item of data.contents){
             van.add(bookContents,
-              tr(
+              tr({id:item.id},
                 td(`${item.id}`),
                 td(`${item.page_number}`),
                 td(item.content.substring(0, 100)),// limited
                 td("none"),
                 td(
-                  button({onclick:()=>btnEditPage(item.id, item.content)},"Edit"),
-                  button({onclick:()=>btnDeletePage(item.id)},"Delete")
-                ),// limited
+                  button({class:"normal",onclick:()=>btnEditPage(item.id, item.content)},"Edit"),
+                  button({class:"warn",onclick:()=>btnDeletePage(item.id)},"Delete")
+                ), // limited
               )
             )
           }
@@ -313,8 +311,7 @@ export function pageBookIdContent(){
     }
   }
 
-
-  return div({id:"bookcontent"},
+  return div({id:"contents"},
     HomeNavMenu(),
     div({class:"main-content"},
       div({class:"cheader"},
@@ -395,7 +392,7 @@ function createFormPage({closed,id}){
   const formiD = van.state(id);//book id
   const formContent = van.state('test formContent');
 
-  async function btnFetchCreatePage(){
+  async function fetchCreatePage(){
     try {
       const data = await useFetch(`/api/books/${formiD.val}/pages`,{
         method:'POST',
@@ -405,8 +402,22 @@ function createFormPage({closed,id}){
         })
       });
       console.log(data);
-      if(closed){
-        closed.val = true;
+      closed.val = true;
+      let currentPages = document.getElementById('bookcontent');
+      if(currentPages){
+        console.log("ADD PAGE???", currentPages)
+        van.add(currentPages,
+          tr({id:data.id},
+            td(`${data.id}`),
+            td(`${data.page_number}`),
+            td(data.content.substring(0, 100)),
+            td("none"),
+            td(
+              button({class:"normal",onclick:()=>btnEditPage(data.id, data.content)},"Edit"),
+              button({class:"warn",onclick:()=>btnDeletePage(data.id)},"Delete")
+            ),
+          )
+        )
       }
     } catch (error) {
       console.log("ERROR",error.message)
@@ -423,7 +434,7 @@ function createFormPage({closed,id}){
       input({type:"text",value:formContent, oninput:e=>formContent.val=e.target.value}),
     ),
     div({class:"form-group"},
-      button({class:"normal", onclick:btnFetchCreatePage},'Send'),
+      button({class:"normal", onclick:fetchCreatePage},'Send'),
       button({class:"warn", onclick:()=>closed.val=true},'Cancel'),
     ),
   );
