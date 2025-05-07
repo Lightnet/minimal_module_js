@@ -8,8 +8,9 @@
 import { Hono } from 'hono';
 import fs from 'fs/promises';
 import { getPool } from '../db/pg_pool.js';
-import van from "mini-van-plate/van-plate"
+import van from "mini-van-plate/van-plate";
 import { checkUserExists } from '../models/pg_user.js';
+import { hashPassword } from '../../helpers.js';
 
 const adminCache = new Map();
 
@@ -162,27 +163,29 @@ route.get('/setup', async (c) => {
     const result = await pool.query("SELECT COUNT(*) AS count FROM users WHERE role = 'admin'");
     const adminExists = result.rows[0].count > 0;
     console.log('Admin exists:', adminExists);
+    // console.log(van)
 
     return c.html(
       van.html(
-        van.body(
-          van.p('Admin setup'),
-          van.form({ method: 'POST', action: '/setup' }, // Changed url to action
-            van.div(
-              van.label('User Name:'),
-              van.input({ value: 'admin', name: 'username' })
+        van.tags.body(
+          van.tags.p('Admin setup'),
+          van.tags.form({ method: 'POST', action: '/setup' }, // Changed url to action
+            van.tags.div(
+              van.tags.label('User Name:'),
+              van.tags.input({ value: 'test', name: 'username' })
             ),
-            van.div(
-              van.label('Passphrase:'),
-              van.input({ value: 'admin', name: 'passphrase', type: 'password' }) // Added type
+            van.tags.div(
+              van.tags.label('Passphrase:'),
+              van.tags.input({ value: 'test', name: 'passphrase', type: 'password' }) // Added type
             ),
-            van.div(
-              van.label('Email:'),
-              van.input({ value: 'admin@example.com', name: 'email', type: 'email' }) // Added type
+            van.tags.div(
+              van.tags.label('Email:'),
+              van.tags.input({ value: 'test', name: 'email', type: 'text' }) // Added type
+              // van.tags.input({ value: 'admin@example.com', name: 'email', type: 'email' }) // Added type
             ),
-            van.div(),
-            van.div(
-              van.button({ type: 'submit' }, 'Register')
+            van.tags.div(),
+            van.tags.div(
+              van.tags.button({ type: 'submit' }, 'Register')
             )
           )
         )

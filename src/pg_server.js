@@ -12,6 +12,7 @@ import { Hono } from 'hono';
 // import { rateLimiter } from 'hono-rate-limiter';
 import { scriptHtml02 } from './routes/pages.js';
 import module_routes from './pg/routes/index.js';
+import { maintenanceMiddleware } from './pg/utils/pg_maintenance.js';
 // import { maintenanceMiddleware } from './utils/maintenance.js';
 const PORT = process.env.PORT || 3000;
 const app = new Hono({ 
@@ -23,7 +24,7 @@ app.route('/', module_routes);
 //   return c.html(pageHtml);
 // });
 
-app.get('/', (c) => {
+app.get('/', maintenanceMiddleware, (c) => {
   const pageHtml = scriptHtml02("/index.js");
   return c.html(pageHtml);
 });
