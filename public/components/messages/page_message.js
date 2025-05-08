@@ -9,24 +9,63 @@ import van from "vanjs-core";
 import { Modal } from "vanjs-ui";
 import { HomeNavMenu } from "../navmenu.js";
 import useFetch from "/libs/useFetch.js";
+import { notify } from "../notify/notify.js";
+import { Color } from "../notify/notifycontext.js";
 
-const {button, h1, div, label, td, input, textarea} = van.tags;
+const {button, h1, div, label, input, textarea,
+  table,
+  thead,
+  tbody,
+  tr,
+  td
+} = van.tags;
 
-function Page_Message(){
+function pageMessage(){
 
-  const messagesDiv = div();
+  const messageTable = tbody({id:"messageTable"});
 
-  async function btnDeleteMessageId(id){
+  async function fetchDeleteMessage(id){
     try {
       const data = await useFetch(`/api/message/${id}`,{
         method:'DELETE'
       });
-      console.log(data);
+      console.log("data message: ",data);
+      notify({
+        color:Color.success,
+        content:`Message Delete:${id}`
+      });
+
+      const messageItem = document.getElementById(id);
+
+      if(messageItem){
+        messageItem.parentNode.removeChild(messageItem);
+      }
 
     } catch (error) {
       console.log(error.message);
+      notify({
+        color:Color.warn,
+        content: error.message
+      });
     }
-    
+  }
+
+  async function btnDeleteMessageId(id){
+    const isCreated = van.state(false);
+    van.add(document.body, Modal({closed:isCreated},
+      div(
+        label(`Are you sure to Delete ID:${id} ?`)
+      ),
+      div(
+        button({class:"warn",onclick:()=>{
+          fetchDeleteMessage(id);
+          isCreated.val=true;
+        }},"DELETE"),
+        button({onclick:()=>isCreated.val=true},"Cancel"),
+      )
+      
+    ));
+    //await fetchDeleteMessage(id);
   }
 
   async function fetchMessages() {
@@ -36,10 +75,15 @@ function Page_Message(){
       if(data){
         for(const item of data){
           console.log(item);
-          van.add(messagesDiv,
-            div(
-              label('content:'+ item.content),
-              button({onclick:()=>btnDeleteMessageId(item.id)},"Delete")
+          van.add(messageTable,
+            tr({id:item.id},
+              td(`${item.id}`), // id
+              td(`${item.to_username}`), // from
+              td(`${item.subject}`), // subject
+              td(`${item.create_at}`), // date
+              td(
+                button({class:"warn",onclick:()=>btnDeleteMessageId(item.id)},"Delete")
+              ),
             )
           )
         }
@@ -60,8 +104,19 @@ function Page_Message(){
       ),
       div({class:"ccontent"},
         label('Message'),
-        El_CreateMessageForm(),
-        messagesDiv
+        createFormMessage(),
+        table(
+          thead(
+            tr(
+              td(`ID:`),
+              td(`From:`),
+              td(`Subject:`),
+              td(`create_at:`),
+              td(`Actions:`),
+            )
+          ),
+          messageTable,
+        ),
       ),
     ),
   );
@@ -69,16 +124,15 @@ function Page_Message(){
 }
 
 //BUTTON MODAL
-function El_CreateMessageForm(){
-
-  const isCreated = van.state(false);
-  function btnMessageForm(){
-    isCreated.val = false;
+function createFormMessage(){
+  
+  function btnFormCreateMessage(){
+    const isCreated = van.state(false);
     van.add(document.body, Modal({closed:isCreated},
       createMessageForm({closed:isCreated})
     ));
   }
-  return button({onclick:()=>btnMessageForm()},"Create Message");
+  return button({onclick:()=>btnFormCreateMessage()},"Create Message");
 }
 
 // CREATE REPORT FORUM
@@ -103,11 +157,19 @@ function createMessageForm({closed}){
         })
       });
       console.log(data);
-      if(closed){
+      if(typeof closed === 'object'){
         closed.val = true;
       }
-    }catch(e){
-      console.log("ERROR",e)
+      notify({
+        color:Color.success,
+        content:"Message Sent!"
+      })
+    }catch(error){
+      console.log("ERROR",error)
+      notify({
+        color:Color.warn,
+        content:error.message
+      });
     }
   }
 
@@ -132,6 +194,5 @@ function createMessageForm({closed}){
 }
 
 export {
-  Page_Message,
-  El_CreateMessageForm,
+  pageMessage
 }

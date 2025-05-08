@@ -19,7 +19,7 @@ import { pageAbout } from "./pages/page_about.js";
 import { pageReport } from "./pages/page_report.js";
 import { pageBookIdContent, pageBook, pageBooks } from "./book/book.js";
 import { pageAccount } from "./pages/page_account.js";
-import { Page_Message } from "./messages/page_message.js";
+import { pageMessage } from "./messages/page_message.js";
 import { pageSetting } from "./pages/page_settings.js";
 import { pageForum, pageBoard, pageTopic, pageComment } from "./forum/bb_page.js";
 import { checkTheme } from "./theme/theme.js";
@@ -64,7 +64,7 @@ const App = () => {
       { path: "/signout", component: pageSignOut },
       { path: "/forgot", component: pageForgot },
       { path: "/settings", component: pageSetting },
-      { path: "/message", component: Page_Message },
+      { path: "/message", component: pageMessage },
       { path: "/forum", component: pageForum },
       { path: "/board", component: pageBoard },
       { path: "/topic", component: pageTopic },
